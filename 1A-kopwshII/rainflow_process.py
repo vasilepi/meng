@@ -155,6 +155,84 @@ def main():
         N_T[w] = 1 / D_m_sum
     print(N_T)
 
+    fea = pd.read_csv('fea-res.csv')
+    n_fea = np.array(fea.iloc[1:18,10]).astype(float)
+
+    mean_fea49 = np.array(fea.iloc[1:18, 21]).astype(float) + 0.05
+    semiamp_fea49 = np.array(fea.iloc[1:18,26]).astype(float) - 0.05
+
+    mean_fea51 = np.array(fea.iloc[1:18, 22]).astype(float) + 0.05
+    semiamp_fea51 = np.array(fea.iloc[1:18, 27]).astype(float) - 0.05
+
+    mean_fea52 = np.array(fea.iloc[1:18, 23]).astype(float) + 0.05
+    semiamp_fea52 = np.array(fea.iloc[1:18, 28]).astype(float) - 0.05
+
+    mean_fea55 = np.array(fea.iloc[1:18, 24]).astype(float) + 0.05
+    semiamp_fea55 = np.array(fea.iloc[1:18, 29]).astype(float) - 0.05
+
+    mean_fea58 = np.array(fea.iloc[1:18, 25]).astype(float) + 0.05
+    semiamp_fea58 = np.array(fea.iloc[1:18, 30]).astype(float) - 0.05
+
+    n49fea = []
+    d49fea = []
+    n51fea = []
+    d51fea = []
+    n52fea = []
+    d52fea = []
+    n55fea = []
+    d55fea = []
+    n58fea = []
+    d58fea = []
+    for e in range(len(n_fea)):
+        sa_fea49 = (semiamp_fea49[e] + M * mean_fea49[e])
+        n49fea.append(10 ** (np.log10(sa_fea49 / sf_) / b_ - np.log10(2)))
+
+        d49fea.append(n_fea[e] / n49fea[e])
+
+        sa_fea51 = (semiamp_fea51[e] + M * mean_fea51[e])
+        n51fea.append(10 ** (np.log10(sa_fea51 / sf_) / b_ - np.log10(2)))
+
+        d51fea.append(n_fea[e] / n51fea[e])
+
+        sa_fea52 = (semiamp_fea52[e] + M * mean_fea52[e])
+        n52fea.append(10 ** (np.log10(sa_fea52 / sf_) / b_ - np.log10(2)))
+
+        d52fea.append(n_fea[e] / n52fea[e])
+
+        sa_fea55 = (semiamp_fea55[e] + M * mean_fea55[e])
+        n55fea.append(10 ** (np.log10(sa_fea55 / sf_) / b_ - np.log10(2)))
+
+        d55fea.append(n_fea[e] / n55fea[e])
+
+        sa_fea58 = (semiamp_fea58[e] + M * mean_fea58[e])
+        n58fea.append(10 ** (np.log10(sa_fea58 / sf_) / b_ - np.log10(2)))
+
+        d58fea.append(n_fea[e] / n58fea[e])
+
+
+
+    d49fea_sum = sum(d49fea)
+    cycles49_fea = 1 / d49fea_sum
+    d51fea_sum = sum(d51fea)
+    cycles51_fea = 1 / d51fea_sum
+    d52fea_sum = sum(d52fea)
+    cycles52_fea = 1 / d52fea_sum
+    d55fea_sum = sum(d55fea)
+    cycles55_fea = 1 / d55fea_sum
+    d58fea_sum = sum(d58fea)
+    cycles58_fea = 1 / d58fea_sum
+
+    FEA_failure = np.array([cycles49_fea, cycles51_fea, cycles52_fea, cycles55_fea, cycles58_fea])
+    print(FEA_failure*1000)
+
+    damage_max = max(d55fea)
+    damage_max_idx = d55fea.index(max(d55fea))
+    nmax_from_damage = 1 / damage_max
+
+    # print("The maximum cycles are: " + str(nmax_from_damage) + " at Block with index: " + str(damage_max_idx))
+    # print("Maximum kilometers for Block " + str(damage_max_idx + 1) + " are " + str(n55fea[damage_max_idx]))
+
+
 
 if __name__ == "__main__":
     main()
