@@ -2,6 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import fatpack
 import pandas as pd
+from fontTools.ttLib.tables.TupleVariation import PRIVATE_POINT_NUMBERS
+
 import utilities as utils
 
 #********************************CODE BEGINS HERE********************************************
@@ -153,6 +155,9 @@ def main():
 
         D_m_sum = sum(D_m)
         N_T[w] = 1 / D_m_sum
+
+    print('------THEORETICAL------')
+    print('Cycles to failure for each measurement point:')
     print(N_T)
 
     fea = pd.read_csv('fea-res.csv')
@@ -223,14 +228,17 @@ def main():
     cycles58_fea = 1 / d58fea_sum
 
     FEA_failure = np.array([cycles49_fea, cycles51_fea, cycles52_fea, cycles55_fea, cycles58_fea])
-    print(FEA_failure*1000)
+    print('-----FEA------')
+    print('Cycles to failure for each measurement point:')
+    print(FEA_failure/300)
 
     damage_max = max(d55fea)
     damage_max_idx = d55fea.index(max(d55fea))
     nmax_from_damage = 1 / damage_max
 
-    # print("The maximum cycles are: " + str(nmax_from_damage) + " at Block with index: " + str(damage_max_idx))
-    # print("Maximum kilometers for Block " + str(damage_max_idx + 1) + " are " + str(n55fea[damage_max_idx]))
+
+    print('----BLOCK----')
+    print("Maximum cycles for Block " + str(damage_max_idx + 1) + " are " + str(n55fea[damage_max_idx]/300000))
 
 
 
