@@ -1,13 +1,13 @@
-# CFD 1st Assignment
+# CFD 1st Assignment - explicit
 import numpy as np
-import pandas as pd
 import matplotlib.pyplot as plt
 
 L = 8
 Vinf = 1
+rho = 1.225 #kg/m^3
 nu = 1.5e-5
-Nx = 800
-Ny = 300
+Nx = 3000
+Ny = 200
 
 dx = L/Nx
 dy = 0.001
@@ -32,24 +32,28 @@ for j in range(1, Nx):
 
         u[i, j] = u[i,j-1] + nu * d2udy2/u[i,j-1] * dx - v[i, j - 1] * dudy * dx / u[i,j-1]
 
+    # boundary layer thickness
     for z in range(Ny):
         if u[z, j] > 0.99 * Vinf:
-            bl_thckns[j] = z * dy  # Store the y-height
+            bl_thckns[j] = z * dy
             break
 
 x = np.linspace(0, L, Nx)
-plt.plot(x, bl_thckns, label="Boundary Layer Thickness")
-plt.xlabel("x (m)")
-plt.ylabel("Boundary Layer Thickness δ (m)")
-plt.title("Boundary Layer Thickness over Flat Plate")
-plt.legend()
-plt.grid(True)
-plt.show()
 
-# # Visualize velocity profile as well
-# plt.contourf(x, y, u, levels=50, cmap="viridis")
-# plt.colorbar(label="Velocity (u)")
-# plt.xlabel("x (m)")
-# plt.ylabel("y (m)")
-# plt.title("Boundary Layer Velocity Profile")
-# plt.show()
+
+d1 = np.zeros(Nx)
+d2 = np.zeros(Nx)
+dudytau = np.zeros(Nx)
+tw = np.zeros(Nx)
+cf = np.zeros(Nx)
+for w in range(0, Nx):
+    d1[w] = np.sum((1-u[:,w]/Vinf)*dy)
+    d2[w] = np.sum((u[:, w] / Vinf) * (1 - u[:, w] / Vinf) * dy)
+    dudytau[w] = (u[2,w]-u[1,w])/dy
+    tw[w] = nu*rho*dudytau[w]
+    cf[w] = tw[w]/(0.5*rho*Vinf**2)
+
+
+
+def run_explicit():
+    return x, bl_thckns, d1, d2, cf
