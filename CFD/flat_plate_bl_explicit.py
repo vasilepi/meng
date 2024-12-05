@@ -10,7 +10,7 @@ Nx = 16000
 Ny = 400
 
 dx = L/Nx
-dy = 0.0005
+dy = 0.001
 
 u = np.zeros((Ny, Nx))
 v = np.zeros((Ny, Nx))
