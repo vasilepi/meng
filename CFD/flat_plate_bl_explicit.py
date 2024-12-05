@@ -6,11 +6,11 @@ L = 8
 Vinf = 1
 rho = 1.225 #kg/m^3
 nu = 1.5e-5
-Nx = 3000
-Ny = 200
+Nx = 16000
+Ny = 400
 
 dx = L/Nx
-dy = 0.001
+dy = 0.0005
 
 u = np.zeros((Ny, Nx))
 v = np.zeros((Ny, Nx))
@@ -30,15 +30,19 @@ for j in range(1, Nx):
         dudy = (u[i+1,j-1] - u[i-1,j-1]) / (2 * dy)
         d2udy2 = (u[i+1,j-1] - 2 * u[i,j-1] + u[i-1, j-1]) / (dy ** 2)
 
-        u[i, j] = u[i,j-1] + nu * d2udy2/u[i,j-1] * dx - v[i, j - 1] * dudy * dx / u[i,j-1]
-
+        u[i, j] = u[i,j-1] + nu * d2udy2/u[i,j-1] * dx - v[i, j-1] * dudy * dx / u[i,j-1]
     # boundary layer thickness
     for z in range(Ny):
         if u[z, j] > 0.99 * Vinf:
             bl_thckns[j] = z * dy
             break
 
+for j in range(1, Nx):
+    for i in range(1, Ny-1):
+        v[i,j] = v[i,j-1] - 0.5*dy*((u[i,j]-u[i-1,j])/dx + (u[i,j-1]-u[i-1,j-1])/dx)
+
 x = np.linspace(0, L, Nx)
+y = np.linspace(0, Ny*dy, Ny)
 
 
 d1 = np.zeros(Nx)
@@ -56,4 +60,4 @@ for w in range(0, Nx):
 
 
 def run_explicit():
-    return x, bl_thckns, d1, d2, cf
+    return x, y, bl_thckns, d1, d2, cf

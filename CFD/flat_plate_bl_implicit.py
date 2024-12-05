@@ -6,8 +6,8 @@ L = 8
 Vinf = 1
 rho = 1.225  # kg/m^3
 nu = 1.5e-5
-Nx = 400
-Ny = 100
+Nx = 8000
+Ny = 400
 
 dx = L / Nx
 dy = 0.001
@@ -45,6 +45,12 @@ for j in range(Nx - 1):
     B[Ny-1] = Vinf
 
     u[:,j+1] = np.linalg.solve(A, B)
+
+for j in range(1, Nx):
+    for i in range(1, Ny-1):
+        v[i,j] = v[i,j-1] - 0.5*dy*((u[i,j]-u[i-1,j])/dx + (u[i,j-1]-u[i-1,j-1])/dx)
+
+
 
 # Boundary layer thickness
 bl_thckns = np.zeros(Nx)
