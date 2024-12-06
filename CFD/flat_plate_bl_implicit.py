@@ -3,23 +3,25 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 L = 8
+H = 0.1 #of domain
 Vinf = 1
 rho = 1.225  # kg/m^3
 nu = 1.5e-5
-Nx = 8000
-Ny = 400
 
-dx = L / Nx
-dy = 0.001
+dx = 0.0008
+dy = 0.0008
+Nx = int(L/dx)
+Ny = int(H/dy)
 
 x = np.linspace(0, L, Nx)
 y = np.linspace(0, Ny * dy, Ny)
 
-u = Vinf * np.ones((Ny, Nx))  # free stream velocity everywhere
+# BCs
+u = Vinf * np.ones((Ny, Nx))  # free stream
 u[0, :] = 0  # no-slip at the wall
 v = np.zeros((Ny, Nx))  # initialize v to zero
 
-# Marching in x
+
 for j in range(Nx - 1):
     # Tridiagonal system
     A = np.zeros((Ny, Ny))  # Coefficient matrix
@@ -38,17 +40,16 @@ for j in range(Nx - 1):
         B[i] = dj
 
     # BCs
-    A[0, 0] = 1       # no-slip at the wall
+    A[0, 0] = 1
     B[0] = 0
 
-    A[Ny-1, Ny-1] = 1  # free stream at the top
+    A[Ny-1, Ny-1] = Vinf
     B[Ny-1] = Vinf
 
     u[:,j+1] = np.linalg.solve(A, B)
+    v[i, j+1] = v[i-1, j+1] + 0.5 * dy/dx * (u[i, j+1] - u[i, j] + u[i, j] - u[i-1, j])
 
-for j in range(1, Nx):
-    for i in range(1, Ny-1):
-        v[i,j] = v[i,j-1] - 0.5*dy*((u[i,j]-u[i-1,j])/dx + (u[i,j-1]-u[i-1,j-1])/dx)
+
 
 
 
@@ -72,4 +73,4 @@ for j in range(0, Nx):
 
 # Return function
 def run_implicit():
-    return x, bl_thckns, d1, d2, cf
+    return x, y, bl_thckns, d1, d2, cf, u, v
