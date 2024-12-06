@@ -1,7 +1,4 @@
 import matplotlib.pyplot as plt
-import pylab as pl
-from pandas.compat.pickle_compat import load_newobj
-
 from flat_plate_bl_implicit import run_implicit
 from flat_plate_bl_explicit import run_explicit
 import numpy as np
@@ -18,7 +15,7 @@ X, Y = np.meshgrid(x_implicit, y)
 L = 8
 Vinf = 1
 nu = 1.5e-5
-x_blasius = np.linspace(0.001, L, 1000)
+x_blasius = np.linspace(0.001, L, 16000)
 Rex = Vinf * x_blasius / nu
 bl_blasius = 5 * x_blasius / np.sqrt(Rex)
 d1_blasius = 1.72 * x_blasius / np.sqrt(Vinf * x_blasius / nu + np.finfo(float).eps)
@@ -46,7 +43,7 @@ plt.ylabel("Boundary Layer Thickness δ (m)")
 plt.title("Boundary Layer Thickness over Flat Plate [Explicit]")
 plt.legend()
 plt.grid(True)
-pl.show()
+plt.show()
 
 plt.figure()
 plt.plot(x_implicit, bl_implicit, color='red', label="CFD Boundary Layer Thickness")
@@ -56,13 +53,13 @@ plt.ylabel("Boundary Layer Thickness δ (m)")
 plt.title("Boundary Layer Thickness over Flat Plate [Implicit]")
 plt.legend()
 plt.grid(True)
-pl.show()
+plt.show()
 
 plt.figure(figsize=(10, 5))
 plt.plot(x_implicit, bl_implicit, label="Implicit CFD", color="red")
 plt.plot(x_explicit, bl_explicit, label="Explicit CFD", color="green")
 plt.plot(x_blasius, bl_blasius, label="Blasius", color="blue")
-plt.title("Boundary Layer Thickness over Flat Plate")
+plt.title("Boundary Layer Thickness over Flat Plate Comparison")
 plt.xlabel("x (m)")
 plt.ylabel("Boundary Layer Thickness δ (m)")
 plt.legend()
@@ -72,7 +69,7 @@ plt.show()
 
 plt.figure(figsize=(10, 5))
 plt.plot(x_implicit, d1_implicit, label="Implicit CFD", color="red")
-plt.plot(x_explicit, d1_explicit, label="Explicit CFD", color="green")
+plt.plot(x_explicit, d1_explicit, label="Explicit CFD", color="green", linestyle='--')
 plt.plot(x_blasius, d1_blasius, label="Blasius", color="blue")
 plt.title("δ1 Comparison")
 plt.xlabel("x (m)")
@@ -83,7 +80,7 @@ plt.show()
 
 plt.figure(figsize=(10, 5))
 plt.plot(x_implicit, d2_implicit, label="Implicit CFD", color="red")
-plt.plot(x_explicit, d2_explicit, label="Explicit CFD", color="green")
+plt.plot(x_explicit, d2_explicit, label="Explicit CFD", color="green", linestyle='--')
 plt.plot(x_blasius, d2_blasius, label="Blasius", color="blue")
 plt.title("δ2 Comparison")
 plt.xlabel("x (m)")
@@ -94,7 +91,7 @@ plt.show()
 
 plt.figure(figsize=(10, 5))
 plt.plot(x_implicit, cf_implicit, label="Implicit CFD", color="red")
-plt.plot(x_explicit, cf_explicit, label="Explicit CFD", color="green")
+plt.plot(x_explicit, cf_explicit, label="Explicit CFD", color="green", linestyle='--')
 plt.plot(x_blasius, cf_blasius, label="Blasius", color="blue")
 plt.title("Friction Coefficient Comparison")
 plt.xlabel("x (m)")
