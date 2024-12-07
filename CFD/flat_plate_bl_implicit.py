@@ -9,7 +9,7 @@ rho = 1.225  # kg/m^3
 nu = 1.5e-5
 
 dx = 0.0008
-dy = 0.0008
+dy = 0.001
 Nx = int(L/dx)
 Ny = int(H/dy)
 
@@ -47,7 +47,12 @@ for j in range(Nx - 1):
     B[Ny-1] = Vinf
 
     u[:,j+1] = np.linalg.solve(A, B)
-    v[i, j+1] = v[i-1, j+1] + 0.5 * dy/dx * (u[i, j+1] - u[i, j] + u[i, j] - u[i-1, j])
+    for i in range(1, Ny - 1):
+        v[i, j + 1] = v[i-1, j - 1] - (dy / (2 * dx)) * ((u[i, j+1] - u[i, j]) + (u[i -1, j+1] - u[i - 1, j]))
+
+    #BCs
+    v[0, j] = 0  # No-slip
+    v[-1, j] = 0  # Free stream
 
 
 

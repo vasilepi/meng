@@ -53,10 +53,10 @@ for w in range(Nx):
     tw[w] = nu*rho*dudytau[w]
     cf[w] = tw[w]/(0.5*rho*Vinf**2)
 
-# plt.plot(x, bl_thckns)
-# plt.xlabel("x")
-# plt.ylabel("Boundary Layer Thickness")
-# plt.show()
+plt.plot(x, bl_thckns)
+plt.xlabel("x")
+plt.ylabel("Boundary Layer Thickness")
+plt.show()
 
 
 def run_explicit():
