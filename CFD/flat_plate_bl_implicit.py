@@ -9,7 +9,7 @@ rho = 1.225  # kg/m^3
 nu = 1.5e-5
 
 dx = 0.0008
-dy = 0.001
+dy = 0.0008
 Nx = int(L/dx)
 Ny = int(H/dy)
 
@@ -72,7 +72,7 @@ cf = np.zeros(Nx)
 for j in range(0, Nx):
     d1[j] = np.sum((1 - u[:, j] / Vinf) * dy)
     d2[j] = np.sum((u[:, j] / Vinf) * (1 - u[:, j] / Vinf) * dy)
-    dudytau[j] = (u[2, j] - u[1, j]) / dy  # Gradient near the wall
+    dudytau[j] = (u[1, j] - u[0, j]) / dy  # Gradient near the wall
     tw[j] = nu * rho * dudytau[j]
     cf[j] = tw[j] / (0.5 * rho * Vinf**2)
 
