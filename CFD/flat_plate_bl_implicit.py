@@ -48,7 +48,7 @@ for j in range(Nx - 1):
 
     u[:,j+1] = np.linalg.solve(A, B)
     for i in range(1, Ny - 1):
-        v[i, j + 1] = v[i-1, j - 1] - (dy / (2 * dx)) * ((u[i, j+1] - u[i, j]) + (u[i -1, j+1] - u[i - 1, j]))
+        v[i, j + 1] = v[i-1, j+1] - (dy / (2 * dx)) * ((u[i, j+1] - u[i, j]) + (u[i -1, j+1] - u[i - 1, j]))
 
     #BCs
     v[0, j] = 0  # No-slip
