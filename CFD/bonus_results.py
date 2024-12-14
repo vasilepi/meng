@@ -30,31 +30,11 @@ plt.plot(X_explicit, Y_explicit, color='black')  # Vertical lines
 plt.plot(X_explicit.T, Y_explicit.T, color='black')  # Horizontal lines
 plt.xlabel('x (m)')
 plt.ylabel('y (m)')
-plt.title('Visualization of the Computational Grid')
+plt.title('Visualization of the Physical Grid')
 plt.grid(False)
-plt.ylim(0, 0.03)
-plt.xlim(0,0.003)
+plt.ylim(0, 0.1)
+plt.xlim(0,0.03)
 plt.show()
-
-
-#contour
-# plt.figure(figsize=(10, 5))
-# contour_explicit = plt.contourf(X_explicit, Y_explicit, np.transpose(u_explicit), levels = 50, cmap='plasma')
-# plt.colorbar(contour_explicit, label="Airspeed")
-# plt.title("Velocity Contour - Explicit Solution")
-# plt.xlabel("x (m)")
-# plt.ylabel("y (m)")
-# plt.ylim(0, 0.03)
-# plt.show()
-#
-# plt.figure(figsize=(10, 5))
-# contour_explicit = plt.contourf(X_implicit, Y_implicit, u_implicit, levels = 50, cmap='plasma')
-# plt.colorbar(contour_explicit, label="Airspeed")
-# plt.title("Velocity Contour - Implicit Solution")
-# plt.xlabel("x (m)")
-# plt.ylabel("y (m)")
-# plt.ylim(0, 0.03)
-# plt.show()
 
 #delta
 plt.figure()
