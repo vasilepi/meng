@@ -2,13 +2,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 L = 8
-H = 4 #of domain
+H = 8 #of domain
 Vinf = 1
 rho = 1.225  # kg/m^3
 nu = 1.5e-5
 dx = 0.0008
 Nx = int(L/dx)
-Ny = 400
+Ny = 500
 
 
 # physical grid
@@ -18,16 +18,18 @@ x = np.linspace(0, L, Nx)
 y = np.array([H * ((np.exp(a*i/Ny))-1)/(np.exp(a)-1) for i in range(Ny)])
 dy = np.diff(y)
 
+print(dy[0])
+print(dy[-1])
 
 # Computational grid (uniform)
 eta = np.zeros((Ny))
 ff = np.zeros((Ny))
 for j in range(Ny):
-    eta[j] = j/(Ny-1)
-    ff[j] = (np.exp(a)-1)/np.exp(a*eta[j])/a/H
+    eta[j] = a*j/Ny
+    ff[j] = (np.exp(a)-1)/np.exp(eta[j])/H
 
 dxi = dx/L
-deta = 1/(Ny-1)
+deta = a/Ny
 
 
 # BCs
@@ -42,16 +44,16 @@ for i in range(Nx - 1):
     B = np.zeros(Ny)        # rhs
 
     for j in range(0, Ny-2):
-        f = ff[j]
-        aj = nu*f**2 *dxi*L/deta**2
+        f = ff[j+1]
+        aj = -nu*f**2 *dxi*L/deta**2
         bj = 2 * nu * f**2 *L*dxi / deta**2   + u[i, j+1]
-        cj = nu*f**2 *dxi*L/deta**2
+        cj = -nu*f**2 *dxi*L/deta**2
         dj = - (u[i,j+2]-u[i,j])* (v[i,j+1]*f*L*dxi+nu*f**2 *L*dxi)/2/deta + u[i,j+1]**2
 
         # Append matrix elements
-        A[j+1, j] = -aj
+        A[j+1, j] = aj
         A[j+1, j+1] = bj
-        A[j+1, j+2] = -cj
+        A[j+1, j+2] = cj
         B[j+1] = dj
 
     # BCs
@@ -62,8 +64,8 @@ for i in range(Nx - 1):
     B[Ny-1] = Vinf
 
     u[i+1,:] = np.linalg.solve(A, B)
-    for j in range(0, Ny - 2):
-        f = ff[j]
+    for j in range(0, Ny - 1):
+        f = ff[j+1]
         v[i + 1, j + 1] = v[i + 1, j] - 0.5 * deta / L / f * (u[i + 1, j + 1] - u[i, j + 1] + u[i + 1, j] - u[i, j]) / dxi
     #BCs
     v[i, 0] = 0  # No-slip

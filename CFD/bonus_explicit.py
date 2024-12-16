@@ -24,11 +24,11 @@ dy = np.diff(y)
 eta = np.zeros((Ny))
 ff = np.zeros((Ny))
 for j in range(Ny):
-    eta[j] = j/(Ny-1)
-    ff[j] = (np.exp(a)-1)/np.exp(a*eta[j])/a/H
+    eta[j] = a*j/Ny
+    ff[j] = (np.exp(a)-1)/np.exp(eta[j])/H
 
 dxi = dx/L
-deta = 1/(Ny-1)
+deta = a/Ny
 u = np.zeros((Nx, Ny))
 v = np.zeros((Nx, Ny))
 
