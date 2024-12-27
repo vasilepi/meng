@@ -3,26 +3,30 @@ from matplotlib import pyplot as plt
 from scipy.optimize import fsolve
 
     
-def solve_Neuber(S,Kt,E,Ku,nu,behavior):
-    
+
+def solve_Neuber(stress_from,strain_from,S,Kt,E,Ku,nu,behavior):
+
     if behavior == "R-O":
-        es = ((Kt*S)**2)/E      
-               
-        eq = lambda s : es/s - s/E - (s/Ku)**(1/nu)        
+        DS = abs(S - stress_from)
+        DE = DS/E
+        e = strain_from + DE
+        es = S*e*(Kt)**2
+
+        eq = lambda s : es/(s+1e-10) - s/E - (s/Ku)**(1/nu)
         s_init = S
-    
+
         s_final =fsolve(eq, s_init)
-    
         return s_final[0]
-    
+
     elif behavior == "Masing":
-        DeDs = ((Kt*S)**2)/E
-            
-        eq = lambda Ds_r : DeDs/Ds_r - Ds_r/E - 2*(Ds_r/(2*Ku))**(1/nu)          
-        Ds_init = S
-        
+        DS = abs(S - stress_from)
+        DeDs = ((Kt*DS)**2)/E
+
+        eq = lambda Ds_r : DeDs/(Ds_r+1e-10) - Ds_r/E - 2*(Ds_r/(2*Ku))**(1/nu)
+        Ds_init = DS
+
         Ds_final =fsolve(eq, Ds_init)
-        
+
         return Ds_final[0]
         
 
