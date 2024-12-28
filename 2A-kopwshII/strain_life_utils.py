@@ -58,6 +58,6 @@ def masing_plot(stress_from,strain_from,stress_to,E,Ku,nu,dir):
     
     elif dir == "down":
         e = strain_from - De
-        
-        
+
+
     plt.plot(e,s)
