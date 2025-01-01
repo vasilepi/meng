@@ -94,7 +94,7 @@ T_an = (1 + (gamma - 1) / 2 * Mtot ** 2) ** -1
 
 
 
-for t in range(len(time)-1):
+for t in range(0,Nt-1):
     V[t + 1, 0] = 2 * V[t + 1, 1] - V[t + 1, 2]
     V[t + 1, -1] = 2 * V[t + 1, -2] - V[t + 1, -3]
     rho[t + 1, -1] = 2 * rho[t + 1, -2] - rho[t + 1, -3]
@@ -119,20 +119,20 @@ for t in range(len(time)-1):
 
     for i in range(1,Nx-1):
         drhodt_av[t, i] = (drhodt_est[t + 1, i] + drhodt[t, i]) / 2
-        dVdt_av[t, i] = (dVdt_est[t + 1, i] + dVdt[t, i]) / 2
+        dVdt_av[t, i] = (dVdt_est[t + 1, i] + dVdt[t, i])*0.5
         dTdt_av[t, i] = (dTdt_est[t + 1, i] + dTdt[t, i]) / 2
     drhodt_av[t,0] = drhodt_est[t+1,0]
     dVdt_av[t,0] = dVdt_est[t+1,0]
     dTdt_av[t,0] = dTdt_est[t+1,0]
-    drhodt_av[t,-11] = drhodt[t,-1]
-    dVdt_av[t,-1] = dVdt[t,-1]
-    dTdt_av[t,-1] = dTdt[t,-1]
+    drhodt_av[t,-1] = drhodt_est[t,-1]
+    dVdt_av[t,-1] = dVdt_est[t,-1]
+    dTdt_av[t,-1] = dTdt_est[t,-1]
 
     for i in range(0,Nx):
         # corrector
-        rho[t+1,i] = rho[t,i] + 0.5*(drhodt[t,i]+drhodt_est[t+1,i])*dt
-        V[t + 1, i] = V[t, i] + 0.5 * (dVdt[t, i] + dVdt_est[t + 1, i]) * dt
-        T[t + 1, i] = T[t, i] + 0.5 * (dTdt[t, i] + dTdt_est[t + 1, i]) * dt
+        rho[t+1,i] = rho[t,i] + drhodt_av[t,i]*dt
+        V[t + 1, i] = V[t, i] + dVdt_av[t,i] * dt
+        T[t + 1, i] = T[t, i] + dTdt_av[t,i] * dt
 
     # edge values
     rho[t + 1, 0] = 1
@@ -248,7 +248,6 @@ plt.grid()
 plt.show()
 
 # Fig. 7.12
-plt.figure(figsize=(10,6))
 fig, ax1 = plt.subplots()
 ax1.plot(x, rho[1399,:], label="Numerical results")
 ax1.plot(x[::3], rho_an[::3], 'o', label="Analytical results")
