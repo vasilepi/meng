@@ -23,7 +23,7 @@ C = 0.5
 rho_i = 1 - 0.3146*x # rho/rho_0
 T_i = 1 - 0.2314*x # T/T_0
 V_i = (0.1 + 1.09*x)*T_i**0.5 # V/a_0
-
+p_i = rho_i*T_i
 # nozzle geometry
 A_ = 1+2.2*(x - 1.5)**2 # A/A*
 A = A_/min(A_)
@@ -67,6 +67,7 @@ mid = (Nx-1)/2
 rho[0,:] = rho_i
 V[0,:] = V_i
 T[0,:] = T_i
+p[0,:] =p_i
 mass_flow[0,:] = rho[0,:]*V[0,:]*A[:]
 
 # Analytical calculations

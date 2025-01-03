@@ -4,11 +4,11 @@ from matplotlib.pyplot import figure
 from scipy.optimize import fsolve
 
 
-# def conservation_check(rho, V, T, A, t, dx):
-#     mass = np.sum(rho[t, :] * A) * dx
-#     momentum = np.sum(rho[t, :] * V[t, :] * A) * dx
-#     energy = np.sum(rho[t, :] * T[t, :] * A) * dx
-#     return mass, momentum, energy
+def conservation_check(rho, V, T, A, t, dx):
+    mass = np.sum(rho[t, :] * A) * dx
+    momentum = np.sum(rho[t, :] * V[t, :] * A) * dx
+    energy = np.sum(rho[t, :] * T[t, :] * A) * dx
+    return mass, momentum, energy
 
 
 gamma = 1.4
@@ -21,12 +21,14 @@ C = 0.5
 
 p0 = 1
 pe = 0.93
+# pe = 0.9
 
 
 # initials
 rho_i = 1 - 0.023*x # rho/rho_0
 T_i = 1 - 0.009333*x # T/T_0
 V_i = 0.05+0.11*x # V/a_0
+p_i = (pe-p0)/L *x + 1
 
 # nozzle geometry
 limit1 = np.where(x == 1.5)[0][0]
@@ -36,7 +38,7 @@ for i in range(0,limit1):
 for i in range(limit1, len(x)):
     A[i] = 1 + 0.2223 * (x[i] - 1.5) ** 2
 
-# A = A_/min(A_)
+
 
 dt = np.min(C*dx/(T_i**0.5+V_i))
 tss = (Nt-1)*dt
@@ -78,31 +80,32 @@ rho[0,:] = rho_i
 V[0,:] = V_i
 T[0,:] = T_i
 mass_flow[0,:] = rho[0,:]*V[0,:]*A[:]
+p[0,:] = p_i
 
-# # Analytical calculations
-# def Mach_eq(M_an, A_):
-#     return (A_) ** 2 - (1 / M_an ** 2) * (
-#                 ((2 / (gamma + 1)) * (1 + ((gamma - 1) / 2) * M_an ** 2)) ** ((gamma + 1) / (gamma - 1)))
-#
-#
-# Mtot = np.zeros(Nx)
-#
-# for i in range(0, Nx):
-#     if i < (Nx) / 2:
-#         init_guess = 0.2
-#     else:
-#         init_guess = 2
-#     M_an = fsolve(Mach_eq, init_guess, args=A_[i])
-#
-#     if M_an < 0:
-#         M_an = -M_an
-#     Mtot[i] = M_an
-#
-# p_an = (1 + (gamma - 1) / 2 * Mtot ** 2) ** (-gamma / (gamma - 1))
-# rho_an = (1 + (gamma - 1) / 2 * Mtot ** 2) ** (-1 / (gamma - 1))
-# T_an = (1 + (gamma - 1) / 2 * Mtot ** 2) ** -1
-#
-#
+# Analytical calculations
+def Mach_eq(M_an, A_):
+    return (A_) ** 2 - (1 / M_an ** 2) * (
+                ((2 / (gamma + 1)) * (1 + ((gamma - 1) / 2) * M_an ** 2)) ** ((gamma + 1) / (gamma - 1)))
+
+
+Mtot = np.zeros(Nx)
+
+for i in range(0, Nx):
+    if i < (Nx) / 2:
+        init_guess = 0.2
+    else:
+        init_guess = 2
+    M_an = fsolve(Mach_eq, init_guess, args=A[i])
+
+    if M_an < 0:
+        M_an = -M_an
+    Mtot[i] = M_an
+
+p_an = (1 + (gamma - 1) / 2 * Mtot ** 2) ** (-gamma / (gamma - 1))
+rho_an = (1 + (gamma - 1) / 2 * Mtot ** 2) ** (-1 / (gamma - 1))
+T_an = (1 + (gamma - 1) / 2 * Mtot ** 2) ** -1
+
+
 
 p[:,0] = p0
 p[:,-1] = pe
@@ -132,14 +135,14 @@ for t in range(0,Nt-1):
         drhodt_av[t, i] = (drhodt_est[t + 1, i] + drhodt[t, i]) / 2
         dVdt_av[t, i] = (dVdt_est[t + 1, i] + dVdt[t, i])*0.5
         dTdt_av[t, i] = (dTdt_est[t + 1, i] + dTdt[t, i]) / 2
-    drhodt_av[t,0] = drhodt_est[t+1,0]
-    dVdt_av[t,0] = dVdt_est[t+1,0]
-    dTdt_av[t,0] = dTdt_est[t+1,0]
-    drhodt_av[t,-1] = drhodt_est[t,-1]
-    dVdt_av[t,-1] = dVdt_est[t,-1]
-    dTdt_av[t,-1] = dTdt_est[t,-1]
+    # drhodt_av[t,0] = drhodt_est[t+1,0]
+    # dVdt_av[t,0] = dVdt_est[t+1,0]
+    # dTdt_av[t,0] = dTdt_est[t+1,0]
+    # drhodt_av[t,-1] = drhodt_est[t,-1]
+    # dVdt_av[t,-1] = dVdt_est[t,-1]
+    # dTdt_av[t,-1] = dTdt_est[t,-1]
 
-    for i in range(0,Nx):
+    for i in range(1,Nx-1):
         # corrector
         rho[t+1,i] = rho[t,i] + drhodt_av[t,i]*dt
         V[t + 1, i] = V[t, i] + dVdt_av[t,i] * dt
@@ -158,9 +161,9 @@ for t in range(0,Nt-1):
 
 
 
-    # if t % 100 == 0:  # Check conservation every 100 time steps
-    #     mass, momentum, energy = conservation_check(rho, V, T, A, t, dx)
-    #     print(f"Time step {t}, Mass = {mass:.5f}, Momentum = {momentum:.5f}, Energy = {energy:.5f}")
+    if t % 100 == 0:  # Check conservation every 100 time steps
+        mass, momentum, energy = conservation_check(rho, V, T, A, t, dx)
+        # print(f"Time step {t}, Mass = {mass:.5f}, Momentum = {momentum:.5f}, Energy = {energy:.5f}")
 
 
 
@@ -173,30 +176,30 @@ for t in range(0,Nt-1):
     drhodt_av_history.append(np.abs(drhodt_av[t,int(mid)]))
     dVdt_av_history.append(np.abs(dVdt_av[t,int(mid)]))
 
-    # for i in range(0,Nx):
-    #     mass_flow[t+1,i] = rho[t+1,i]*V[t+1,i]*A[i]
+    for i in range(0,Nx):
+        mass_flow[t+1,i] = rho[t+1,i]*V[t+1,i]*A[i]
 
-print(rho[4999,15], V[4999,15], T[4999,15])
 
-# ########## RESULTS ###########
-#
-# # Tab. 7.3
+
+########## RESULTS ###########
+
+# Tab. 7.7
 # print(np.round(np.array((x.T, A.T, rho[1399,:].T, V[1399,:].T, T[1399,:].T, p[1399,:].T, M[1399,:].T, mass_flow[1399,:].T)),3))
-#
-# # Tab. 7.4
+
+# Tab. 7.8
 # print(np.round(np.array((x.T, A.T, rho[1399,:].T, rho_an[:], np.abs(rho[1399,:]-rho_an[:])/rho[1399,:]*100, M[1399,:].T, Mtot[:].T, np.abs(M[1399,:]-Mtot[:])/M[1399,:]*100)),3))
-#
-# # Tab. 7.5
-# # results can be found on Tab. 7.6 if the grid points are changed
-#
-# # Tab. 7.6
+
+# Tab. 7.5
+# results can be found on Tab. 7.6 if the grid points are changed
+
+# Tab. 7.6
 # print(f"Density numerical = {rho[1399,int(mid)]}, Density analytical = {rho_an[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
 # print(f"Temperature numerical = {T[1399,int(mid)]}, Temperature analytical = {T_an[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
 # print(f"Pressure numerical = {p[1399,int(mid)]}, Pressure analytical = {p_an[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
 # print(f"Mach numerical = {M[1399,int(mid)]}, Mach analytical = {Mtot[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
-#
-#
-#
+
+
+
 #
 # # Fig. 7.9
 # plt.figure(figsize=(10, 6))
@@ -235,50 +238,52 @@ print(rho[4999,15], V[4999,15], T[4999,15])
 # plt.grid()
 # plt.show()
 #
-# # Fig. 7.10
-# plt.figure(figsize=(10, 6))
-# plt.plot(range(1, len(drhodt_av_history) + 1), drhodt_av_history, label=r"$|(\frac{d\rho}{dt})_{avg}|$")
-# plt.plot(range(1, len(dVdt_av_history) + 1), dVdt_av_history, label=r"$|(\frac{dV}{dt})_{avg}|$")
-# plt.xlabel("Number of Time Steps")
-# plt.ylabel("Residual")
-# plt.title(f"Dimensionless time derivatives at Grid Point {int(mid+1)} Over Time")
-# plt.legend()
-# plt.grid()
-# plt.show()
-#
-# # Fig. 7.11
-# plt.figure(figsize=(10, 6))
-# plt.plot(x,mass_flow[0,:], label=r"$0\Delta t$")
-# plt.plot(x,mass_flow[50,:], label=r"$50\Delta t$")
-# plt.plot(x,mass_flow[100,:], label=r"$100\Delta t$")
-# plt.plot(x,mass_flow[150,:], label=r"$150\Delta t$")
-# plt.plot(x,mass_flow[200,:], label=r"$200\Delta t$")
-# plt.plot(x,mass_flow[700,:], label=r"$700\Delta t$")
-# plt.xlabel("Nondimensionless distance through nozzle (x)")
-# plt.ylabel("Nondimensionless mass flow")
-# plt.title("Mass flow distributions")
-# plt.legend()
-# plt.grid()
-# plt.show()
-#
-# # Fig. 7.12
-# fig, ax1 = plt.subplots()
-# ax1.plot(x, rho[1399,:], label="Numerical results")
-# ax1.plot(x[::3], rho_an[::3], 'o', label="Analytical results")
-# ax1.set_xlabel("Nondimensionless distance through nozzle (x)")
-# ax1.set_ylabel("Nondimensionless density")
-# ax2 = ax1.twinx()
-# ax2.plot(x, M[1399,:], 'g', label="Numerical results")
-# ax2.plot(x[::3], Mtot[::3],'o', label="Analytical results")
-# ax2.set_ylabel("Mach number")
-# plt.title("Steady-state distributions over nozzle distance")
-# plt.legend()
-# plt.grid()
-# plt.show()
+# Fig. 7.10
+plt.figure(figsize=(10, 6))
+plt.plot(range(1, len(drhodt_av_history) + 1), drhodt_av_history, label=r"$|(\frac{d\rho}{dt})_{avg}|$")
+plt.plot(range(1, len(dVdt_av_history) + 1), dVdt_av_history, label=r"$|(\frac{dV}{dt})_{avg}|$")
+plt.xlabel("Number of Time Steps")
+plt.ylabel("Residual")
+plt.title(f"Dimensionless time derivatives at Grid Point {int(mid+1)} Over Time")
+plt.legend()
+plt.grid()
+plt.show()
 
+# Fig. 7.16
+plt.figure(figsize=(10, 6))
+plt.plot(x,mass_flow[0,:], label=r"$0\Delta t$")
+plt.plot(x,mass_flow[499,:], label=r"$500\Delta t$")
+plt.plot(x,mass_flow[-1,:], label=r"$5000\Delta t$")
+plt.xlabel("Nondimensionless distance through nozzle (x)")
+plt.ylabel("Nondimensionless mass flow")
+plt.title("Mass flow distributions")
+plt.legend()
+plt.grid()
+plt.show()
 
+# Fig. 7.17
+plt.figure(figsize=(10, 6))
+plt.plot(x,p[0,:], label=r"$0\Delta t$")
+plt.plot(x,p[500,:], label=r"$500\Delta t$")
+plt.plot(x,p[1000,:], label=r"$1000\Delta t$")
+plt.plot(x,p[-1,:], label=r"$5000\Delta t$")
+plt.xlabel("Nondimensionless distance through nozzle (x)")
+plt.ylabel("Nondimensionless mass flow")
+plt.title("Mass flow distributions")
+plt.legend()
+plt.grid()
+plt.show()
 
-
-
-
-
+# Fig. 7.18
+############### CHANGE pe to pe = 0.9 for this plot
+plt.figure(figsize=(10, 6))
+plt.plot(x,p[0,:], label=r"$0\Delta t$")
+plt.plot(x,p[400,:], label=r"$400\Delta t$")
+plt.plot(x,p[800,:], label=r"$800\Delta t$")
+plt.plot(x,p[1200,:], label=r"$1200\Delta t$")
+plt.xlabel("Nondimensionless distance through nozzle (x)")
+plt.ylabel("Nondimensionless mass flow")
+plt.title("Mass flow distributions")
+plt.legend()
+plt.grid()
+plt.show()
