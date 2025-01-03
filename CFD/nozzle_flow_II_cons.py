@@ -38,6 +38,46 @@ for i in range(0,limit1):
 for i in range(limit1, len(x)):
     A[i] = 1 + 0.2223 * (x[i] - 1.5) ** 2
 
+# Analytical calculations
+def Mach_eq(M_ex, pe):
+    return pe - (1 + (gamma - 1) / 2 * M_ex ** 2) ** -(gamma / (gamma - 1))
+
+
+def A_eq(AeA0, M_ex):
+    return (AeA0) ** 2 - (1 / M_ex ** 2) * (
+                ((2 / (gamma + 1)) * (1 + ((gamma - 1) / 2) * M_ex ** 2)) ** ((gamma + 1) / (gamma - 1)))
+
+
+mach_ex_guess = 1
+A_guess = 0.1
+M_ex = fsolve(Mach_eq, mach_ex_guess, args=pe)
+
+AeA0 = fsolve(A_eq, A_guess, args=M_ex)
+
+AA0 = A * AeA0 / 1.5
+
+
+def Mach_eq2(M_an, AA0):
+    return (AA0) ** 2 - (1 / M_an ** 2) * (
+                ((2 / (gamma + 1)) * (1 + ((gamma - 1) / 2) * M_an ** 2)) ** ((gamma + 1) / (gamma - 1)))
+
+
+Mtot = np.zeros(Nx)
+
+for i in range(0, Nx):
+    init_guess = 0.079
+    M_an = fsolve(Mach_eq2, init_guess, args=AA0[i])
+
+    while M_an < 0.07 or M_an > 0.545:
+        init_guess = init_guess + 0.001
+        M_an = fsolve(Mach_eq2, init_guess, args=AA0[i])
+
+    Mtot[i] = M_an
+
+p_an = (1 + (gamma - 1) / 2 * Mtot ** 2) ** (-gamma / (gamma - 1))
+rho_an = (1 + (gamma - 1) / 2 * Mtot ** 2) ** (-1 / (gamma - 1))
+T_an = (1 + (gamma - 1) / 2 * Mtot ** 2) ** -1
+
 
 U1 = rho * A
 U2 = rho * A * V
@@ -154,10 +194,10 @@ pressure[0] = (pe-p0)/L *x + 1
 ########## RESULTS ###########
 
 # Tab. 7.7
-print(x.T, A.T, rho[-1].T, V[-1].T, T[-1].T, p[-1].T, M[-1].T, m[-1].T)
+print(x.T, A.T, rho[:].T, V[:].T, T[:].T, p[:].T, M[:].T, m[:   ].T)
 
 # Tab. 7.8
-# print(np.round(np.array((x.T, A.T, rho[1399,:].T, rho_an[:], np.abs(rho[1399,:]-rho_an[:])/rho[1399,:]*100, M[1399,:].T, Mtot[:].T, np.abs(M[1399,:]-Mtot[:])/M[1399,:]*100)),3))
+print(np.round(np.array((x.T, A.T, rho[:].T, rho_an[:], np.abs(rho[:]-rho_an[:])/rho[:]*100, M[:].T, Mtot[:].T, np.abs(M[:]-Mtot[:])/M[:]*100)),3))
 
 # Tab. 7.5
 # results can be found on Tab. 7.6 if the grid points are changed
