@@ -1,6 +1,3 @@
-from idlelib.format import get_indent
-from operator import index
-
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.pyplot import figure
@@ -17,7 +14,7 @@ def conservation_check(rho, V, T, A, t, dx):
 gamma = 1.4
 L = 3
 Nx = 31
-Nt = 1400
+Nt = 202
 x = np.linspace(0,L,Nx) # x/L
 dx = L/(Nx-1)
 C = 0.5
@@ -48,8 +45,9 @@ for i in range(limit2,Nx):
 A_ = 1+2.2*(x - 1.5)**2 # A/A*
 A = A_/min(A_)
 
-V_i = U2_i/rho_i/A
+
 U1_i = rho_i*A
+V_i = U2_i/U1_i
 U3_i = rho_i*(T_i/(gamma-1) + 0.5*gamma*V_i**2)*A
 
 
@@ -109,25 +107,24 @@ for i in range(0,Nx-1):
     J2[0,i] = 1/gamma * rho[0,i]*T[0,i]*(A[i+1]-A[i])/dx
 
 
-for t in range(101):
-# for t in range(0,1):
-    rho[t + 1, 0] = 1
-    T[t + 1, 0] = 1
-    U1[t + 1, 0] = A[0]
-    U2[t + 1, 0] = 2 * U2[t + 1, 1] - U2[t + 1, 2]
-    V[t+1,0] = U2[t+1,0]/U1[t+1,0]
-    U3[t + 1, 0] = U1[t + 1, 0] * (T[t + 1, 0] / (gamma - 1) + 0.5 * gamma * V[t + 1, 0] ** 2)
-    U1[t + 1, -1] = 2 * U1[t + 1, -2] - U1[t + 1, -3]
-    U2[t + 1, -1] = 2 * U2[t + 1, -2] - U2[t + 1, -3]
-    U3[t + 1, -1] = 2 * U3[t + 1, -2] - U3[t + 1, -3]
 
-    for i in range(1,Nx-1):
+# rho[:,0] = 1
+# T[:,0] = 1
+# U1[:,0] = 1
+# U2[0,0] = 2*U2[0,1]-U2[0,2]
+# U3[0,0] = U1[0,0]*(T[0,0]/(gamma-1)+0.5*gamma*V[0,0]*2)
+
+
+for t in range(Nt-1):
+# for t in range(0,1):
+
+    for i in range(0,Nx-1):
         # derivatives
         dU1dt[t, i] = - (F1[t,i+1]-F1[t,i])/dx
         dU2dt[t,i] = - (F2[t,i+1]-F2[t,i])/dx + J2[t,i]
         dU3dt[t, i] = - (F3[t,i+1]-F3[t,i])/dx
 
-    for i in range(1,Nx-1):
+    for i in range(0,Nx-1):
         # estimators
         U1_est[t+1,i] = U1[t, i] + dU1dt[t,i]*dt
         U2_est[t + 1, i] = U2[t, i] + dU2dt[t, i] * dt
@@ -139,13 +136,13 @@ for t in range(101):
 
 
         F1_est[t+1, i] = U2_est[t+1, i]
-        F2_est[t+1,i] = (U2_est[t+1, i] ** 2 / U1_est[t+1, i] + (gamma - 1) / gamma * (U3_est[t+1,i] - 0.5 * gamma * U2_est[t+1,i]**2 / U1_est[t+1, i]))
+        F2_est[t+1,i] = (U2_est[t+1, i]**2 / U1_est[t+1, i] + (gamma - 1) / gamma * (U3_est[t+1,i] - 0.5 * gamma * U2_est[t+1,i]**2 / U1_est[t+1, i]))
         F3_est[t+1, i] = U2_est[t+1,i] * U3_est[t+1,i] * gamma / U1_est[t+1,i] - gamma * (gamma - 1) * 0.5 * U2_est[t+1,i]**3 / (U1_est[t+1,i]**2)
 
-    for i in range(1,Nx-1):
-        J2_est[t+1,i] = rho_est[t + 1, i] * T_est[t + 1, i] * (A[i] - A[i - 1]) / dx / gamma
-
-    for i in range(1,Nx-1):
+    for i in range(1,Nx):
+        # J2_est[t+1,i] = 1 / gamma * rho_est[t + 1, i] * T_est[t + 1, i] * (A[i+1] - A[i]) / dx
+        J2_est[t + 1, i] = (gamma-1) / gamma * (U3_est[t + 1, i] * 0.5*gamma*U2_est[t + 1, i]**2/U1_est[t+1,i]) * (np.log(A[i]) - np.log(A[i-1])) / dx
+    for i in range(1,Nx):
         # der estimators
         dU1dt_est[t+1, i] = - (F1_est[t+1,i]-F1_est[t+1,i-1])/dx
         dU2dt_est[t+1, i] = - (F2[t+1,i]-F2[t+1,i-1])/dx + J2_est[t+1,i]
@@ -156,43 +153,48 @@ for t in range(101):
         dU2dt_av[t, i] = (dU2dt_est[t + 1, i] + dU2dt[t, i]) / 2
         dU3dt_av[t, i] = (dU3dt_est[t + 1, i] + dU3dt[t, i]) / 2
 
-    dU1dt_av[t,0] = dU1dt_est[t+1,0]
-    dU2dt_av[t,0] = dU2dt_est[t+1,0]
-    dU3dt_av[t,0] = dU3dt_est[t+1,0]
-    dU1dt_av[t,-1] = dU1dt_est[t+1,-1]
-    dU2dt_av[t,-1] = dU2dt_est[t+1,-1]
-    dU3dt_av[t,-1] = dU3dt_est[t+1,-1]
+    # dU1dt_av[t,0] = dU1dt_est[t+1,0]
+    # dU2dt_av[t,0] = dU2dt_est[t+1,0]
+    # dU3dt_av[t,0] = dU3dt_est[t+1,0]
+    # dU1dt_av[t,-1] = dU1dt_est[t+1,-1]
+    # dU2dt_av[t,-1] = dU2dt_est[t+1,-1]
+    # dU3dt_av[t,-1] = dU3dt_est[t+1,-1]
 
-    for i in range(0,Nx):
+    for i in range(1,Nx-1):
         # corrector
-        U1[t+1,i] = U1[t,i] + 0.5*(dU1dt_est[t + 1, i] + dU1dt[t, i])*dt
-        U2[t + 1, i] = U2[t, i] + 0.5*(dU2dt_est[t + 1, i] + dU2dt[t, i])*dt
-        U3[t + 1, i] = U3[t, i] + 0.5*(dU3dt_est[t + 1, i] + dU3dt[t, i])*dt
+        U1[t+1,i] = U1[t,i] + dU1dt_av[t,i]*dt
+        U2[t + 1, i] = U2[t, i] + dU2dt_av[t,i]*dt
+        U3[t + 1, i] = U3[t, i] + dU3dt_av[t,i]*dt
 
 
-    for i in range(0,Nx):
+
+    for i in range(1,Nx-1):
         rho[t+1,i] = U1[t+1,i]/A[i]
-    for i in range(Nx):
-        V[t+1,i] = U2[t+1,i]/rho[t + 1, i]/A[i]
-    for i in range(Nx):
+    for i in range(1,Nx-1):
+        V[t+1,i] = U2[t+1,i]/U1[t+1,i]
+    for i in range(1,Nx-1):
         T[t+1,i] = (gamma-1)*(U3[t+1,i]/U1[t + 1, i]-0.5*gamma*V[t+1,i]**2)
 
-    # edge values
-    U1[t + 1, 0] = A[0]
-    U2[t + 1, 0] = 2 * U2[t + 1, 1] - U2[t + 1, 2]
-    U1[t + 1, -1] = 2 * U1[t + 1, -2] - U1[t + 1, -3]
-    U2[t + 1, -1] = 2 * U2[t + 1, -2] - U2[t + 1, -3]
-    U3[t + 1, -1] = 2 * U3[t + 1, -2] - U3[t + 1, -3]
-    F1[t + 1, 0] = U2[t + 1, 0]
-    F2[t + 1, 0] = (U2[t + 1, 0] ** 2 / U1[t + 1, 0] + (gamma - 1) / gamma * (
-            U3[t + 1, 0] - 0.5 * gamma * U2[t + 1, 0] ** 2 / U1[t + 1, 0]))
-    F3[t + 1, 0] = U2[t + 1, 0] * U3[t + 1, 0] * gamma / U1[t + 1, 0] - gamma * (gamma - 1) * 0.5 * U2[t + 1, 0] ** 3 / (
-            U1[t + 1, 0] ** 2)
-    F1[t + 1, -1] = U2[t + 1, -1]
-    F2[t + 1, -1] = (U2[t + 1, -1] ** 2 / U1[t + 1, -1] + (gamma - 1) / gamma * (
-            U3[t + 1, -1] - 0.5 * gamma * U2[t + 1, -1] ** 2 / U1[t + 1, -1]))
-    F3[t + 1, -1] = U2[t + 1, -1] * U3[t + 1, -1] * gamma / U1[t + 1, -1] - gamma * (gamma - 1) * 0.5 * U2[
-        t + 1, -1] ** 3 / (U1[t + 1, -1] ** 2)
+
+    rho[t+1,0] = 1
+    T[t+1,0] = 1
+    U1[t+1,0] = A[0]
+    U2[t+1,0] = 2*U2[t+1,1]-U2[t+1,2]
+    U3[t+1,0] = U1[t+1,0]*(T[t+1,0]/(gamma-1)+0.5*gamma*V[t+1,0]*2)
+    F1[t+1,0] = U2[t+1,0]
+    F2[t+1,0] = (U2[t+1,0]**2/U1[t+1,0] + (gamma-1)/gamma * (U3[t+1,0]-0.5*gamma*U2[t+1,0]**2/U1[t+1,0]))
+    F3[t+1,0] = U2[t+1,0]*U3[t+1,0]*gamma/U1[t+1,0] - gamma*(gamma-1)*0.5*U2[t+1,0]**3/(U1[t+1,0]**2)
+
+
+    U1[t+1,-1] = 2*U1[t+1,-2]-U1[t+1,-3]
+    U2[t+1,-1] = 2*U2[t+1,-2]-U2[t+1,-3]
+    U3[t+1,-1] = 2*U3[t+1,-2]-U3[t+1,-3]
+    F1[t+1,-1] = U2[t+1,-1]
+    F2[t+1,-1] = (U2[t+1,-1]**2/U1[t+1,-1] + (gamma-1)/gamma * (U3[t+1,-1]-0.5*gamma*U2[t+1,-1]**2/U1[t+1,-1]))
+    F3[t+1,-1] = U2[t+1,-1]*U3[t+1,-1]*gamma/U1[t+1,-1] - gamma*(gamma-1)*0.5*U2[t+1,-1]**3/(U1[t+1,-1]**2)
+
+    for i in range(0,Nx-1):
+        J2[t+1,i] = (gamma-1) / gamma * (U3[t + 1, i] * 0.5*gamma*U2[t + 1, i]**2/U1[t+1,i]) * (np.log(A[i + 1]) - np.log(A[i])) / dx
 
     if t % 100 == 0:  # Check conservation every 100 time steps
         mass, momentum, energy = conservation_check(rho, V, T, A, t, dx)
@@ -200,7 +202,11 @@ for t in range(101):
 
 
 
-print(rho[1,15], T[1,15], V[1,15])
+
+
+
+
+print(rho[1,15], T[1,15], V[1,15], U1[1,15], U2[1,15], U3[1,15], U1_est[1,15], F1_est[1,14], U2_est[1,15], F2_est[1,14], U3_est[1,15], F3_est[1,14])
 # ########## RESULTS ###########
 #
 # # Tab. 7.3
