@@ -75,7 +75,7 @@ dVdt_av_history = []
 
 mass_flow = np.zeros((len(time),len(x)))
 
-# mid = (Nx-1)/2
+mid = (Nx-1)/2
 rho[0,:] = rho_i
 V[0,:] = V_i
 T[0,:] = T_i
@@ -170,8 +170,8 @@ for t in range(0,Nt-1):
     T[t + 1, 0] = 1
     V[t + 1, 0] = 2 * V[t + 1, 1] - V[t + 1, 2]
     V[t + 1, -1] = 2 * V[t + 1, -2] - V[t + 1, -3]
-    T[t + 1, -1] = 2 * T[t + 1, -2] - T[t + 1, -3]
-    rho[t + 1, -1] = pe / T[t + 1, -1]
+    rho[t + 1, -1] = 2 * rho[t + 1, -2] - rho[t + 1, -3]
+    T[t + 1, -1] = pe / rho[t + 1, -1]
     # pressure and Mach
     p[t + 1,:] = rho[t + 1,:] * T[t + 1,:]
     M[t+1,:] = V[t+1,:] / (T[t + 1,:]**0.5)
@@ -185,13 +185,13 @@ for t in range(0,Nt-1):
 
 
     # # plot vectors
-    # rho_history.append(rho[t + 1, int(mid)])
-    # p_history.append(p[t+1,int(mid)])
-    # T_history.append(T[t+1,int(mid)])
-    # M_history.append(M[t+1,int(mid)])
-    #
-    # drhodt_av_history.append(np.abs(drhodt_av[t,int(mid)]))
-    # dVdt_av_history.append(np.abs(dVdt_av[t,int(mid)]))
+    rho_history.append(rho[t + 1, int(mid)])
+    p_history.append(p[t+1,int(mid)])
+    T_history.append(T[t+1,int(mid)])
+    M_history.append(M[t+1,int(mid)])
+
+    drhodt_av_history.append(np.abs(drhodt_av[t,int(mid)]))
+    dVdt_av_history.append(np.abs(dVdt_av[t,int(mid)]))
 
     for i in range(0,Nx):
         mass_flow[t+1,i] = rho[t+1,i]*V[t+1,i]*A[i]
@@ -210,10 +210,10 @@ print(np.round(np.array((x.T, A.T, rho[1399,:].T, rho_an[:], np.abs(rho[1399,:]-
 # results can be found on Tab. 7.6 if the grid points are changed
 
 # # Tab. 7.6
-# print(f"Density numerical = {rho[1399,int(mid)]}, Density analytical = {rho_an[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
-# print(f"Temperature numerical = {T[1399,int(mid)]}, Temperature analytical = {T_an[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
-# print(f"Pressure numerical = {p[1399,int(mid)]}, Pressure analytical = {p_an[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
-# print(f"Mach numerical = {M[1399,int(mid)]}, Mach analytical = {Mtot[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
+print(f"Density numerical = {rho[1399,int(mid)]}, Density analytical = {rho_an[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
+print(f"Temperature numerical = {T[1399,int(mid)]}, Temperature analytical = {T_an[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
+print(f"Pressure numerical = {p[1399,int(mid)]}, Pressure analytical = {p_an[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
+print(f"Mach numerical = {M[1399,int(mid)]}, Mach analytical = {Mtot[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
 
 
 
@@ -293,14 +293,14 @@ plt.show()
 
 # Fig. 7.18
 ############### CHANGE pe to pe = 0.9 for this plot
-plt.figure(figsize=(10, 6))
-plt.plot(x,p[0,:], label=r"$0\Delta t$")
-plt.plot(x,p[400,:], label=r"$400\Delta t$")
-plt.plot(x,p[800,:], label=r"$800\Delta t$")
-plt.plot(x,p[1200,:], label=r"$1200\Delta t$")
-plt.xlabel("Nondimensionless distance through nozzle (x)")
-plt.ylabel("Nondimensionless mass flow")
-plt.title("Mass flow distributions")
-plt.legend()
-plt.grid()
-plt.show()
+# plt.figure(figsize=(10, 6))
+# plt.plot(x,p[0,:], label=r"$0\Delta t$")
+# plt.plot(x,p[400,:], label=r"$400\Delta t$")
+# plt.plot(x,p[800,:], label=r"$800\Delta t$")
+# plt.plot(x,p[1200,:], label=r"$1200\Delta t$")
+# plt.xlabel("Nondimensionless distance through nozzle (x)")
+# plt.ylabel("Nondimensionless mass flow")
+# plt.title("Mass flow distributions")
+# plt.legend()
+# plt.grid()
+# plt.show()
