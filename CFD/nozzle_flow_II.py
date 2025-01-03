@@ -75,7 +75,7 @@ dVdt_av_history = []
 
 mass_flow = np.zeros((len(time),len(x)))
 
-mid = (Nx-1)/2
+# mid = (Nx-1)/2
 rho[0,:] = rho_i
 V[0,:] = V_i
 T[0,:] = T_i
@@ -83,22 +83,39 @@ mass_flow[0,:] = rho[0,:]*V[0,:]*A[:]
 p[0,:] = p_i
 
 # Analytical calculations
-def Mach_eq(M_an, A_):
-    return (A_) ** 2 - (1 / M_an ** 2) * (
+def Mach_eq(M_ex, pe):
+    return pe - (1 + (gamma - 1) / 2 * M_ex ** 2) ** -(gamma / (gamma - 1))
+
+
+def A_eq(AeA0, M_ex):
+    return (AeA0) ** 2 - (1 / M_ex ** 2) * (
+                ((2 / (gamma + 1)) * (1 + ((gamma - 1) / 2) * M_ex ** 2)) ** ((gamma + 1) / (gamma - 1)))
+
+
+mach_ex_guess = 1
+A_guess = 0.1
+M_ex = fsolve(Mach_eq, mach_ex_guess, args=pe)
+
+AeA0 = fsolve(A_eq, A_guess, args=M_ex)
+
+AA0 = A * AeA0 / 1.5
+
+
+def Mach_eq2(M_an, AA0):
+    return (AA0) ** 2 - (1 / M_an ** 2) * (
                 ((2 / (gamma + 1)) * (1 + ((gamma - 1) / 2) * M_an ** 2)) ** ((gamma + 1) / (gamma - 1)))
 
 
 Mtot = np.zeros(Nx)
 
 for i in range(0, Nx):
-    if i < (Nx) / 2:
-        init_guess = 0.2
-    else:
-        init_guess = 2
-    M_an = fsolve(Mach_eq, init_guess, args=A[i])
+    init_guess = 0.079
+    M_an = fsolve(Mach_eq2, init_guess, args=AA0[i])
 
-    if M_an < 0:
-        M_an = -M_an
+    while M_an < 0.07 or M_an > 0.545:
+        init_guess = init_guess + 0.001
+        M_an = fsolve(Mach_eq2, init_guess, args=AA0[i])
+
     Mtot[i] = M_an
 
 p_an = (1 + (gamma - 1) / 2 * Mtot ** 2) ** (-gamma / (gamma - 1))
@@ -107,12 +124,12 @@ T_an = (1 + (gamma - 1) / 2 * Mtot ** 2) ** -1
 
 
 
+
 p[:,0] = p0
 p[:,-1] = pe
 
 
 for t in range(0,Nt-1):
-
     for i in range(0,Nx-1):
         # derivatives
         drhodt[t, i] = - rho[t,i] * (V[t,i+1]-V[t,i])/dx - rho[t,i]*V[t,i]*(np.log(A[i+1])-np.log(A[i]))/dx - V[t,i]*(rho[t,i+1]-rho[t,i])/dx
@@ -167,14 +184,14 @@ for t in range(0,Nt-1):
 
 
 
-    # plot vectors
-    rho_history.append(rho[t + 1, int(mid)])
-    p_history.append(p[t+1,int(mid)])
-    T_history.append(T[t+1,int(mid)])
-    M_history.append(M[t+1,int(mid)])
-
-    drhodt_av_history.append(np.abs(drhodt_av[t,int(mid)]))
-    dVdt_av_history.append(np.abs(dVdt_av[t,int(mid)]))
+    # # plot vectors
+    # rho_history.append(rho[t + 1, int(mid)])
+    # p_history.append(p[t+1,int(mid)])
+    # T_history.append(T[t+1,int(mid)])
+    # M_history.append(M[t+1,int(mid)])
+    #
+    # drhodt_av_history.append(np.abs(drhodt_av[t,int(mid)]))
+    # dVdt_av_history.append(np.abs(dVdt_av[t,int(mid)]))
 
     for i in range(0,Nx):
         mass_flow[t+1,i] = rho[t+1,i]*V[t+1,i]*A[i]
@@ -184,15 +201,15 @@ for t in range(0,Nt-1):
 ########## RESULTS ###########
 
 # Tab. 7.7
-# print(np.round(np.array((x.T, A.T, rho[1399,:].T, V[1399,:].T, T[1399,:].T, p[1399,:].T, M[1399,:].T, mass_flow[1399,:].T)),3))
+print(np.round(np.array((x.T, A.T, rho[1399,:].T, V[1399,:].T, T[1399,:].T, p[1399,:].T, M[1399,:].T, mass_flow[1399,:].T)),3))
 
 # Tab. 7.8
-# print(np.round(np.array((x.T, A.T, rho[1399,:].T, rho_an[:], np.abs(rho[1399,:]-rho_an[:])/rho[1399,:]*100, M[1399,:].T, Mtot[:].T, np.abs(M[1399,:]-Mtot[:])/M[1399,:]*100)),3))
+print(np.round(np.array((x.T, A.T, rho[1399,:].T, rho_an[:], np.abs(rho[1399,:]-rho_an[:])/rho[1399,:]*100, M[1399,:].T, Mtot[:].T, np.abs(M[1399,:]-Mtot[:])/M[1399,:]*100)),3))
 
 # Tab. 7.5
 # results can be found on Tab. 7.6 if the grid points are changed
 
-# Tab. 7.6
+# # Tab. 7.6
 # print(f"Density numerical = {rho[1399,int(mid)]}, Density analytical = {rho_an[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
 # print(f"Temperature numerical = {T[1399,int(mid)]}, Temperature analytical = {T_an[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
 # print(f"Pressure numerical = {p[1399,int(mid)]}, Pressure analytical = {p_an[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")

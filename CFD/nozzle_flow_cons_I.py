@@ -139,10 +139,10 @@ for t in range(Nt-1):
         F2_est[t+1,i] = (U2_est[t+1, i]**2 / U1_est[t+1, i] + (gamma - 1) / gamma * (U3_est[t+1,i] - 0.5 * gamma * U2_est[t+1,i]**2 / U1_est[t+1, i]))
         F3_est[t+1, i] = U2_est[t+1,i] * U3_est[t+1,i] * gamma / U1_est[t+1,i] - gamma * (gamma - 1) * 0.5 * U2_est[t+1,i]**3 / (U1_est[t+1,i]**2)
 
-    for i in range(1,Nx):
+    for i in range(1,Nx-1):
         # J2_est[t+1,i] = 1 / gamma * rho_est[t + 1, i] * T_est[t + 1, i] * (A[i+1] - A[i]) / dx
         J2_est[t + 1, i] = (gamma-1) / gamma * (U3_est[t + 1, i] * 0.5*gamma*U2_est[t + 1, i]**2/U1_est[t+1,i]) * (np.log(A[i]) - np.log(A[i-1])) / dx
-    for i in range(1,Nx):
+    for i in range(1,Nx-1):
         # der estimators
         dU1dt_est[t+1, i] = - (F1_est[t+1,i]-F1_est[t+1,i-1])/dx
         dU2dt_est[t+1, i] = - (F2[t+1,i]-F2[t+1,i-1])/dx + J2_est[t+1,i]
