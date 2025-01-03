@@ -4,14 +4,15 @@ from matplotlib import pyplot as plt
 from scipy.optimize import fsolve
 
 
-C = 1.1  # Courant
+C = 0.5  # Courant
 g = 1.4
 L = 3  # m
 Nx = 31
 dx = L / (Nx-1)
 Nt = 1400
 x = np.linspace(0, L, Nx)
-A = 1 + 2.2 * (x - 1.5) ** 2
+A_ = 1 + 2.2 * (x - 1.5) ** 2
+A = A_/min(A_)
 r = np.ones(len(x))
 T = np.ones(len(x))
 r[int(0.5 / dx):int(1.5 / dx) + 1] = 1 - 0.366 * (x[int(0.5 / dx):int(1.5 / dx) + 1] - 0.5)
@@ -42,79 +43,32 @@ F1_ = np.zeros(len(x) - 1)
 F2_ = np.zeros(len(x) - 1)
 F3_ = np.zeros(len(x) - 1)
 
-
-rho[0,:] = rho_i
-V[0,:] = V_i
-T[0,:] = T_i
-U1[0,:] = U1_i
-U2[0,:] = U2_i
-U3[0,:] = U3_i
-
-F1[0,:] = U2[0,:]
-F2[0,:] = (U2[0,:]**2/U1[0,:] + (gamma-1)/gamma * (U3[0,:]-0.5*gamma*U2[0,:]**2/U1[0,:]))
-F3[0,:] = U2[0,:]*U3[0,:]*gamma/U1[0,:] - gamma*(gamma-1)*0.5*U2[0,:]**3/(U1[0,:]**2)
-for i in range(0,Nx-1):
-    J2[0,i] = 1/gamma * rho[0,i]*T[0,i]*(A[i+1]-A[i])/dx
+mass = {}
+mass[0] = r*A*V
+pressure = {}
+mid = (Nx-1)/2
+# Analytical calculations
+def Mach_eq(M_an, A_):
+    return (A_) ** 2 - (1 / M_an ** 2) * (
+                ((2 / (g + 1)) * (1 + ((g - 1) / 2) * M_an ** 2)) ** ((g + 1) / (g - 1)))
 
 
+Mtot = np.zeros(Nx)
 
-# rho[:,0] = 1
-# T[:,0] = 1
-# U1[:,0] = 1
-# U2[0,0] = 2*U2[0,1]-U2[0,2]
-# U3[0,0] = U1[0,0]*(T[0,0]/(gamma-1)+0.5*gamma*V[0,0]*2)
+for i in range(0, Nx):
+    if i < (Nx) / 2:
+        init_guess = 0.2
+    else:
+        init_guess = 2
+    M_an = fsolve(Mach_eq, init_guess, args=A_[i])
 
+    if M_an < 0:
+        M_an = -M_an
+    Mtot[i] = M_an
 
-for t in range(Nt-1):
-# for t in range(0,1):
-
-    for i in range(0,Nx-1):
-        # derivatives
-        dU1dt[t, i] = - (F1[t,i+1]-F1[t,i])/dx
-        dU2dt[t,i] = - (F2[t,i+1]-F2[t,i])/dx + J2[t,i]
-        dU3dt[t, i] = - (F3[t,i+1]-F3[t,i])/dx
-
-    for i in range(0,Nx-1):
-        # estimators
-        U1_est[t+1,i] = U1[t, i] + dU1dt[t,i]*dt
-        U2_est[t + 1, i] = U2[t, i] + dU2dt[t, i] * dt
-        U3_est[t + 1, i] = U3[t, i] + dU3dt[t, i] * dt
-
-
-        rho_est[t+1,i] = U1_est[t+1,i]/A[i]
-        T_est[t + 1, i] = (gamma-1)*(U3_est[t+1,i]/U1_est[t + 1, i]-0.5*gamma*(U2_est[t + 1, i]/U1_est[t + 1, i])**2)
-
-
-        F1_est[t+1, i] = U2_est[t+1, i]
-        F2_est[t+1,i] = (U2_est[t+1, i]**2 / U1_est[t+1, i] + (gamma - 1) / gamma * (U3_est[t+1,i] - 0.5 * gamma * U2_est[t+1,i]**2 / U1_est[t+1, i]))
-        F3_est[t+1, i] = U2_est[t+1,i] * U3_est[t+1,i] * gamma / U1_est[t+1,i] - gamma * (gamma - 1) * 0.5 * U2_est[t+1,i]**3 / (U1_est[t+1,i]**2)
-
-    for i in range(1,Nx-1):
-        # J2_est[t+1,i] = 1 / gamma * rho_est[t + 1, i] * T_est[t + 1, i] * (A[i+1] - A[i]) / dx
-        J2_est[t + 1, i] = (gamma-1) / gamma * (U3_est[t + 1, i] * 0.5*gamma*U2_est[t + 1, i]**2/U1_est[t+1,i]) * (np.log(A[i]) - np.log(A[i-1])) / dx
-    for i in range(1,Nx-1):
-        # der estimators
-        dU1dt_est[t+1, i] = - (F1_est[t+1,i]-F1_est[t+1,i-1])/dx
-        dU2dt_est[t+1, i] = - (F2[t+1,i]-F2[t+1,i-1])/dx + J2_est[t+1,i]
-        dU3dt_est[t+1, i] = - (F3_est[t+1,i]-F3_est[t+1,i-1])/dx
-
-    for i in range(1,Nx-1):
-        dU1dt_av[t, i] = (dU1dt_est[t + 1, i] + dU1dt[t, i]) / 2
-        dU2dt_av[t, i] = (dU2dt_est[t + 1, i] + dU2dt[t, i]) / 2
-        dU3dt_av[t, i] = (dU3dt_est[t + 1, i] + dU3dt[t, i]) / 2
-
-    # dU1dt_av[t,0] = dU1dt_est[t+1,0]
-    # dU2dt_av[t,0] = dU2dt_est[t+1,0]
-    # dU3dt_av[t,0] = dU3dt_est[t+1,0]
-    # dU1dt_av[t,-1] = dU1dt_est[t+1,-1]
-    # dU2dt_av[t,-1] = dU2dt_est[t+1,-1]
-    # dU3dt_av[t,-1] = dU3dt_est[t+1,-1]
-
-    for i in range(1,Nx-1):
-        # corrector
-        U1[t+1,i] = U1[t,i] + dU1dt_av[t,i]*dt
-        U2[t + 1, i] = U2[t, i] + dU2dt_av[t,i]*dt
-        U3[t + 1, i] = U3[t, i] + dU3dt_av[t,i]*dt
+p_an = (1 + (g - 1) / 2 * Mtot ** 2) ** (-g / (g - 1))
+r_an = (1 + (g - 1) / 2 * Mtot ** 2) ** (-1 / (g - 1))
+T_an = (1 + (g - 1) / 2 * Mtot ** 2) ** -1
 
 r_history = []
 T_history = []
@@ -185,3 +139,102 @@ for j in range(Nt):
 
 
 
+# Tab. 7.3
+print(x.T, A.T, r[:].T, V[:].T, T[:].T, p[:].T, M[:].T, m[:].T)
+
+# Tab. 7.4
+print(np.round(np.array((x.T, A.T, r[:].T, r_an[:], np.abs(r[:]-r_an[:])/r[:]*100, M[:].T, Mtot[:].T, np.abs(M[:]-Mtot[:])/M[:]*100)),3))
+
+# Tab. 7.5
+# results can be found on Tab. 7.6 if the grid points are changed
+
+# # # Tab. 7.6
+# print(f"Density numerical = {r[1399,int(mid)]}, Density analytical = {r_an[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
+# print(f"Temperature numerical = {T[1399,int(mid)]}, Temperature analytical = {T_an[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
+# print(f"Pressure numerical = {p[1399,int(mid)]}, Pressure analytical = {p_an[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
+# print(f"Mach numerical = {M[1399,int(mid)]}, Mach analytical = {Mtot[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
+
+
+
+#
+# # Fig. 7.9
+plt.figure(figsize=(10, 6))
+plt.plot(range(1, len(r_history) + 1), r_history, label="Numerical Solution")
+plt.xlabel("Number of Time Steps")
+plt.ylabel(r"$\rho / \rho_0$")
+plt.title(f"Density at Grid Point {int(mid+1)} Over Time")
+plt.legend()
+plt.grid()
+plt.show()
+
+plt.figure(figsize=(10, 6))
+plt.plot(range(1, len(T_history) + 1), T_history, label="Numerical Solution")
+plt.xlabel("Number of Time Steps")
+plt.ylabel(r"$T / T_0$")
+plt.title(f"Temperature at Grid Point {int(mid+1)} Over Time")
+plt.legend()
+plt.grid()
+plt.show()
+
+plt.figure(figsize=(10, 6))
+plt.plot(range(1, len(p_history) + 1), p_history, label="Numerical Solution")
+plt.xlabel("Number of Time Steps")
+plt.ylabel(r"$p / p_0$")
+plt.title(f"Pressure at Grid Point {int(mid+1)} Over Time")
+plt.legend()
+plt.grid()
+plt.show()
+
+plt.figure(figsize=(10, 6))
+plt.plot(range(1, len(M_history) + 1), M_history, label="Numerical Solution")
+plt.xlabel("Number of Time Steps")
+plt.ylabel(r"$M$")
+plt.title(f"Mach number at Grid Point {int(mid+1)} Over Time")
+plt.legend()
+plt.grid()
+plt.show()
+#
+# Fig. 7.10
+# plt.figure(figsize=(10, 6))
+# plt.plot(range(1, len(drdt_av_history) + 1), drdt_av_history, label=r"$|(\frac{d\r}{dt})_{avg}|$")
+# plt.plot(range(1, len(dVdt_av_history) + 1), dVdt_av_history, label=r"$|(\frac{dV}{dt})_{avg}|$")
+# plt.xlabel("Number of Time Steps")
+# plt.ylabel("Residual")
+# plt.title(f"Dimensionless time derivatives at Grid Point {int(mid+1)} Over Time")
+# plt.legend()
+# plt.grid()
+# plt.show()
+#
+
+
+# # Fig. 7.11
+plt.figure(figsize=(10, 6))
+plt.plot(x,mass[0], label=r"$0\Delta t$")
+plt.plot(x,mass[49], label=r"$50\Delta t$")
+plt.plot(x,mass[99], label=r"$100\Delta t$")
+plt.plot(x,mass[149], label=r"$150\Delta t$")
+plt.plot(x,mass[199], label=r"$150\Delta t$")
+plt.plot(x,mass[699], label=r"$700\Delta t$")
+plt.xlabel("Nondimensionless distance through nozzle (x)")
+plt.ylabel("Nondimensionless mass flow")
+plt.title("Mass flow distributions")
+plt.legend()
+plt.grid()
+plt.show()
+#
+# # Fig. 7.12
+fig, ax1 = plt.subplots()
+ax1.plot(x, r, label="Numerical results")
+ax1.plot(x[::3], r_an[::3], 'o', label="Analytical results")
+ax1.set_xlabel("Nondimensionless distance through nozzle (x)")
+ax1.set_ylabel("Nondimensionless density")
+ax2 = ax1.twinx()
+ax2.plot(x, M, 'g', label="Numerical results")
+ax2.plot(x[::3], Mtot[::3],'o', label="Analytical results")
+ax2.set_ylabel("Mach number")
+plt.title("Steady-state distributions over nozzle distance")
+plt.legend()
+plt.grid()
+plt.show()
+
+print(mass)
