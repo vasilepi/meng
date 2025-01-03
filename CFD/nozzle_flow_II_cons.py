@@ -105,7 +105,8 @@ F3_ = np.zeros(len(x)-1)
 # dU1_ = np.zeros(len(x)-1)
 # dU2_ = np.zeros(len(x)-1)
 # dU3_ = np.zeros(len(x)-1)
-
+mass = {}
+pressure = {}
 for j in range(Nt):
     for i in range (len(x)-1):
         # Predictor Step
@@ -124,9 +125,7 @@ for j in range(Nt):
         # F3_[i] = gamma * U2_[i] * U3_[i] / U1_[i] - gamma*(gamma-1)/2 * U2_[i]**3 / U1_[i]**2
         F3_[i] = gamma * U2_[i] * U3_[i] / U1_[i] - gamma*(gamma-1)/2 * (U2_[i]/U1_[i])**2 * U2_[i]
 
-    # print(dU1_[[15,14]])
-    # print(dU2_[[15,14]])
-    # print(dU3[[15,14]])
+
 
         # Corrector Step
     for i in range (1,len(x)-1):
@@ -156,16 +155,9 @@ for j in range(Nt):
         T[-1] = pe/rho[-1]
         U3[-1] = U1[-1] * (T[-1]/(gamma-1) + gamma/2 * V[-1]**2)
 
+    m = rho * V * A
 
-        m = rho * V * A
-    # print(rho[15])
-    # print(T[15])
-    # print(V[15])
 
-        # if i ==15:
-        #     print(dU1_)
-        #     print(dU2_av)
-        #     print(dU3_av)
 
     F1 = U2
     F2 = U2 ** 2 / U1 + (gamma - 1) / gamma * (U3 - gamma / 2 * U2 ** 2 / U1)
@@ -181,12 +173,6 @@ for j in range(Nt):
         pressure[j] = p
     if j == 399 or j == 799 or j == 2199:
         pressure[j] = p
-
-
-print(rho)
-print(V)
-print(T)
-print(m)
 
 
 pressure[0] = (pe-p0)/L *x + 1
