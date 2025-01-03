@@ -131,22 +131,30 @@ for j in range(Nt):
     F2 = U2 ** 2 / U1 + (gamma - 1) / gamma * (U3 - gamma / 2 * U2 ** 2 / U1)
     F3 = gamma * U2 * U3 / U1 - gamma * (gamma - 1) / 2 * U2 ** 3 / U1 ** 2
 
+    p = rho*T
+    M = V/(T**2)
 
-# print(dU1_[14:17])
-# print(dU2_[15])
-# print(dU3_[15])
+    if j == 0 or j == 499 or j == Nt-1:
+        mass[j] = m
+        pressure[j] = p
+    if j == 999:
+        pressure[j] = p
+    if j == 399 or j == 799 or j == 2199:
+        pressure[j] = p
+
+
 print(rho)
 print(V)
 print(T)
 print(m)
 
 
-
+pressure[0] = (pe-p0)/L *x + 1
 
 ########## RESULTS ###########
 
 # Tab. 7.7
-# print(np.round(np.array((x.T, A.T, rho[1399,:].T, V[1399,:].T, T[1399,:].T, p[1399,:].T, M[1399,:].T, mass_flow[1399,:].T)),3))
+print(x.T, A.T, rho[-1].T, V[-1].T, T[-1].T, p[-1].T, M[-1].T, m[-1].T)
 
 # Tab. 7.8
 # print(np.round(np.array((x.T, A.T, rho[1399,:].T, rho_an[:], np.abs(rho[1399,:]-rho_an[:])/rho[1399,:]*100, M[1399,:].T, Mtot[:].T, np.abs(M[1399,:]-Mtot[:])/M[1399,:]*100)),3))
@@ -211,38 +219,40 @@ print(m)
 # plt.grid()
 # plt.show()
 #
+
+
 # # Fig. 7.16
-# plt.figure(figsize=(10, 6))
-# plt.plot(x,mass_flow[0,:], label=rho"$0\Delta t$")
-# plt.plot(x,mass_flow[499,:], label=rho"$500\Delta t$")
-# plt.plot(x,mass_flow[-1,:], label=rho"$5000\Delta t$")
-# plt.xlabel("Nondimensionless distance through nozzle (x)")
-# plt.ylabel("Nondimensionless mass flow")
-# plt.title("Mass flow distributions")
-# plt.legend()
-# plt.grid()
-# plt.show()
+plt.figure(figsize=(10, 6))
+plt.plot(x,mass[0], label=r"$0\Delta t$")
+plt.plot(x,mass[499], label=r"$500\Delta t$")
+plt.plot(x,mass[Nt-1], label=r"$5000\Delta t$")
+plt.xlabel("Nondimensionless distance through nozzle (x)")
+plt.ylabel("Nondimensionless mass flow")
+plt.title("Mass flow distributions")
+plt.legend()
+plt.grid()
+plt.show()
 #
 # # Fig. 7.17
-# plt.figure(figsize=(10, 6))
-# plt.plot(x,p[0,:], label=rho"$0\Delta t$")
-# plt.plot(x,p[500,:], label=rho"$500\Delta t$")
-# plt.plot(x,p[1000,:], label=rho"$1000\Delta t$")
-# plt.plot(x,p[-1,:], label=rho"$5000\Delta t$")
-# plt.xlabel("Nondimensionless distance through nozzle (x)")
-# plt.ylabel("Nondimensionless mass flow")
-# plt.title("Mass flow distributions")
-# plt.legend()
-# plt.grid()
-# plt.show()
+plt.figure(figsize=(10, 6))
+plt.plot(x,pressure[0], label=r"$0\Delta t$")
+plt.plot(x,pressure[499], label=r"$500\Delta t$")
+plt.plot(x,pressure[999], label=r"$1000\Delta t$")
+plt.plot(x,pressure[Nt-1], label=r"$5000\Delta t$")
+plt.xlabel("Nondimensionless distance through nozzle (x)")
+plt.ylabel("Nondimensionless mass flow")
+plt.title("Mass flow distributions")
+plt.legend()
+plt.grid()
+plt.show()
 
 # Fig. 7.18
 ############### CHANGE pe to pe = 0.9 for this plot
 # plt.figure(figsize=(10, 6))
-# plt.plot(x,p[0,:], label=rho"$0\Delta t$")
-# plt.plot(x,p[400,:], label=rho"$400\Delta t$")
-# plt.plot(x,p[800,:], label=rho"$800\Delta t$")
-# plt.plot(x,p[1200,:], label=rho"$1200\Delta t$")
+# plt.plot(x,pressure[0], label=r"$0\Delta t$")
+# plt.plot(x,pressure[399], label=r"$400\Delta t$")
+# plt.plot(x,pressure[799], label=r"$800\Delta t$")
+# plt.plot(x,pressure[2199], label=r"$1200\Delta t$")
 # plt.xlabel("Nondimensionless distance through nozzle (x)")
 # plt.ylabel("Nondimensionless mass flow")
 # plt.title("Mass flow distributions")
