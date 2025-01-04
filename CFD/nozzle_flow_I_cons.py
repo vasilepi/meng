@@ -33,6 +33,7 @@ for i in range(limit2,Nx):
 
 
 V = 0.59 / (rho * A)
+p = rho*T
 U1 = rho * A
 U2 = rho * A * V
 U3 = rho * (T / (gamma - 1) + gamma / 2 * V ** 2) * A
@@ -213,15 +214,15 @@ plt.show()
 #
 # Fig. 7.10
 # plt.figure(figsize=(10, 6))
-# plt.plot(range(1, len(drdt_av_history) + 1), drdt_av_history, label=rho"$|(\frac{d\rho}{dt})_{avg}|$")
-# plt.plot(range(1, len(dVdt_av_history) + 1), dVdt_av_history, label=rho"$|(\frac{dV}{dt})_{avg}|$")
+# plt.plot(range(1, len(drdt_av_history) + 1), drdt_av_history, label=r"$|(\frac{d\rho}{dt})_{avg}|$")
+# plt.plot(range(1, len(dVdt_av_history) + 1), dVdt_av_history, label=r"$|(\frac{dV}{dt})_{avg}|$")
 # plt.xlabel("Number of Time Steps")
 # plt.ylabel("Residual")
 # plt.title(f"Dimensionless time derivatives at Grid Point {int(mid+1)} Over Time")
 # plt.legend()
 # plt.grid()
 # plt.show()
-#
+
 
 
 # # Fig. 7.11
@@ -253,5 +254,3 @@ plt.title("Steady-state distributions over nozzle distance")
 plt.legend()
 plt.grid()
 plt.show()
-
-print(mass)

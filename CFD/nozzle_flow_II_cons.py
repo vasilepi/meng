@@ -78,6 +78,7 @@ T_an = (1 + (gamma - 1) / 2 * M_an ** 2) ** -1
 U1 = rho * A
 U2 = rho * A * V
 U3 = rho * (T/(gamma-1) + gamma/2*V**2) * A
+p = rho*T
 
 F1 = U2
 F2 = U2**2/U1 + (gamma-1)/gamma * (U3 - gamma/2 * U2**2/U1)
@@ -157,7 +158,7 @@ for j in range(Nt):
     F3 = gamma * U2 * U3 / U1 - gamma * (gamma - 1) / 2 * U2 ** 3 / U1 ** 2
 
     p = rho*T
-    M = V/(T**2)
+    M = V/(T**0.5)
 
     if j == 0 or j == 499 or j == Nt-1:
         mass[j] = mass_flow
