@@ -39,45 +39,41 @@ for i in range(limit1, len(x)):
     A[i] = 1 + 0.2223 * (x[i] - 1.5) ** 2
 
 # Analytical calculations
-def Mach_eq(M_ex, pe):
+def M_solve(M_ex, pe):
     return pe - (1 + (gamma - 1) / 2 * M_ex ** 2) ** -(gamma / (gamma - 1))
 
-
-def A_eq(AeA0, M_ex):
+def A_solve(AeA0, M_ex):
     return (AeA0) ** 2 - (1 / M_ex ** 2) * (
-                ((2 / (gamma + 1)) * (1 + ((gamma - 1) / 2) * M_ex ** 2)) ** ((gamma + 1) / (gamma - 1)))
-
+        ((2 / (gamma + 1)) * (1 + ((gamma - 1) / 2) * M_ex ** 2)) ** ((gamma + 1) / (gamma - 1))
+    )
 
 mach_ex_guess = 1
 A_guess = 0.1
-M_ex = fsolve(Mach_eq, mach_ex_guess, args=pe)
-
-AeA0 = fsolve(A_eq, A_guess, args=M_ex)
-
+M_ex = fsolve(M_solve, mach_ex_guess, args=pe)[0]  # Extract the scalar
+AeA0 = fsolve(A_solve, A_guess, args=M_ex)[0]  # Extract the scalar
 AA0 = A * AeA0 / 1.5
 
+def M_solvesolve(M_, AA0):
+    return (AA0) ** 2 - (1 / M_ ** 2) * (
+        ((2 / (gamma + 1)) * (1 + ((gamma - 1) / 2) * M_ ** 2)) ** ((gamma + 1) / (gamma - 1))
+    )
 
-def Mach_eq2(M_an, AA0):
-    return (AA0) ** 2 - (1 / M_an ** 2) * (
-                ((2 / (gamma + 1)) * (1 + ((gamma - 1) / 2) * M_an ** 2)) ** ((gamma + 1) / (gamma - 1)))
-
-
-Mtot = np.zeros(Nx)
+M_an = np.zeros(Nx)
 
 for i in range(0, Nx):
     init_guess = 0.079
-    M_an = fsolve(Mach_eq2, init_guess, args=AA0[i])
+    M_ = fsolve(M_solvesolve, init_guess, args=AA0[i])[0]  # Extract the scalar
 
-    while M_an < 0.07 or M_an > 0.545:
+    while M_ < 0.07 or M_ > 0.545:
         init_guess = init_guess + 0.001
-        M_an = fsolve(Mach_eq2, init_guess, args=AA0[i])
+        M_ = fsolve(M_solvesolve, init_guess, args=AA0[i])[0]  # Extract the scalar
 
-    Mtot[i] = M_an
+    M_an[i] = M_
 
-p_an = (1 + (gamma - 1) / 2 * Mtot ** 2) ** (-gamma / (gamma - 1))
-rho_an = (1 + (gamma - 1) / 2 * Mtot ** 2) ** (-1 / (gamma - 1))
-T_an = (1 + (gamma - 1) / 2 * Mtot ** 2) ** -1
-
+# Calculate analytical results
+p_an = (1 + (gamma - 1) / 2 * M_an ** 2) ** (-gamma / (gamma - 1))
+rho_an = (1 + (gamma - 1) / 2 * M_an ** 2) ** (-1 / (gamma - 1))
+T_an = (1 + (gamma - 1) / 2 * M_an ** 2) ** -1
 
 U1 = rho * A
 U2 = rho * A * V
@@ -88,23 +84,20 @@ F2 = U2**2/U1 + (gamma-1)/gamma * (U3 - gamma/2 * U2**2/U1)
 F3 = gamma * U2*U3/U1 - gamma*(gamma-1)/2 * U2**3/U1**2
 
 J2 = np.zeros(len(x)-1)
-dU1 = np.zeros(len(x)-1)
-dU2 = np.zeros(len(x)-1)
-dU3 = np.zeros(len(x)-1)
-Dt = min(C * dx / (T[:]**0.5 + V[:]))
-r_ = np.zeros(len(x)-1)
-T_ = np.zeros(len(x)-1)
+dU1dt = np.zeros(len(x)-1)
+dU2dt = np.zeros(len(x)-1)
+dU3dt = np.zeros(len(x)-1)
+dt = min(C * dx / (T[:]**0.5 + V[:]))
+rho_est = np.zeros(len(x)-1)
+T_est = np.zeros(len(x)-1)
 
-U1_ = np.zeros(len(x)-1)
-U2_ = np.zeros(len(x)-1)
-U3_ = np.zeros(len(x)-1)
-F1_ = np.zeros(len(x)-1)
-F2_ = np.zeros(len(x)-1)
-F3_ = np.zeros(len(x)-1)
-#
-# dU1_ = np.zeros(len(x)-1)
-# dU2_ = np.zeros(len(x)-1)
-# dU3_ = np.zeros(len(x)-1)
+U1_est = np.zeros(len(x)-1)
+U2_est = np.zeros(len(x)-1)
+U3_est = np.zeros(len(x)-1)
+F1_est = np.zeros(len(x)-1)
+F2_est = np.zeros(len(x)-1)
+F3_est = np.zeros(len(x)-1)
+
 mass = {}
 pressure = {}
 for j in range(Nt):
@@ -112,33 +105,33 @@ for j in range(Nt):
         # Predictor Step
         # J2[i] = (gamma-1)/gamma * (U3[i] - gamma/2 * U2[i]**2/U1[i]) * (A[i]-A[i-1])/dx
         J2[i] = 1/gamma * rho[i] * T[i] * (A[i+1]-A[i])/dx
-        dU1[i] = -(F1[i+1]-F1[i])/dx
-        dU2[i] = -(F2[i+1]-F2[i])/dx + J2[i]
-        dU3[i] = -(F3[i+1]-F3[i])/dx
-        U1_[i] = U1[i] + dU1[i] * Dt
-        U2_[i] = U2[i] + dU2[i] * Dt
-        U3_[i] = U3[i] + dU3[i] * Dt
-        r_[i] = U1_[i] / A[i]
-        T_[i] = (gamma-1) * (U3_[i]/U1_[i] - gamma/2 * (U2_[i]/U1_[i])**2)
-        F1_[i] = U2_[i]
-        F2_[i] = U2_[i]**2 / U1_[i] + (gamma-1)/gamma * (U3_[i] - gamma/2 * U2_[i]**2 / U1_[i])
-        # F3_[i] = gamma * U2_[i] * U3_[i] / U1_[i] - gamma*(gamma-1)/2 * U2_[i]**3 / U1_[i]**2
-        F3_[i] = gamma * U2_[i] * U3_[i] / U1_[i] - gamma*(gamma-1)/2 * (U2_[i]/U1_[i])**2 * U2_[i]
+        dU1dt[i] = -(F1[i+1]-F1[i])/dx
+        dU2dt[i] = -(F2[i+1]-F2[i])/dx + J2[i]
+        dU3dt[i] = -(F3[i+1]-F3[i])/dx
+        U1_est[i] = U1[i] + dU1dt[i] * dt
+        U2_est[i] = U2[i] + dU2dt[i] * dt
+        U3_est[i] = U3[i] + dU3dt[i] * dt
+        rho_est[i] = U1_est[i] / A[i]
+        T_est[i] = (gamma-1) * (U3_est[i]/U1_est[i] - gamma/2 * (U2_est[i]/U1_est[i])**2)
+        F1_est[i] = U2_est[i]
+        F2_est[i] = U2_est[i]**2 / U1_est[i] + (gamma-1)/gamma * (U3_est[i] - gamma/2 * U2_est[i]**2 / U1_est[i])
+        # F3_est[i] = gamma * U2_est[i] * U3_est[i] / U1_est[i] - gamma*(gamma-1)/2 * U2_est[i]**3 / U1_est[i]**2
+        F3_est[i] = gamma * U2_est[i] * U3_est[i] / U1_est[i] - gamma*(gamma-1)/2 * (U2_est[i]/U1_est[i])**2 * U2_est[i]
 
 
 
         # Corrector Step
     for i in range (1,len(x)-1):
-        dU1_ = -(F1_[i]-F1_[i-1])/dx
-        dU2_ = -(F2_[i]-F2_[i-1])/dx + 1/gamma * r_[i] * T_[i] * (A[i]-A[i-1])/dx
-        dU3_ = -(F3_[i]-F3_[i-1])/dx
-        dU1_av = 0.5 * (dU1[i] + dU1_)
-        dU2_av = 0.5 * (dU2[i] + dU2_)
-        dU3_av = 0.5 * (dU3[i] + dU3_)
+        dU1dt_est = -(F1_est[i]-F1_est[i-1])/dx
+        dU2dt_est = -(F2_est[i]-F2_est[i-1])/dx + 1/gamma * rho_est[i] * T_est[i] * (A[i]-A[i-1])/dx
+        dU3dt_est = -(F3_est[i]-F3_est[i-1])/dx
+        dU1dt_av = 0.5 * (dU1dt[i] + dU1dt_est)
+        dU2dt_av = 0.5 * (dU2dt[i] + dU2dt_est)
+        dU3dt_av = 0.5 * (dU3dt[i] + dU3dt_est)
 
-        U1[i] = U1[i] + dU1_av * Dt
-        U2[i] = U2[i] + dU2_av * Dt
-        U3[i] = U3[i] + dU3_av * Dt
+        U1[i] = U1[i] + dU1dt_av * dt
+        U2[i] = U2[i] + dU2dt_av * dt
+        U3[i] = U3[i] + dU3dt_av * dt
 
         rho[i] = U1[i]/A[i]
         V[i] = U2[i]/U1[i]
@@ -155,7 +148,7 @@ for j in range(Nt):
         T[-1] = pe/rho[-1]
         U3[-1] = U1[-1] * (T[-1]/(gamma-1) + gamma/2 * V[-1]**2)
 
-    m = rho * V * A
+    mass_flow = rho * V * A
 
 
 
@@ -167,7 +160,7 @@ for j in range(Nt):
     M = V/(T**2)
 
     if j == 0 or j == 499 or j == Nt-1:
-        mass[j] = m
+        mass[j] = mass_flow
         pressure[j] = p
     if j == 999:
         pressure[j] = p
@@ -180,10 +173,10 @@ pressure[0] = (pe-p0)/L *x + 1
 ########## RESULTS ###########
 
 # Tab. 7.7
-print(x.T, A.T, rho[:].T, V[:].T, T[:].T, p[:].T, M[:].T, m[:   ].T)
+print(x.T, A.T, rho[:].T, V[:].T, T[:].T, p[:].T, M[:].T, mass_flow[:   ].T)
 
 # Tab. 7.8
-print(np.round(np.array((x.T, A.T, rho[:].T, rho_an[:], np.abs(rho[:]-rho_an[:])/rho[:]*100, M[:].T, Mtot[:].T, np.abs(M[:]-Mtot[:])/M[:]*100)),3))
+print(np.round(np.array((x.T, A.T, rho[:].T, rho_an[:], np.abs(rho[:]-rho_an[:])/rho[:]*100, M[:].T, M_an[:].T, np.abs(M[:]-M_an[:])/M[:]*100)),3))
 
 # Tab. 7.5
 # results can be found on Tab. 7.6 if the grid points are changed
@@ -192,48 +185,10 @@ print(np.round(np.array((x.T, A.T, rho[:].T, rho_an[:], np.abs(rho[:]-rho_an[:])
 # print(f"Density numerical = {rho[1399,int(mid)]}, Density analytical = {rho_an[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
 # print(f"Temperature numerical = {T[1399,int(mid)]}, Temperature analytical = {T_an[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
 # print(f"Pressure numerical = {p[1399,int(mid)]}, Pressure analytical = {p_an[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
-# print(f"Mach numerical = {M[1399,int(mid)]}, Mach analytical = {Mtot[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
+# print(f"Mach numerical = {M[1399,int(mid)]}, Mach analytical = {M_an[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
 
 
 
-#
-# # Fig. 7.9
-# plt.figure(figsize=(10, 6))
-# plt.plot(range(1, len(rho_history) + 1), rho_history, label="Numerical Solution")
-# plt.xlabel("Number of Time Steps")
-# plt.ylabel(rho"$\rho / \rho_0$")
-# plt.title(f"Density at Grid Point {int(mid+1)} Over Time")
-# plt.legend()
-# plt.grid()
-# plt.show()
-#
-# plt.figure(figsize=(10, 6))
-# plt.plot(range(1, len(T_history) + 1), T_history, label="Numerical Solution")
-# plt.xlabel("Number of Time Steps")
-# plt.ylabel(rho"$T / T_0$")
-# plt.title(f"Temperature at Grid Point {int(mid+1)} Over Time")
-# plt.legend()
-# plt.grid()
-# plt.show()
-#
-# plt.figure(figsize=(10, 6))
-# plt.plot(range(1, len(p_history) + 1), p_history, label="Numerical Solution")
-# plt.xlabel("Number of Time Steps")
-# plt.ylabel(rho"$p / p_0$")
-# plt.title(f"Pressure at Grid Point {int(mid+1)} Over Time")
-# plt.legend()
-# plt.grid()
-# plt.show()
-#
-# plt.figure(figsize=(10, 6))
-# plt.plot(range(1, len(M_history) + 1), M_history, label="Numerical Solution")
-# plt.xlabel("Number of Time Steps")
-# plt.ylabel(rho"$M$")
-# plt.title(f"Mach number at Grid Point {int(mid+1)} Over Time")
-# plt.legend()
-# plt.grid()
-# plt.show()
-#
 # Fig. 7.10
 # plt.figure(figsize=(10, 6))
 # plt.plot(range(1, len(drhodt_av_history) + 1), drhodt_av_history, label=rho"$|(\frac{d\rho}{dt})_{avg}|$")
@@ -244,7 +199,7 @@ print(np.round(np.array((x.T, A.T, rho[:].T, rho_an[:], np.abs(rho[:]-rho_an[:])
 # plt.legend()
 # plt.grid()
 # plt.show()
-#
+
 
 
 # # Fig. 7.16

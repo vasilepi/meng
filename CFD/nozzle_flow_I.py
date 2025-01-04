@@ -71,27 +71,21 @@ p[0,:] =p_i
 mass_flow[0,:] = rho[0,:]*V[0,:]*A[:]
 
 # Analytical calculations
-def Mach_eq(M_an, A_):
-    return (A_) ** 2 - (1 / M_an ** 2) * (
-                ((2 / (gamma + 1)) * (1 + ((gamma - 1) / 2) * M_an ** 2)) ** ((gamma + 1) / (gamma - 1)))
+def M_solve(M_, A_):
+    return (A_) ** 2 - (1 / M_ ** 2) * (
+                ((2 / (gamma + 1)) * (1 + ((gamma - 1) / 2) * M_ ** 2)) ** ((gamma + 1) / (gamma - 1)))
 
 
-Mtot = np.zeros(Nx)
+M_an = np.zeros(Nx)
 
-for i in range(0, Nx):
-    if i < (Nx) / 2:
-        init_guess = 0.2
-    else:
-        init_guess = 2
-    M_an = fsolve(Mach_eq, init_guess, args=A_[i])
+for i in range(Nx):
+    init_guess = 0.2 if x[i] < 1.5 else 2.0
+    M_ = fsolve(M_solve, init_guess, args=(A_[i],))[0]
+    M_an[i] = abs(M_)
 
-    if M_an < 0:
-        M_an = -M_an
-    Mtot[i] = M_an
-
-p_an = (1 + (gamma - 1) / 2 * Mtot ** 2) ** (-gamma / (gamma - 1))
-rho_an = (1 + (gamma - 1) / 2 * Mtot ** 2) ** (-1 / (gamma - 1))
-T_an = (1 + (gamma - 1) / 2 * Mtot ** 2) ** -1
+p_an = (1 + (gamma - 1) / 2 * M_an ** 2) ** (-gamma / (gamma - 1))
+rho_an = (1 + (gamma - 1) / 2 * M_an ** 2) ** (-1 / (gamma - 1))
+T_an = (1 + (gamma - 1) / 2 * M_an ** 2) ** -1
 
 
 
@@ -171,7 +165,7 @@ for t in range(0,Nt-1):
 print(np.round(np.array((x.T, A.T, rho[1399,:].T, V[1399,:].T, T[1399,:].T, p[1399,:].T, M[1399,:].T, mass_flow[1399,:].T)),3))
 
 # Tab. 7.4
-print(np.round(np.array((x.T, A.T, rho[1399,:].T, rho_an[:], np.abs(rho[1399,:]-rho_an[:])/rho[1399,:]*100, M[1399,:].T, Mtot[:].T, np.abs(M[1399,:]-Mtot[:])/M[1399,:]*100)),3))
+print(np.round(np.array((x.T, A.T, rho[1399,:].T, rho_an[:], np.abs(rho[1399,:]-rho_an[:])/rho[1399,:]*100, M[1399,:].T, M_an[:].T, np.abs(M[1399,:]-M_an[:])/M[1399,:]*100)),3))
 
 # Tab. 7.5
 # results can be found on Tab. 7.6 if the grid points are changed
@@ -180,7 +174,7 @@ print(np.round(np.array((x.T, A.T, rho[1399,:].T, rho_an[:], np.abs(rho[1399,:]-
 print(f"Density numerical = {rho[1399,int(mid)]}, Density analytical = {rho_an[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
 print(f"Temperature numerical = {T[1399,int(mid)]}, Temperature analytical = {T_an[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
 print(f"Pressure numerical = {p[1399,int(mid)]}, Pressure analytical = {p_an[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
-print(f"Mach numerical = {M[1399,int(mid)]}, Mach analytical = {Mtot[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
+print(f"Mach numerical = {M[1399,int(mid)]}, Mach analytical = {M_an[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
 
 
 
@@ -256,7 +250,7 @@ ax1.set_xlabel("Nondimensionless distance through nozzle (x)")
 ax1.set_ylabel("Nondimensionless density")
 ax2 = ax1.twinx()
 ax2.plot(x, M[-1,:], 'g', label="Numerical results")
-ax2.plot(x[::3], Mtot[::3],'o', label="Analytical results")
+ax2.plot(x[::3], M_an[::3],'o', label="Analytical results")
 ax2.set_ylabel("Mach number")
 plt.title("Steady-state distributions over nozzle distance")
 plt.legend()
