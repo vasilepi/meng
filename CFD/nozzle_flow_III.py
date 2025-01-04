@@ -1,6 +1,5 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.pyplot import figure
 from scipy.optimize import fsolve
 
 
@@ -48,7 +47,7 @@ for i in range(limit3,len(x)):
 A_ = 1 + 2.2 * (x - 1.5) ** 2
 A = A_/min(A_)
 
-V = 0.59 / (rho * A)
+V = 0.582 / (rho * A)
 p = rho * T
 # Analytical calculations
 # def M_solve(M_ex, pe):
@@ -212,14 +211,33 @@ for j in range(Nt):
 
 
 pressure[0] = (pe-p0)/L *x + 1
+p[-1] = pe
 
 ########## RESULTS ###########
 
 plt.figure(figsize=(10, 6))
-plt.plot(x,p, label=r"$0\Delta t$")
+plt.plot(x,p, label="$Numerical$")
+plt.xlabel("Nondimensionless distance through nozzle (x)")
+plt.ylabel("Nondimensionless density")
+# plt.title("Mass flow distributions")
+plt.legend()
+plt.grid()
+plt.show()
+
+plt.figure(figsize=(10, 6))
+plt.plot(x,M, label=r"$0\Delta t$")
+plt.xlabel("Nondimensionless distance through nozzle (x)")
+plt.ylabel("Mach")
+# plt.title("Mass flow distributions")
+plt.legend()
+plt.grid()
+plt.show()
+
+plt.figure(figsize=(10, 6))
+plt.plot(x,mass_flow, label=r"$0\Delta t$")
 plt.xlabel("Nondimensionless distance through nozzle (x)")
 plt.ylabel("Nondimensionless mass flow")
-plt.title("Mass flow distributions")
+# plt.title("Mass flow distributions")
 plt.legend()
 plt.grid()
 plt.show()
