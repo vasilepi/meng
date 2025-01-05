@@ -31,7 +31,7 @@ V = 0.05+0.11*x # V/a_0
 p = (pe-p0)/L *x + 1
 
 # nozzle geometry
-limit1 = np.where(x == 1.5)[0][0]
+limit1 = np.where(x >= 1.5)[0][0]
 A = np.zeros(len(x))
 for i in range(0,limit1):
     A[i] = 1+2.2*(x[i] - 1.5)**2 # A/A*

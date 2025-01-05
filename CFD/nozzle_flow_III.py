@@ -18,8 +18,8 @@ Nx = 61
 Nt = 1600
 x = np.linspace(0,L,Nx) # x/L
 dx = L/(Nx-1)
-C = 0.2
-
+C = 0.5
+Cx = 0.2
 p0 = 1
 pe = 0.6784
 
@@ -28,9 +28,9 @@ T = np.zeros(len(x))
 p = np.zeros(len(x))
 # initials
 
-limit1 = np.where(x == 0.5)[0][0]
-limit2 = np.where(x == 1.5)[0][0]
-limit3 = np.where(x == 2.1)[0][0]
+limit1 = np.where(x >= 0.5)[0][0]
+limit2 = np.where(x >= 1.5)[0][0]
+limit3 = np.where(x >= 2.1)[0][0]
 for i in range(0,limit1):
     rho[i] = 1
     T[i] = 1
@@ -47,45 +47,43 @@ for i in range(limit3,Nx):
 # nozzle geometry
 A_ = 1 + 2.2 * (x - 1.5) ** 2
 A = A_/min(A_)
-
+Ae = A[-1]
 V = 0.59 / (rho * A)
 p[:] = rho[:] * T[:]
-# Analytical calculations
-# def M_solve(M_ex, pe):
-#     return pe - (1 + (gamma - 1) / 2 * M_ex ** 2) ** -(gamma / (gamma - 1))
-#
-# def A_solve(AeA0, M_ex):
-#     return (AeA0) ** 2 - (1 / M_ex ** 2) * (
-#         ((2 / (gamma + 1)) * (1 + ((gamma - 1) / 2) * M_ex ** 2)) ** ((gamma + 1) / (gamma - 1))
-#     )
-#
-# mach_ex_guess = 1
-# A_guess = 0.1
-# M_ex = fsolve(M_solve, mach_ex_guess, args=pe)[0]  # Extract the scalar
-# AeA0 = fsolve(A_solve, A_guess, args=M_ex)[0]  # Extract the scalar
-# AA0 = A * AeA0 / 1.5
-#
-# def M_solvesolve(M_, AA0):
-#     return (AA0) ** 2 - (1 / M_ ** 2) * (
-#         ((2 / (gamma + 1)) * (1 + ((gamma - 1) / 2) * M_ ** 2)) ** ((gamma + 1) / (gamma - 1))
-#     )
-#
-# M_an = np.zeros(Nx)
-#
-# for i in range(0, Nx):
-#     init_guess = 0.079
-#     M_ = fsolve(M_solvesolve, init_guess, args=AA0[i])[0]  # Extract the scalar
-#
-#     while M_ < 0.07 or M_ > 0.545:
-#         init_guess = init_guess + 0.001
-#         M_ = fsolve(M_solvesolve, init_guess, args=AA0[i])[0]  # Extract the scalar
-#
-#     M_an[i] = M_
-#
-# # Calculate analytical results
-# p_an = (1 + (gamma - 1) / 2 * M_an ** 2) ** (-gamma / (gamma - 1))
-# rho_an = (1 + (gamma - 1) / 2 * M_an ** 2) ** (-1 / (gamma - 1))
-# T_an = (1 + (gamma - 1) / 2 * M_an ** 2) ** -1
+
+
+# Analytical calculations 
+
+def Mach_ex_eq(M_ex, pe):
+    return pe * Ae - (1 + (gamma - 1) / 2 * M_ex ** 2) ** -(gamma / (gamma - 1)) * (1 / M_ex) * (
+                ((2 / (gamma + 1)) * (1 + ((gamma - 1) / 2) * M_ex ** 2)) ** ((gamma + 1) / (2 * (gamma - 1))))
+
+
+mach_ex_guess = 0.1
+M_ex = fsolve(Mach_ex_eq, mach_ex_guess, args=pe)
+
+pep0e = (1 + (gamma - 1) / 2 * M_ex ** 2) ** -(gamma / (gamma - 1))
+p02p01 = pe / pep0e
+
+
+def M1_eq(M1, p02p01):
+    return p02p01 - ((gamma + 1) * M1 ** 2 / ((gamma - 1) * M1 ** 2 + 2)) ** (gamma / (gamma - 1)) * (
+                (gamma + 1) / (2 * gamma * M1 ** 2 - gamma + 1)) ** (1 / (gamma - 1))
+
+
+M1_guess = 2
+M1 = fsolve(M1_eq, M1_guess, args=p02p01)
+
+
+def A_dot_eq(AAdot, M):
+    return (AAdot) ** 2 - (1 / M ** 2) * (
+                ((2 / (gamma + 1)) * (1 + ((gamma - 1) / 2) * M ** 2)) ** ((gamma + 1) / (gamma - 1)))
+
+
+A1A1dot = fsolve(A_dot_eq, 1, args=M1)
+
+p2p1 = 1 + 2 * gamma / (gamma + 1) * (M1 ** 2 - 1)
+M2 = ((1 + (gamma - 1) / 2 * M1 ** 2) / (gamma * M1 ** 2 - (gamma - 1) / 2)) ** 0.5
 
 U1 = rho * A
 U2 = rho * A * V
@@ -103,6 +101,7 @@ dt = min(C * dx / (T[:]**0.5 + V[:]))
 rho_est = np.zeros(len(x)-1)
 T_est = np.zeros(len(x)-1)
 p_est = np.zeros(len(x))
+V_est = np.zeros(len(x))
 U1_est = np.zeros(len(x))
 U2_est = np.zeros(len(x))
 U3_est = np.zeros(len(x))
@@ -121,12 +120,17 @@ mass = {}
 pressure = {}
 for j in range(Nt):
     for i in range(1, len(x) - 1):
-        S1[i] = C * abs(p[i + 1] - 2 * p[i] + p[i - 1]) / (p[i + 1] + 2 * p[i] + p[i - 1]) * (
+        S1[i] = Cx * abs(p[i + 1] - 2 * p[i] + p[i - 1]) / (p[i + 1] + 2 * p[i] + p[i - 1]) * (
                     U1[i + 1] - 2 * U1[i] + U1[i - 1])
-        S2[i] = C * abs(p[i + 1] - 2 * p[i] + p[i - 1]) / (p[i + 1] + 2 * p[i] + p[i - 1]) * (
+        S2[i] = Cx * abs(p[i + 1] - 2 * p[i] + p[i - 1]) / (p[i + 1] + 2 * p[i] + p[i - 1]) * (
                 U2[i + 1] - 2 * U2[i] + U2[i - 1])
-        S3[i] = C * abs(p[i + 1] - 2 * p[i] + p[i - 1]) / (p[i + 1] + 2 * p[i] + p[i - 1]) * (
+        S3[i] = Cx * abs(p[i + 1] - 2 * p[i] + p[i - 1]) / (p[i + 1] + 2 * p[i] + p[i - 1]) * (
                 U3[i + 1] - 2 * U3[i] + U3[i - 1])
+
+        ########### For Fig. 7.23 ############
+        # S1[i] = 0
+        # S2[i] = 0
+        # S3[i] = 0
     for i in range (len(x)-1):
         # Predictor Step
         # J2[i] = (gamma-1)/gamma * (U3[i] - gamma/2 * U2[i]**2/U1[i]) * (A[i]-A[i-1])/dx
@@ -137,6 +141,7 @@ for j in range(Nt):
         U1_est[i] = U1[i] + dU1dt[i] * dt + S1[i]
         U2_est[i] = U2[i] + dU2dt[i] * dt + S2[i]
         U3_est[i] = U3[i] + dU3dt[i] * dt + S3[i]
+
         rho_est[i] = U1_est[i] / A[i]
         T_est[i] = (gamma-1) * (U3_est[i]/U1_est[i] - gamma/2 * (U2_est[i]/U1_est[i])**2)
         p_est[i] = rho_est[i] * T_est[i]
@@ -144,19 +149,25 @@ for j in range(Nt):
         F2_est[i] = U2_est[i]**2 / U1_est[i] + (gamma-1)/gamma * (U3_est[i] - gamma/2 * U2_est[i]**2 / U1_est[i])
         # F3_est[i] = gamma * U2_est[i] * U3_est[i] / U1_est[i] - gamma*(gamma-1)/2 * U2_est[i]**3 / U1_est[i]**2
         F3_est[i] = gamma * U2_est[i] * U3_est[i] / U1_est[i] - gamma*(gamma-1)/2 * (U2_est[i]/U1_est[i])**2 * U2_est[i]
-
+    U1_est[-1] = 2 * U1_est[-2] - U1_est[-3]
+    U2_est[-1] = 2 * U2_est[-2] - U2_est[-3]
+    V_est = U2_est/U1_est
+    U3_est[-1] = pe * A[-1] / (gamma - 1) + 0.5 * gamma * U2_est[-1] * V_est[-1]
     p_est[0] = 1
     p_est[-1] = pe
     for i in range (1, len(x)-1):
-        S1_est[i] = C * abs(p_est[i + 1] - 2 * p_est[i] + p_est[i - 1]) / (p_est[i + 1] + 2 * p_est[i] + p_est[i - 1]) * (
+        S1_est[i] = Cx * abs(p_est[i + 1] - 2 * p_est[i] + p_est[i - 1]) / (p_est[i + 1] + 2 * p_est[i] + p_est[i - 1]) * (
                 U1_est[i + 1] - 2 * U1_est[i] + U1_est[i - 1])
-        S2_est[i] = C * abs(p_est[i + 1] - 2 * p_est[i] + p_est[i - 1]) / (
+        S2_est[i] = Cx * abs(p_est[i + 1] - 2 * p_est[i] + p_est[i - 1]) / (
                     p_est[i + 1] + 2 * p_est[i] + p_est[i - 1]) * (
                             U2_est[i + 1] - 2 * U2_est[i] + U2_est[i - 1])
-        S3_est[i] = C * abs(p_est[i + 1] - 2 * p_est[i] + p_est[i - 1]) / (
+        S3_est[i] = Cx * abs(p_est[i + 1] - 2 * p_est[i] + p_est[i - 1]) / (
                     p_est[i + 1] + 2 * p_est[i] + p_est[i - 1]) * (
                             U3_est[i + 1] - 2 * U3_est[i] + U3_est[i - 1])
-
+        ########### For Fig. 7.23 ############
+        # S1_est[i] = 0
+        # S2_est[i] = 0
+        # S3_est[i] = 0
         # Corrector Step
     for i in range (1,len(x)-1):
         dU1dt_est = -(F1_est[i]-F1_est[i-1])/dx
@@ -189,8 +200,8 @@ for j in range(Nt):
         U2[-1] = 2 * U2[-2] - U2[-3]
         V[-1] = U2[-1] / U1[-1]
         U3[-1] = pe*A[-1]/(gamma-1)+0.5*gamma*U2[-1]*V[-1]
-        T[-1] = 2*T[-2]- T[-3]
-        rho[-1] = pe/T[-1]
+        rho[-1] = U1[-1]/A[-1]
+        T[-1] = pe/rho[-1]
         p[-1] = pe
 
 
@@ -200,7 +211,7 @@ for j in range(Nt):
 
     p = rho*T
     M = V/(T**0.5)
-
+    mass_flow = rho * V * A
 
 
 
@@ -212,33 +223,32 @@ for j in range(Nt):
     # if j == 399 or j == 799 or j == 2199:
     #     pressure[j] = p
 
-mass_flow = np.zeros(Nx)
-mass_flow[:] = rho[:]* V[:] * A[:]
 
-print(mass_flow)
+
 
 ########## RESULTS ###########
 
+# Fig. 7.23 - 7.24 (For 7.23 replace viscosity with commented values)
 plt.figure(figsize=(10, 6))
 plt.plot(x,p, label="$Numerical$")
 plt.xlabel("Nondimensionless distance through nozzle (x)")
 plt.ylabel("Nondimensionless density")
-# plt.title("Mass flow distributions")
 plt.legend()
 plt.grid()
 plt.show()
 
+# Fig. 7.25
 plt.figure(figsize=(10, 6))
 plt.plot(x,M, label=r"$0\Delta t$")
 plt.xlabel("Nondimensionless distance through nozzle (x)")
 plt.ylabel("Mach")
-# plt.title("Mass flow distributions")
 plt.legend()
 plt.grid()
 plt.show()
 
+
 plt.figure(figsize=(10, 6))
-plt.plot(x,U2, label=r"$0\Delta t$")
+plt.plot(x,mass_flow, label=r"$0\Delta t$")
 plt.xlabel("Nondimensionless distance through nozzle (x)")
 plt.ylabel("Nondimensionless mass flow")
 # plt.title("Mass flow distributions")
@@ -247,8 +257,8 @@ plt.grid()
 plt.show()
 
 
-# Tab. 7.7
-# print(x.T, A.T, rho[:].T, V[:].T, T[:].T, p[:].T, M[:].T, mass_flow[:   ].T)
+# Tab. 7.13
+print(x.T, A.T, rho[:].T, V[:].T, T[:].T, p[:].T, M[:].T, mass_flow[:].T)
 
 # Tab. 7.8
 # print(np.round(np.array((x.T, A.T, rho[:].T, rho_an[:], np.abs(rho[:]-rho_an[:])/rho[:]*100, M[:].T, M_an[:].T, np.abs(M[:]-M_an[:])/M[:]*100)),3))

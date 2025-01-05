@@ -15,8 +15,8 @@ A_ = 1 + 2.2 * (x - 1.5) ** 2
 A = A_/min(A_)
 
 # initials
-limit1 = np.where(x == 0.5)[0][0]
-limit2 = np.where(x == 1.5)[0][0]
+limit1 = np.where(x >= 0.5)[0][0]
+limit2 = np.where(x >= 1.5)[0][0]
 
 rho = np.zeros(len(x))
 T = np.zeros(len(x))
@@ -31,7 +31,7 @@ for i in range(limit2,Nx):
     rho[i] = 0.634-0.3879*(x[i]-1.5)
     T[i] = 0.833-0.3507*(x[i]-1.5)
 
-
+print(rho)
 V = 0.59 / (rho * A)
 p = rho*T
 U1 = rho * A
