@@ -64,7 +64,8 @@ M_ex = fsolve(Mach_ex_eq, mach_ex_guess, args=pe)
 
 pep0e = (1 + (gamma - 1) / 2 * M_ex ** 2) ** -(gamma / (gamma - 1))
 p02p01 = pe / pep0e
-
+rhoerho0 = (1 + (gamma - 1) / 2 * M_ex ** 2) ** -(1 / (gamma - 1))
+TeT0 = (1 + (gamma - 1) / 2 * M_ex ** 2) ** -1
 
 def M1_eq(M1, p02p01):
     return p02p01 - ((gamma + 1) * M1 ** 2 / ((gamma - 1) * M1 ** 2 + 2)) ** (gamma / (gamma - 1)) * (
@@ -84,6 +85,9 @@ A1A1dot = fsolve(A_dot_eq, 1, args=M1)
 
 p2p1 = 1 + 2 * gamma / (gamma + 1) * (M1 ** 2 - 1)
 M2 = ((1 + (gamma - 1) / 2 * M1 ** 2) / (gamma * M1 ** 2 - (gamma - 1) / 2)) ** 0.5
+
+
+
 
 U1 = rho * A
 U2 = rho * A * V
@@ -133,7 +137,6 @@ for j in range(Nt):
         # S3[i] = 0
     for i in range (len(x)-1):
         # Predictor Step
-        # J2[i] = (gamma-1)/gamma * (U3[i] - gamma/2 * U2[i]**2/U1[i]) * (A[i]-A[i-1])/dx
         J2[i] = 1/gamma * rho[i] * T[i] * (A[i+1]-A[i])/dx
         dU1dt[i] = -(F1[i+1]-F1[i])/dx
         dU2dt[i] = -(F2[i+1]-F2[i])/dx + J2[i]
@@ -246,7 +249,7 @@ plt.legend()
 plt.grid()
 plt.show()
 
-
+# Fig. 7.26
 plt.figure(figsize=(10, 6))
 plt.plot(x,mass_flow, label=r"$0\Delta t$")
 plt.xlabel("Nondimensionless distance through nozzle (x)")
@@ -266,7 +269,13 @@ print(x.T, A.T, rho[:].T, V[:].T, T[:].T, p[:].T, M[:].T, mass_flow[:].T)
 # Tab. 7.5
 # results can be found on Tab. 7.6 if the grid points are changed
 
-# # Tab. 7.6
+# # Tab. 7.14
+# print(f"Density numerical = {rho[1399,int(mid)]}, Density analytical = {rho_an[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
+# print(f"Temperature numerical = {T[1399,int(mid)]}, Temperature analytical = {T_an[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
+# print(f"Pressure numerical = {p[1399,int(mid)]}, Pressure analytical = {p_an[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
+# print(f"Mach numerical = {M[1399,int(mid)]}, Mach analytical = {M_an[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
+
+# # Tab. 7.15
 # print(f"Density numerical = {rho[1399,int(mid)]}, Density analytical = {rho_an[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
 # print(f"Temperature numerical = {T[1399,int(mid)]}, Temperature analytical = {T_an[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
 # print(f"Pressure numerical = {p[1399,int(mid)]}, Pressure analytical = {p_an[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
@@ -325,3 +334,5 @@ print(x.T, A.T, rho[:].T, V[:].T, T[:].T, p[:].T, M[:].T, mass_flow[:].T)
 # plt.legend()
 # plt.grid()
 # plt.show()
+
+print(M_ex)
