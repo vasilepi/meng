@@ -15,7 +15,7 @@ def conservation_check(rho, V, T, A, t, dx):
 gamma = 1.4
 L = 3
 Nx = 61
-Nt = 1400
+Nt = 1600
 x = np.linspace(0,L,Nx) # x/L
 dx = L/(Nx-1)
 C = 0.2
@@ -25,6 +25,7 @@ pe = 0.6784
 
 rho = np.zeros(len(x))
 T = np.zeros(len(x))
+p = np.zeros(len(x))
 # initials
 
 limit1 = np.where(x == 0.5)[0][0]
@@ -39,7 +40,7 @@ for i in range(limit1,limit2):
 for i in range(limit2,limit3):
     rho[i] = 0.634-0.702*(x[i]-1.5)
     T[i] = 0.833 - 0.4908*(x[i]-1.5)
-for i in range(limit3,len(x)):
+for i in range(limit3,Nx):
     rho[i] = 0.5892+0.10228*(x[i]-2.1)
     T[i] = 0.93968+0.0622*(x[i]-2.1)
 
@@ -47,8 +48,8 @@ for i in range(limit3,len(x)):
 A_ = 1 + 2.2 * (x - 1.5) ** 2
 A = A_/min(A_)
 
-V = 0.582 / (rho * A)
-p = rho * T
+V = 0.59 / (rho * A)
+p[:] = rho[:] * T[:]
 # Analytical calculations
 # def M_solve(M_ex, pe):
 #     return pe - (1 + (gamma - 1) / 2 * M_ex ** 2) ** -(gamma / (gamma - 1))
@@ -120,11 +121,11 @@ mass = {}
 pressure = {}
 for j in range(Nt):
     for i in range(1, len(x) - 1):
-        S1[i] = C * np.abs(p[i + 1] - 2 * p[i] + p[i - 1]) / (p[i + 1] + 2 * p[i] + p[i - 1]) * (
+        S1[i] = C * abs(p[i + 1] - 2 * p[i] + p[i - 1]) / (p[i + 1] + 2 * p[i] + p[i - 1]) * (
                     U1[i + 1] - 2 * U1[i] + U1[i - 1])
-        S2[i] = C * np.abs(p[i + 1] - 2 * p[i] + p[i - 1]) / (p[i + 1] + 2 * p[i] + p[i - 1]) * (
+        S2[i] = C * abs(p[i + 1] - 2 * p[i] + p[i - 1]) / (p[i + 1] + 2 * p[i] + p[i - 1]) * (
                 U2[i + 1] - 2 * U2[i] + U2[i - 1])
-        S3[i] = C * np.abs(p[i + 1] - 2 * p[i] + p[i - 1]) / (p[i + 1] + 2 * p[i] + p[i - 1]) * (
+        S3[i] = C * abs(p[i + 1] - 2 * p[i] + p[i - 1]) / (p[i + 1] + 2 * p[i] + p[i - 1]) * (
                 U3[i + 1] - 2 * U3[i] + U3[i - 1])
     for i in range (len(x)-1):
         # Predictor Step
@@ -138,20 +139,21 @@ for j in range(Nt):
         U3_est[i] = U3[i] + dU3dt[i] * dt + S3[i]
         rho_est[i] = U1_est[i] / A[i]
         T_est[i] = (gamma-1) * (U3_est[i]/U1_est[i] - gamma/2 * (U2_est[i]/U1_est[i])**2)
-        p_est[i] = rho_est[i]*  T_est[i]
-
+        p_est[i] = rho_est[i] * T_est[i]
         F1_est[i] = U2_est[i]
         F2_est[i] = U2_est[i]**2 / U1_est[i] + (gamma-1)/gamma * (U3_est[i] - gamma/2 * U2_est[i]**2 / U1_est[i])
         # F3_est[i] = gamma * U2_est[i] * U3_est[i] / U1_est[i] - gamma*(gamma-1)/2 * U2_est[i]**3 / U1_est[i]**2
         F3_est[i] = gamma * U2_est[i] * U3_est[i] / U1_est[i] - gamma*(gamma-1)/2 * (U2_est[i]/U1_est[i])**2 * U2_est[i]
 
+    p_est[0] = 1
+    p_est[-1] = pe
     for i in range (1, len(x)-1):
-        S1_est[i] = C * np.abs(p_est[i + 1] - 2 * p_est[i] + p[i - 1]) / (p_est[i + 1] + 2 * p_est[i] + p_est[i - 1]) * (
+        S1_est[i] = C * abs(p_est[i + 1] - 2 * p_est[i] + p_est[i - 1]) / (p_est[i + 1] + 2 * p_est[i] + p_est[i - 1]) * (
                 U1_est[i + 1] - 2 * U1_est[i] + U1_est[i - 1])
-        S2_est[i] = C * np.abs(p_est[i + 1] - 2 * p_est[i] + p[i - 1]) / (
+        S2_est[i] = C * abs(p_est[i + 1] - 2 * p_est[i] + p_est[i - 1]) / (
                     p_est[i + 1] + 2 * p_est[i] + p_est[i - 1]) * (
                             U2_est[i + 1] - 2 * U2_est[i] + U2_est[i - 1])
-        S3_est[i] = C * np.abs(p_est[i + 1] - 2 * p_est[i] + p[i - 1]) / (
+        S3_est[i] = C * abs(p_est[i + 1] - 2 * p_est[i] + p_est[i - 1]) / (
                     p_est[i + 1] + 2 * p_est[i] + p_est[i - 1]) * (
                             U3_est[i + 1] - 2 * U3_est[i] + U3_est[i - 1])
 
@@ -171,6 +173,8 @@ for j in range(Nt):
         rho[i] = U1[i]/A[i]
         V[i] = U2[i]/U1[i]
         T[i] = (gamma-1) * (U3[i]/U1[i] - gamma/2 * V[i]**2)
+        p[i] = rho[i]*T[i]
+
 
         # Boundary Conditions
         U1[0] = A[0]
@@ -179,16 +183,15 @@ for j in range(Nt):
         U3[0] = U1[0] * (T[0] / (gamma - 1) + gamma / 2 * V[0] ** 2)
         rho[0] = 1
         T[0] = 1
+        p[0] = 1
 
         U1[-1] = 2 * U1[-2] - U1[-3]
         U2[-1] = 2 * U2[-2] - U2[-3]
         V[-1] = U2[-1] / U1[-1]
         U3[-1] = pe*A[-1]/(gamma-1)+0.5*gamma*U2[-1]*V[-1]
-        rho[-1] = 2*rho[-2]-rho[-3]
-        T[-1] = pe/rho[-1]
-
-    mass_flow = rho * V * A
-
+        T[-1] = 2*T[-2]- T[-3]
+        rho[-1] = pe/T[-1]
+        p[-1] = pe
 
 
     F1 = U2
@@ -201,17 +204,18 @@ for j in range(Nt):
 
 
 
-    if j == 0 or j == 499 or j == Nt-1:
-        mass[j] = mass_flow
-        pressure[j] = p
-    if j == 999:
-        pressure[j] = p
-    if j == 399 or j == 799 or j == 2199:
-        pressure[j] = p
+    # if j == 0 or j == 499 or j == Nt-1:
+    #     mass[j] = mass_flow
+    #     pressure[j] = p
+    # if j == 999:
+    #     pressure[j] = p
+    # if j == 399 or j == 799 or j == 2199:
+    #     pressure[j] = p
 
+mass_flow = np.zeros(Nx)
+mass_flow[:] = rho[:]* V[:] * A[:]
 
-pressure[0] = (pe-p0)/L *x + 1
-p[-1] = pe
+print(mass_flow)
 
 ########## RESULTS ###########
 
@@ -234,7 +238,7 @@ plt.grid()
 plt.show()
 
 plt.figure(figsize=(10, 6))
-plt.plot(x,mass_flow, label=r"$0\Delta t$")
+plt.plot(x,U2, label=r"$0\Delta t$")
 plt.xlabel("Nondimensionless distance through nozzle (x)")
 plt.ylabel("Nondimensionless mass flow")
 # plt.title("Mass flow distributions")
