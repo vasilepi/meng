@@ -28,7 +28,7 @@ pe = 0.93
 rho = 1 - 0.023*x # rho/rho_0
 T = 1 - 0.009333*x # T/T_0
 V = 0.05+0.11*x # V/a_0
-p = (pe-p0)/L *x + 1
+
 
 # nozzle geometry
 limit1 = np.where(x >= 1.5)[0][0]
@@ -101,7 +101,10 @@ F3_est = np.zeros(len(x)-1)
 
 mass = {}
 pressure = {}
+pressure[0] = p
+mass[0] = rho*V*A
 for j in range(Nt):
+
     for i in range (len(x)-1):
         # Predictor Step
         # J2[i] = (gamma-1)/gamma * (U3[i] - gamma/2 * U2[i]**2/U1[i]) * (A[i]-A[i-1])/dx
@@ -160,7 +163,7 @@ for j in range(Nt):
     p = rho*T
     M = V/(T**0.5)
 
-    if j == 0 or j == 499 or j == Nt-1:
+    if j == 499 or j == Nt-1:
         mass[j] = mass_flow
         pressure[j] = p
     if j == 999:
@@ -169,7 +172,7 @@ for j in range(Nt):
         pressure[j] = p
 
 
-pressure[0] = (pe-p0)/L *x + 1
+# pressure[0] = (pe-p0)/L *x + 1
 
 ########## RESULTS ###########
 

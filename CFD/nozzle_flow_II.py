@@ -28,8 +28,8 @@ pe = 0.93
 rho_i = 1 - 0.023*x # rho/rho_0
 T_i = 1 - 0.009333*x # T/T_0
 V_i = 0.05+0.11*x # V/a_0
-p_i = (pe-p0)/L *x + 1
-
+# p_i = (pe-p0)/L *x + 1
+p_i = rho_i*T_i
 # nozzle geometry
 limit1 = np.where(x == 1.5)[0][0]
 A = np.zeros(len(x))
@@ -123,7 +123,7 @@ T_an = (1 + (gamma - 1) / 2 * M_an ** 2) ** -1
 
 
 p[:,0] = p0
-p[:,-1] = pe
+p[1:,-1] = pe
 
 
 for t in range(0,Nt-1):

@@ -13,8 +13,8 @@ def conservation_check(rho, V, T, A, t, dx):
 
 gamma = 1.4
 L = 3
-Nx = 31
-Nt = 1400
+Nx = 41
+Nt = 1800
 x = np.linspace(0,L,Nx) # x/L
 dx = L/(Nx-1)
 C = 0.5
@@ -181,7 +181,7 @@ print(f"Mach numerical = {M[1399,int(mid)]}, Mach analytical = {M_an[int(mid)]} 
 
 # Fig. 7.9
 plt.figure(figsize=(10, 6))
-plt.plot(range(1, len(rho_history) + 1), rho_history, label="Numerical Solution")
+plt.plot(range(1, len(rho_history) + 1), rho_history, label="At Nozzle Throat")
 plt.xlabel("Number of Time Steps")
 plt.ylabel(r"$\rho / \rho_0$")
 plt.title(f"Density at Grid Point {int(mid+1)} Over Time")
@@ -190,7 +190,7 @@ plt.grid()
 plt.show()
 
 plt.figure(figsize=(10, 6))
-plt.plot(range(1, len(T_history) + 1), T_history, label="Numerical Solution")
+plt.plot(range(1, len(T_history) + 1), T_history, label="At Nozzle Throat")
 plt.xlabel("Number of Time Steps")
 plt.ylabel(r"$T / T_0$")
 plt.title(f"Temperature at Grid Point {int(mid+1)} Over Time")
@@ -199,7 +199,7 @@ plt.grid()
 plt.show()
 
 plt.figure(figsize=(10, 6))
-plt.plot(range(1, len(p_history) + 1), p_history, label="Numerical Solution")
+plt.plot(range(1, len(p_history) + 1), p_history, label="At Nozzle Throat")
 plt.xlabel("Number of Time Steps")
 plt.ylabel(r"$p / p_0$")
 plt.title(f"Pressure at Grid Point {int(mid+1)} Over Time")
@@ -208,7 +208,7 @@ plt.grid()
 plt.show()
 
 plt.figure(figsize=(10, 6))
-plt.plot(range(1, len(M_history) + 1), M_history, label="Numerical Solution")
+plt.plot(range(1, len(M_history) + 1), M_history, label="At Nozzle Throat")
 plt.xlabel("Number of Time Steps")
 plt.ylabel(r"$M$")
 plt.title(f"Mach number at Grid Point {int(mid+1)} Over Time")
@@ -220,6 +220,7 @@ plt.show()
 plt.figure(figsize=(10, 6))
 plt.plot(range(1, len(drhodt_av_history) + 1), drhodt_av_history, label=r"$|(\frac{d\rho}{dt})_{avg}|$")
 plt.plot(range(1, len(dVdt_av_history) + 1), dVdt_av_history, label=r"$|(\frac{dV}{dt})_{avg}|$")
+plt.yscale("log")
 plt.xlabel("Number of Time Steps")
 plt.ylabel("Residual")
 plt.title(f"Dimensionless time derivatives at Grid Point {int(mid+1)} Over Time")
