@@ -64,8 +64,16 @@ M_ex = fsolve(Mach_ex_eq, mach_ex_guess, args=pe)
 
 pep0e = (1 + (gamma - 1) / 2 * M_ex ** 2) ** -(gamma / (gamma - 1))
 p02p01 = pe / pep0e
-rhoerho0 = (1 + (gamma - 1) / 2 * M_ex ** 2) ** -(1 / (gamma - 1))
+
 TeT0 = (1 + (gamma - 1) / 2 * M_ex ** 2) ** -1
+rhoerho0 = (1 + (gamma - 1) / 2 * M_ex ** 2) ** -(1 / (gamma - 1)) * p02p01
+me = rhoerho0 * M_ex * Ae
+
+
+Mt = 1
+pt = (1 + (gamma - 1) / 2 * Mt ** 2) ** -(gamma / (gamma - 1))
+rhot = (1 + (gamma - 1) / 2 * Mt ** 2) ** -(1 / (gamma - 1))
+Tt = (1 + (gamma - 1) / 2 * Mt ** 2) ** -1
 
 def M1_eq(M1, p02p01):
     return p02p01 - ((gamma + 1) * M1 ** 2 / ((gamma - 1) * M1 ** 2 + 2)) ** (gamma / (gamma - 1)) * (
@@ -120,6 +128,8 @@ S1_est = np.zeros(Nx)
 S2_est = np.zeros(Nx)
 S3_est = np.zeros(Nx)
 
+
+mid = (Nx-1)/2
 mass = {}
 pressure = {}
 for j in range(Nt):
@@ -275,13 +285,22 @@ print(x.T, A.T, rho[:].T, V[:].T, T[:].T, p[:].T, M[:].T, mass_flow[:].T)
 # print(f"Pressure numerical = {p[1399,int(mid)]}, Pressure analytical = {p_an[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
 # print(f"Mach numerical = {M[1399,int(mid)]}, Mach analytical = {M_an[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
 
+# # Tab. 7.14
+print("------ TAB 7.14 --------")
+print(f"Density numerical = {rho[int(mid)]}, Density analytical = {rhot} for C = {C} at throat")
+print(f"Temperature numerical = {T[int(mid)]}, Temperature analytical = {Tt} for C = {C} at throat")
+print(f"Pressure numerical = {p[int(mid)]}, Pressure analytical = {pt} for C = {C} at throat")
+print(f"Mach numerical = {M[int(mid)]}, Mach analytical = {Mt} for C = {C} at throat")
+print(f"Mass numerical = {mass_flow[int(mid)]}, Mass analytical = {me} for C = {C} at throat")
+
+
 # # Tab. 7.15
-# print(f"Density numerical = {rho[1399,int(mid)]}, Density analytical = {rho_an[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
-# print(f"Temperature numerical = {T[1399,int(mid)]}, Temperature analytical = {T_an[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
-# print(f"Pressure numerical = {p[1399,int(mid)]}, Pressure analytical = {p_an[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
-# print(f"Mach numerical = {M[1399,int(mid)]}, Mach analytical = {M_an[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
-
-
+print("------ TAB 7.15 --------")
+print(f"Density numerical = {rho[-1]}, Density analytical = {rhoerho0} for C = {C} at exit")
+print(f"Temperature numerical = {T[-1]}, Temperature analytical = {TeT0} for C = {C} at exit")
+print(f"Pressure numerical = {p[-1]}, Pressure analytical = {pe} for C = {C} at exit")
+print(f"Mach numerical = {M[-1]}, Mach analytical = {M_ex} for C = {C} at exit")
+print(f"Mass numerical = {mass_flow[-1]}, Mass analytical = {me} for C = {C} at exit")
 
 # Fig. 7.10
 # plt.figure(figsize=(10, 6))
@@ -335,4 +354,3 @@ print(x.T, A.T, rho[:].T, V[:].T, T[:].T, p[:].T, M[:].T, mass_flow[:].T)
 # plt.grid()
 # plt.show()
 
-print(M_ex)
