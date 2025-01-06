@@ -280,12 +280,6 @@ print(x.T, A.T, rho[:].T, V[:].T, T[:].T, p[:].T, M[:].T, mass_flow[:].T)
 # results can be found on Tab. 7.6 if the grid points are changed
 
 # # Tab. 7.14
-# print(f"Density numerical = {rho[1399,int(mid)]}, Density analytical = {rho_an[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
-# print(f"Temperature numerical = {T[1399,int(mid)]}, Temperature analytical = {T_an[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
-# print(f"Pressure numerical = {p[1399,int(mid)]}, Pressure analytical = {p_an[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
-# print(f"Mach numerical = {M[1399,int(mid)]}, Mach analytical = {M_an[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
-
-# # Tab. 7.14
 print("------ TAB 7.14 --------")
 print(f"Density numerical = {rho[int(mid)]}, Density analytical = {rhot} for C = {C} at throat")
 print(f"Temperature numerical = {T[int(mid)]}, Temperature analytical = {Tt} for C = {C} at throat")

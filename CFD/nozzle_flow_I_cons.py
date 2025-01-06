@@ -4,12 +4,12 @@ from matplotlib import pyplot as plt
 from scipy.optimize import fsolve
 
 
-C = 0.5  # Courant
+C = 0.9  # Courant
 gamma = 1.4
 L = 3  # m
-Nx = 31
+Nx = 161
 dx = L / (Nx-1)
-Nt = 1400
+Nt = 6500
 x = np.linspace(0, L, Nx)
 A_ = 1 + 2.2 * (x - 1.5) ** 2
 A = A_/min(A_)
@@ -31,7 +31,7 @@ for i in range(limit2,Nx):
     rho[i] = 0.634-0.3879*(x[i]-1.5)
     T[i] = 0.833-0.3507*(x[i]-1.5)
 
-print(rho)
+
 V = 0.59 / (rho * A)
 p = rho*T
 U1 = rho * A
@@ -60,7 +60,7 @@ F3_est = np.zeros(len(x) - 1)
 mass = {}
 mass[0] = rho*A*V
 pressure = {}
-mid = (Nx-1)/2
+mid = int((Nx-1)/2)
 
 
 # Analytical calculations
@@ -150,64 +150,60 @@ for j in range(Nt):
     if j == 0 or j == 49 or j == 99 or j == 149 or j == 199 or j == 699:
         mass[j] = mass_flow
 
-    rho_history.append(rho[15])
-    T_history.append(T[15])
-    p_history.append(p[15])
-    M_history.append(M[15])
+    rho_history.append(rho[mid])
+    T_history.append(T[mid])
+    p_history.append(p[mid])
+    M_history.append(M[mid])
 
 
 
 # Tab. 7.3
-print(x.T, A.T, rho[:].T, V[:].T, T[:].T, p[:].T, M[:].T, mass_flow[:].T)
+print(x.T[:10], A.T[:10], rho[:10].T, V[:10].T, T[:10].T, p[:10].T, M[:10].T, mass_flow[:10].T)
 
 # Tab. 7.4
-print(np.round(np.array((x.T, A.T, rho[:].T, rho_an[:], np.abs(rho[:]-rho_an[:])/rho[:]*100, M[:].T, M_an[:].T, np.abs(M[:]-M_an[:])/M[:]*100)),3))
+print(np.round(np.array((x.T[:10], A.T[:10], rho[:10].T, rho_an[:10], np.abs(rho[:10]-rho_an[:10])/rho[:10]*100, M[:10].T, M_an[:10].T, np.abs(M[:10]-M_an[:10])/M[:10]*100)),3))
 
 # Tab. 7.5
 # results can be found on Tab. 7.6 if the grid points are changed
 
 # # # Tab. 7.6
-# print(f"Density numerical = {rho[1399,int(mid)]}, Density analytical = {rho_an[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
-# print(f"Temperature numerical = {T[1399,int(mid)]}, Temperature analytical = {T_an[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
-# print(f"Pressure numerical = {p[1399,int(mid)]}, Pressure analytical = {p_an[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
-# print(f"Mach numerical = {M[1399,int(mid)]}, Mach analytical = {M_an[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
+print(f"Density numerical = {rho[int(mid)]}, Density analytical = {rho_an[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
+print(f"Temperature numerical = {T[int(mid)]}, Temperature analytical = {T_an[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
+print(f"Pressure numerical = {p[int(mid)]}, Pressure analytical = {p_an[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
+print(f"Mach numerical = {M[int(mid)]}, Mach analytical = {M_an[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
 
 
 
 #
 # # Fig. 7.9
 plt.figure(figsize=(10, 6))
-plt.plot(range(1, len(rho_history) + 1), rho_history, label="Numerical Solution")
+plt.plot(range(1, len(rho_history) + 1), rho_history, label="At Nozzle Throat")
 plt.xlabel("Number of Time Steps")
 plt.ylabel(r"$\rho / \rho_0$")
-plt.title(f"Density at Grid Point {int(mid+1)} Over Time")
 plt.legend()
 plt.grid()
 plt.show()
 
 plt.figure(figsize=(10, 6))
-plt.plot(range(1, len(T_history) + 1), T_history, label="Numerical Solution")
+plt.plot(range(1, len(T_history) + 1), T_history, label="At Nozzle Throat")
 plt.xlabel("Number of Time Steps")
 plt.ylabel(r"$T / T_0$")
-plt.title(f"Temperature at Grid Point {int(mid+1)} Over Time")
 plt.legend()
 plt.grid()
 plt.show()
 
 plt.figure(figsize=(10, 6))
-plt.plot(range(1, len(p_history) + 1), p_history, label="Numerical Solution")
+plt.plot(range(1, len(p_history) + 1), p_history, label="At Nozzle Throat")
 plt.xlabel("Number of Time Steps")
 plt.ylabel(r"$p / p_0$")
-plt.title(f"Pressure at Grid Point {int(mid+1)} Over Time")
 plt.legend()
 plt.grid()
 plt.show()
 
 plt.figure(figsize=(10, 6))
-plt.plot(range(1, len(M_history) + 1), M_history, label="Numerical Solution")
+plt.plot(range(1, len(M_history) + 1), M_history, label="At Nozzle Throat")
 plt.xlabel("Number of Time Steps")
 plt.ylabel(r"$M$")
-plt.title(f"Mach number at Grid Point {int(mid+1)} Over Time")
 plt.legend()
 plt.grid()
 plt.show()
@@ -235,7 +231,6 @@ plt.plot(x,mass[199], label=r"$150\Delta t$")
 plt.plot(x,mass[699], label=r"$700\Delta t$")
 plt.xlabel("Nondimensionless distance through nozzle (x)")
 plt.ylabel("Nondimensionless mass flow")
-plt.title("Mass flow distributions")
 plt.legend()
 plt.grid()
 plt.show()
@@ -250,7 +245,6 @@ ax2 = ax1.twinx()
 ax2.plot(x, M, 'g', label="Numerical results")
 ax2.plot(x[::3], M_an[::3],'o', label="Analytical results")
 ax2.set_ylabel("Mach number")
-plt.title("Steady-state distributions over nozzle distance")
 plt.legend()
 plt.grid()
 plt.show()

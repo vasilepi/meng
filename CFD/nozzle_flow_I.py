@@ -13,17 +13,20 @@ def conservation_check(rho, V, T, A, t, dx):
 
 gamma = 1.4
 L = 3
-Nx = 41
-Nt = 1800
+Nx = 161
+Nt = 6500
 x = np.linspace(0,L,Nx) # x/L
 dx = L/(Nx-1)
-C = 0.5
+C = 0.4
+
 
 # initials
 rho_i = 1 - 0.3146*x # rho/rho_0
 T_i = 1 - 0.2314*x # T/T_0
 V_i = (0.1 + 1.09*x)*T_i**0.5 # V/a_0
 p_i = rho_i*T_i
+
+# print(T_i[-1], V_i[-1])
 # nozzle geometry
 A_ = 1+2.2*(x - 1.5)**2 # A/A*
 A = A_/min(A_)
@@ -141,7 +144,7 @@ for t in range(0,Nt-1):
 
     if t % 100 == 0:  # Check conservation every 100 time steps
         mass, momentum, energy = conservation_check(rho, V, T, A, t, dx)
-        print(f"Time step {t}, Mass = {mass:.5f}, Momentum = {momentum:.5f}, Energy = {energy:.5f}")
+        # print(f"Time step {t}, Mass = {mass:.5f}, Momentum = {momentum:.5f}, Energy = {energy:.5f}")
 
 
 
@@ -162,10 +165,10 @@ for t in range(0,Nt-1):
 ########## RESULTS ###########
 
 # Tab. 7.3
-print(np.round(np.array((x.T, A.T, rho[1399,:].T, V[1399,:].T, T[1399,:].T, p[1399,:].T, M[1399,:].T, mass_flow[1399,:].T)),3))
+print(np.round(np.array((x.T[:20], A.T[:20], rho[1399,:20].T, V[1399,:20].T, T[1399,:20].T, p[1399,:20].T, M[1399,:20].T, mass_flow[1399,:20].T)),3))
 
 # Tab. 7.4
-print(np.round(np.array((x.T, A.T, rho[1399,:].T, rho_an[:], np.abs(rho[1399,:]-rho_an[:])/rho[1399,:]*100, M[1399,:].T, M_an[:].T, np.abs(M[1399,:]-M_an[:])/M[1399,:]*100)),3))
+print(np.round(np.array((x.T[:10], A.T[:10], rho[1399,:10].T, rho_an[:10], np.abs(rho[1399,:10]-rho_an[:10])/rho[1399,:10]*100, M[1399,:10].T, M_an[:10].T, np.abs(M[1399,:10]-M_an[:10])/M[1399,:10]*100)),3))
 
 # Tab. 7.5
 # results can be found on Tab. 7.6 if the grid points are changed
@@ -184,7 +187,6 @@ plt.figure(figsize=(10, 6))
 plt.plot(range(1, len(rho_history) + 1), rho_history, label="At Nozzle Throat")
 plt.xlabel("Number of Time Steps")
 plt.ylabel(r"$\rho / \rho_0$")
-plt.title(f"Density at Grid Point {int(mid+1)} Over Time")
 plt.legend()
 plt.grid()
 plt.show()
@@ -193,7 +195,6 @@ plt.figure(figsize=(10, 6))
 plt.plot(range(1, len(T_history) + 1), T_history, label="At Nozzle Throat")
 plt.xlabel("Number of Time Steps")
 plt.ylabel(r"$T / T_0$")
-plt.title(f"Temperature at Grid Point {int(mid+1)} Over Time")
 plt.legend()
 plt.grid()
 plt.show()
@@ -202,7 +203,6 @@ plt.figure(figsize=(10, 6))
 plt.plot(range(1, len(p_history) + 1), p_history, label="At Nozzle Throat")
 plt.xlabel("Number of Time Steps")
 plt.ylabel(r"$p / p_0$")
-plt.title(f"Pressure at Grid Point {int(mid+1)} Over Time")
 plt.legend()
 plt.grid()
 plt.show()
@@ -211,7 +211,6 @@ plt.figure(figsize=(10, 6))
 plt.plot(range(1, len(M_history) + 1), M_history, label="At Nozzle Throat")
 plt.xlabel("Number of Time Steps")
 plt.ylabel(r"$M$")
-plt.title(f"Mach number at Grid Point {int(mid+1)} Over Time")
 plt.legend()
 plt.grid()
 plt.show()
@@ -223,7 +222,6 @@ plt.plot(range(1, len(dVdt_av_history) + 1), dVdt_av_history, label=r"$|(\frac{d
 plt.yscale("log")
 plt.xlabel("Number of Time Steps")
 plt.ylabel("Residual")
-plt.title(f"Dimensionless time derivatives at Grid Point {int(mid+1)} Over Time")
 plt.legend()
 plt.grid()
 plt.show()
@@ -238,7 +236,6 @@ plt.plot(x,mass_flow[199,:], label=r"$200\Delta t$")
 plt.plot(x,mass_flow[699,:], label=r"$700\Delta t$")
 plt.xlabel("Nondimensionless distance through nozzle (x)")
 plt.ylabel("Nondimensionless mass flow")
-plt.title("Mass flow distributions")
 plt.legend()
 plt.grid()
 plt.show()
@@ -253,7 +250,6 @@ ax2 = ax1.twinx()
 ax2.plot(x, M[-1,:], 'g', label="Numerical results")
 ax2.plot(x[::3], M_an[::3],'o', label="Analytical results")
 ax2.set_ylabel("Mach number")
-plt.title("Steady-state distributions over nozzle distance")
 plt.legend()
 plt.grid()
 plt.show()
