@@ -82,8 +82,8 @@ def M_solve(M_, A_):
 M_an = np.zeros(Nx)
 
 for i in range(Nx):
-    init_guess = 0.2 if x[i] < 1.5 else 2.0
-    M_ = fsolve(M_solve, init_guess, args=(A_[i],))[0]
+    guess = 0.2 if x[i] < 1.5 else 2.0
+    M_ = fsolve(M_solve, guess, args=(A_[i],))[0]
     M_an[i] = abs(M_)
 
 p_an = (1 + (gamma - 1) / 2 * M_an ** 2) ** (-gamma / (gamma - 1))

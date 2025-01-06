@@ -54,20 +54,20 @@ p[:] = rho[:] * T[:]
 
 # Analytical calculations 
 
-def Mach_ex_eq(M_ex, pe):
-    return pe * Ae - (1 + (gamma - 1) / 2 * M_ex ** 2) ** -(gamma / (gamma - 1)) * (1 / M_ex) * (
-                ((2 / (gamma + 1)) * (1 + ((gamma - 1) / 2) * M_ex ** 2)) ** ((gamma + 1) / (2 * (gamma - 1))))
+def Me_solve(Me, pe):
+    return pe * Ae - (1 + (gamma - 1) / 2 * Me ** 2) ** -(gamma / (gamma - 1)) * (1 / Me) * (
+                ((2 / (gamma + 1)) * (1 + ((gamma - 1) / 2) * Me ** 2)) ** ((gamma + 1) / (2 * (gamma - 1))))
 
 
-mach_ex_guess = 0.1
-M_ex = fsolve(Mach_ex_eq, mach_ex_guess, args=pe)
+guess = 0.1
+Me = fsolve(Me_solve, guess, args=pe)
 
-pep0e = (1 + (gamma - 1) / 2 * M_ex ** 2) ** -(gamma / (gamma - 1))
+pep0e = (1 + (gamma - 1) / 2 * Me ** 2) ** -(gamma / (gamma - 1))
 p02p01 = pe / pep0e
 
-TeT0 = (1 + (gamma - 1) / 2 * M_ex ** 2) ** -1
-rhoerho0 = (1 + (gamma - 1) / 2 * M_ex ** 2) ** -(1 / (gamma - 1)) * p02p01
-me = rhoerho0 * M_ex * Ae
+TeT0 = (1 + (gamma - 1) / 2 * Me ** 2) ** -1
+rhoerho0 = (1 + (gamma - 1) / 2 * Me ** 2) ** -(1 / (gamma - 1)) * p02p01
+me = rhoerho0 * Me * Ae
 
 
 Mt = 1
@@ -75,21 +75,21 @@ pt = (1 + (gamma - 1) / 2 * Mt ** 2) ** -(gamma / (gamma - 1))
 rhot = (1 + (gamma - 1) / 2 * Mt ** 2) ** -(1 / (gamma - 1))
 Tt = (1 + (gamma - 1) / 2 * Mt ** 2) ** -1
 
-def M1_eq(M1, p02p01):
+def M1_solve(M1, p02p01):
     return p02p01 - ((gamma + 1) * M1 ** 2 / ((gamma - 1) * M1 ** 2 + 2)) ** (gamma / (gamma - 1)) * (
                 (gamma + 1) / (2 * gamma * M1 ** 2 - gamma + 1)) ** (1 / (gamma - 1))
 
 
 M1_guess = 2
-M1 = fsolve(M1_eq, M1_guess, args=p02p01)
+M1 = fsolve(M1_solve, M1_guess, args=p02p01)
 
 
-def A_dot_eq(AAdot, M):
+def Astar_solve(AAdot, M):
     return (AAdot) ** 2 - (1 / M ** 2) * (
                 ((2 / (gamma + 1)) * (1 + ((gamma - 1) / 2) * M ** 2)) ** ((gamma + 1) / (gamma - 1)))
 
 
-A1A1dot = fsolve(A_dot_eq, 1, args=M1)
+A1A1star = fsolve(Astar_solve, 1, args=M1)
 
 p2p1 = 1 + 2 * gamma / (gamma + 1) * (M1 ** 2 - 1)
 M2 = ((1 + (gamma - 1) / 2 * M1 ** 2) / (gamma * M1 ** 2 - (gamma - 1) / 2)) ** 0.5
@@ -293,7 +293,7 @@ print("------ TAB 7.15 --------")
 print(f"Density numerical = {rho[-1]}, Density analytical = {rhoerho0} for C = {C} at exit")
 print(f"Temperature numerical = {T[-1]}, Temperature analytical = {TeT0} for C = {C} at exit")
 print(f"Pressure numerical = {p[-1]}, Pressure analytical = {pe} for C = {C} at exit")
-print(f"Mach numerical = {M[-1]}, Mach analytical = {M_ex} for C = {C} at exit")
+print(f"Mach numerical = {M[-1]}, Mach analytical = {Me} for C = {C} at exit")
 print(f"Mass numerical = {mass_flow[-1]}, Mass analytical = {me} for C = {C} at exit")
 
 # Fig. 7.10

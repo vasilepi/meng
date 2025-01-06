@@ -39,18 +39,18 @@ for i in range(limit1, len(x)):
     A[i] = 1 + 0.2223 * (x[i] - 1.5) ** 2
 
 # Analytical calculations
-def M_solve(M_ex, pe):
-    return pe - (1 + (gamma - 1) / 2 * M_ex ** 2) ** -(gamma / (gamma - 1))
+def M_solve(Me, pe):
+    return pe - (1 + (gamma - 1) / 2 * Me ** 2) ** -(gamma / (gamma - 1))
 
-def A_solve(AeA0, M_ex):
-    return (AeA0) ** 2 - (1 / M_ex ** 2) * (
-        ((2 / (gamma + 1)) * (1 + ((gamma - 1) / 2) * M_ex ** 2)) ** ((gamma + 1) / (gamma - 1))
+def A_solve(AeA0, Me):
+    return (AeA0) ** 2 - (1 / Me ** 2) * (
+        ((2 / (gamma + 1)) * (1 + ((gamma - 1) / 2) * Me ** 2)) ** ((gamma + 1) / (gamma - 1))
     )
 
-mach_ex_guess = 1
+M_guess = 1
 A_guess = 0.1
-M_ex = fsolve(M_solve, mach_ex_guess, args=pe)[0]  # Extract the scalar
-AeA0 = fsolve(A_solve, A_guess, args=M_ex)[0]  # Extract the scalar
+Me = fsolve(M_solve, M_guess, args=pe)[0]  # Extract the scalar
+AeA0 = fsolve(A_solve, A_guess, args=Me)[0]  # Extract the scalar
 AA0 = A * AeA0 / 1.5
 
 def M_solvesolve(M_, AA0):
@@ -61,12 +61,12 @@ def M_solvesolve(M_, AA0):
 M_an = np.zeros(Nx)
 
 for i in range(0, Nx):
-    init_guess = 0.079
-    M_ = fsolve(M_solvesolve, init_guess, args=AA0[i])[0]  # Extract the scalar
+    guess = 0.079
+    M_ = fsolve(M_solvesolve, guess, args=AA0[i])[0]  # Extract the scalar
 
     while M_ < 0.07 or M_ > 0.545:
-        init_guess = init_guess + 0.001
-        M_ = fsolve(M_solvesolve, init_guess, args=AA0[i])[0]  # Extract the scalar
+        guess = guess + 0.001
+        M_ = fsolve(M_solvesolve, guess, args=AA0[i])[0]  # Extract the scalar
 
     M_an[i] = M_
 
