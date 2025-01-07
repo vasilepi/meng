@@ -1,5 +1,4 @@
 import numpy as np
-import pandas as pd
 from matplotlib import pyplot as plt
 from scipy.optimize import fsolve
 
@@ -7,9 +6,9 @@ from scipy.optimize import fsolve
 C = 0.9  # Courant
 gamma = 1.4
 L = 3  # m
-Nx = 161
+Nx = 41
 dx = L / (Nx-1)
-Nt = 6500
+Nt = 1900
 x = np.linspace(0, L, Nx)
 A_ = 1 + 2.2 * (x - 1.5) ** 2
 A = A_/min(A_)
@@ -90,7 +89,6 @@ M_history = []
 for j in range(Nt):
     for i in range(len(x) - 1):
         # Predictor Step
-        # J2[i] = (gamma-1)/gamma * (U3[i] - gamma/2 * U2[i]**2/U1[i]) * (A[i]-A[i-1])/dx
         J2[i] = (rho[i] * T[i]) / gamma * ((A[i+1] - A[i]) / dx)
         dU1dt[i] = -(F1[i + 1] - F1[i]) / dx
         dU2dt[i] = -(F2[i + 1] - F2[i]) / dx + J2[i]
@@ -102,7 +100,6 @@ for j in range(Nt):
         T_est[i] = (gamma - 1) * (U3_est[i] / U1_est[i] - gamma / 2 * (U2_est[i] / U1_est[i]) ** 2)
         F1_est[i] = U2_est[i]
         F2_est[i] = U2_est[i] ** 2 / U1_est[i] + (gamma - 1) / gamma * (U3_est[i] - gamma / 2 * U2_est[i] ** 2 / U1_est[i])
-        # F3_est[i] = gamma * U2_est[i] * U3_est[i] / U1_est[i] - gamma*(gamma-1)/2 * U2_est[i]**3 / U1_est[i]**2
         F3_est[i] = gamma * U2_est[i] * U3_est[i] / U1_est[i] - gamma * (gamma - 1) / 2 * (U2_est[i] / U1_est[i]) ** 2 * U2_est[i]
 
         # Corrector Step

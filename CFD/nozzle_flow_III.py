@@ -14,12 +14,12 @@ def conservation_check(rho, V, T, A, t, dx):
 
 gamma = 1.4
 L = 3
-Nx = 61
+Nx = 41
 Nt = 1600
 x = np.linspace(0,L,Nx) # x/L
 dx = L/(Nx-1)
-C = 0.5
-Cx = 0.2
+C = 0.7
+Cx = 0.3 # set to 0 for solution without artificial viscosity
 p0 = 1
 pe = 0.6784
 
@@ -43,14 +43,14 @@ for i in range(limit2,limit3):
 for i in range(limit3,Nx):
     rho[i] = 0.5892+0.10228*(x[i]-2.1)
     T[i] = 0.93968+0.0622*(x[i]-2.1)
-
+# print(T[-1])
 # nozzle geometry
 A_ = 1 + 2.2 * (x - 1.5) ** 2
 A = A_/min(A_)
 Ae = A[-1]
 V = 0.59 / (rho * A)
 p[:] = rho[:] * T[:]
-
+# print(V[-1])
 
 # Analytical calculations 
 
@@ -127,9 +127,12 @@ S3 = np.zeros(Nx)
 S1_est = np.zeros(Nx)
 S2_est = np.zeros(Nx)
 S3_est = np.zeros(Nx)
+rho_history =[]
+T_history=[]
+p_history=[]
+M_history=[]
 
-
-mid = (Nx-1)/2
+mid = int((Nx-1)/2)
 mass = {}
 pressure = {}
 for j in range(Nt):
@@ -141,10 +144,7 @@ for j in range(Nt):
         S3[i] = Cx * abs(p[i + 1] - 2 * p[i] + p[i - 1]) / (p[i + 1] + 2 * p[i] + p[i - 1]) * (
                 U3[i + 1] - 2 * U3[i] + U3[i - 1])
 
-        ########### For Fig. 7.23 ############
-        # S1[i] = 0
-        # S2[i] = 0
-        # S3[i] = 0
+
     for i in range (len(x)-1):
         # Predictor Step
         J2[i] = 1/gamma * rho[i] * T[i] * (A[i+1]-A[i])/dx
@@ -160,7 +160,6 @@ for j in range(Nt):
         p_est[i] = rho_est[i] * T_est[i]
         F1_est[i] = U2_est[i]
         F2_est[i] = U2_est[i]**2 / U1_est[i] + (gamma-1)/gamma * (U3_est[i] - gamma/2 * U2_est[i]**2 / U1_est[i])
-        # F3_est[i] = gamma * U2_est[i] * U3_est[i] / U1_est[i] - gamma*(gamma-1)/2 * U2_est[i]**3 / U1_est[i]**2
         F3_est[i] = gamma * U2_est[i] * U3_est[i] / U1_est[i] - gamma*(gamma-1)/2 * (U2_est[i]/U1_est[i])**2 * U2_est[i]
     U1_est[-1] = 2 * U1_est[-2] - U1_est[-3]
     U2_est[-1] = 2 * U2_est[-2] - U2_est[-3]
@@ -177,10 +176,7 @@ for j in range(Nt):
         S3_est[i] = Cx * abs(p_est[i + 1] - 2 * p_est[i] + p_est[i - 1]) / (
                     p_est[i + 1] + 2 * p_est[i] + p_est[i - 1]) * (
                             U3_est[i + 1] - 2 * U3_est[i] + U3_est[i - 1])
-        ########### For Fig. 7.23 ############
-        # S1_est[i] = 0
-        # S2_est[i] = 0
-        # S3_est[i] = 0
+
         # Corrector Step
     for i in range (1,len(x)-1):
         dU1dt_est = -(F1_est[i]-F1_est[i-1])/dx
@@ -226,7 +222,10 @@ for j in range(Nt):
     M = V/(T**0.5)
     mass_flow = rho * V * A
 
-
+    rho_history.append(rho[mid])
+    T_history.append(T[mid])
+    p_history.append(p[mid])
+    M_history.append(M[mid])
 
     # if j == 0 or j == 499 or j == Nt-1:
     #     mass[j] = mass_flow
@@ -243,7 +242,7 @@ for j in range(Nt):
 
 # Fig. 7.23 - 7.24 (For 7.23 replace viscosity with commented values)
 plt.figure(figsize=(10, 6))
-plt.plot(x,p, label="$Numerical$")
+plt.plot(x,p, label="$Steady state$")
 plt.xlabel("Nondimensionless distance through nozzle (x)")
 plt.ylabel("Nondimensionless density")
 plt.legend()
@@ -252,7 +251,7 @@ plt.show()
 
 # Fig. 7.25
 plt.figure(figsize=(10, 6))
-plt.plot(x,M, label=r"$0\Delta t$")
+plt.plot(x,M, label="$Steady state$")
 plt.xlabel("Nondimensionless distance through nozzle (x)")
 plt.ylabel("Mach")
 plt.legend()
@@ -261,88 +260,65 @@ plt.show()
 
 # Fig. 7.26
 plt.figure(figsize=(10, 6))
-plt.plot(x,mass_flow, label=r"$0\Delta t$")
+plt.plot(x,mass_flow, label="$Steady state$")
 plt.xlabel("Nondimensionless distance through nozzle (x)")
 plt.ylabel("Nondimensionless mass flow")
 plt.legend()
 plt.grid()
 plt.show()
 
+# # # Fig. 7.9
+plt.figure(figsize=(10, 6))
+plt.plot(range(1, len(rho_history) + 1), rho_history, label="At Nozzle Throat")
+plt.xlabel("Number of Time Steps")
+plt.ylabel(r"$\rho / \rho_0$")
+plt.legend()
+plt.grid()
+plt.show()
+
+plt.figure(figsize=(10, 6))
+plt.plot(range(1, len(T_history) + 1), T_history, label="At Nozzle Throat")
+plt.xlabel("Number of Time Steps")
+plt.ylabel(r"$T / T_0$")
+plt.legend()
+plt.grid()
+plt.show()
+
+plt.figure(figsize=(10, 6))
+plt.plot(range(1, len(p_history) + 1), p_history, label="At Nozzle Throat")
+plt.xlabel("Number of Time Steps")
+plt.ylabel(r"$p / p_0$")
+plt.legend()
+plt.grid()
+plt.show()
+
+plt.figure(figsize=(10, 6))
+plt.plot(range(1, len(M_history) + 1), M_history, label="At Nozzle Throat")
+plt.xlabel("Number of Time Steps")
+plt.ylabel(r"$M$")
+plt.legend()
+plt.grid()
+plt.show()
+
 
 # Tab. 7.13
-print(x.T, A.T, rho[:].T, V[:].T, T[:].T, p[:].T, M[:].T, mass_flow[:].T)
+print(x.T[:10], A.T[:10], rho[:10].T, V[:10].T, T[:10].T, p[:10].T, M[:10].T, mass_flow[:10].T)
 
-# Tab. 7.8
-# print(np.round(np.array((x.T, A.T, rho[:].T, rho_an[:], np.abs(rho[:]-rho_an[:])/rho[:]*100, M[:].T, M_an[:].T, np.abs(M[:]-M_an[:])/M[:]*100)),3))
-
-# Tab. 7.5
-# results can be found on Tab. 7.6 if the grid points are changed
 
 # # Tab. 7.14
 print("------ TAB 7.14 --------")
-print(f"Density numerical = {rho[int(mid)]}, Density analytical = {rhot} for C = {C} at throat")
-print(f"Temperature numerical = {T[int(mid)]}, Temperature analytical = {Tt} for C = {C} at throat")
-print(f"Pressure numerical = {p[int(mid)]}, Pressure analytical = {pt} for C = {C} at throat")
-print(f"Mach numerical = {M[int(mid)]}, Mach analytical = {Mt} for C = {C} at throat")
-print(f"Mass numerical = {mass_flow[int(mid)]}, Mass analytical = {me} for C = {C} at throat")
+print(f"Density numerical = {rho[int(mid)]}, Density analytical = {rhot} for Cx = {Cx} at throat")
+print(f"Temperature numerical = {T[int(mid)]}, Temperature analytical = {Tt} for Cx = {Cx} at throat")
+print(f"Pressure numerical = {p[int(mid)]}, Pressure analytical = {pt} for Cx = {Cx} at throat")
+print(f"Mach numerical = {M[int(mid)]}, Mach analytical = {Mt} for Cx = {Cx} at throat")
+print(f"Mass numerical = {mass_flow[int(mid)]}, Mass analytical = {me} for Cx = {Cx} at throat")
 
 
 # # Tab. 7.15
 print("------ TAB 7.15 --------")
-print(f"Density numerical = {rho[-1]}, Density analytical = {rhoerho0} for C = {C} at exit")
-print(f"Temperature numerical = {T[-1]}, Temperature analytical = {TeT0} for C = {C} at exit")
-print(f"Pressure numerical = {p[-1]}, Pressure analytical = {pe} for C = {C} at exit")
-print(f"Mach numerical = {M[-1]}, Mach analytical = {Me} for C = {C} at exit")
-print(f"Mass numerical = {mass_flow[-1]}, Mass analytical = {me} for C = {C} at exit")
-
-# Fig. 7.10
-# plt.figure(figsize=(10, 6))
-# plt.plot(range(1, len(drhodt_av_history) + 1), drhodt_av_history, label=rho"$|(\frac{d\rho}{dt})_{avg}|$")
-# plt.plot(range(1, len(dVdt_av_history) + 1), dVdt_av_history, label=rho"$|(\frac{dV}{dt})_{avg}|$")
-# plt.xlabel("Number of Time Steps")
-# plt.ylabel("Residual")
-# plt.legend()
-# plt.grid()
-# plt.show()
-
-
-
-# # Fig. 7.16
-# plt.figure(figsize=(10, 6))
-# plt.plot(x,mass[0], label=r"$0\Delta t$")
-# plt.plot(x,mass[499], label=r"$500\Delta t$")
-# plt.plot(x,mass[Nt-1], label=r"$5000\Delta t$")
-# plt.xlabel("Nondimensionless distance through nozzle (x)")
-# plt.ylabel("Nondimensionless mass flow")
-# plt.title("Mass flow distributions")
-# plt.legend()
-# plt.grid()
-# plt.show()
-#
-# # Fig. 7.17
-# plt.figure(figsize=(10, 6))
-# plt.plot(x,pressure[0], label=r"$0\Delta t$")
-# plt.plot(x,pressure[499], label=r"$500\Delta t$")
-# plt.plot(x,pressure[999], label=r"$1000\Delta t$")
-# plt.plot(x,pressure[Nt-1], label=r"$5000\Delta t$")
-# plt.xlabel("Nondimensionless distance through nozzle (x)")
-# plt.ylabel("Nondimensionless mass flow")
-# plt.title("Mass flow distributions")
-# plt.legend()
-# plt.grid()
-# plt.show()
-
-# Fig. 7.18
-############### CHANGE pe to pe = 0.9 for this plot
-# plt.figure(figsize=(10, 6))
-# plt.plot(x,pressure[0], label=r"$0\Delta t$")
-# plt.plot(x,pressure[399], label=r"$400\Delta t$")
-# plt.plot(x,pressure[799], label=r"$800\Delta t$")
-# plt.plot(x,pressure[2199], label=r"$1200\Delta t$")
-# plt.xlabel("Nondimensionless distance through nozzle (x)")
-# plt.ylabel("Nondimensionless mass flow")
-# plt.title("Mass flow distributions")
-# plt.legend()
-# plt.grid()
-# plt.show()
+print(f"Density numerical = {rho[-1]}, Density analytical = {rhoerho0} for Cx = {Cx} at exit")
+print(f"Temperature numerical = {T[-1]}, Temperature analytical = {TeT0} for Cx = {Cx} at exit")
+print(f"Pressure numerical = {p[-1]}, Pressure analytical = {pe} for Cx = {Cx} at exit")
+print(f"Mach numerical = {M[-1]}, Mach analytical = {Me} for Cx = {Cx} at exit")
+print(f"Mass numerical = {mass_flow[-1]}, Mass analytical = {me} for Cx = {Cx} at exit")
 

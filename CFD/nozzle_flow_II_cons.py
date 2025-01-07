@@ -1,6 +1,5 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.pyplot import figure
 from scipy.optimize import fsolve
 
 
@@ -13,15 +12,15 @@ def conservation_check(rho, V, T, A, t, dx):
 
 gamma = 1.4
 L = 3
-Nx = 31
-Nt = 5000
+Nx = 41
+Nt = 5800
 x = np.linspace(0,L,Nx) # x/L
 dx = L/(Nx-1)
 C = 0.5
 
 p0 = 1
 pe = 0.93
-# pe = 0.9
+# pe = 0.77
 
 
 # initials
@@ -29,7 +28,7 @@ rho = 1 - 0.023*x # rho/rho_0
 T = 1 - 0.009333*x # T/T_0
 V = 0.05+0.11*x # V/a_0
 
-
+mid = int((Nx-1)/2)
 # nozzle geometry
 limit1 = np.where(x >= 1.5)[0][0]
 A = np.zeros(len(x))
@@ -103,11 +102,15 @@ mass = {}
 pressure = {}
 pressure[0] = p
 mass[0] = rho*V*A
+
+rho_history = []
+T_history = []
+p_history = []
+M_history = []
 for j in range(Nt):
 
     for i in range (len(x)-1):
         # Predictor Step
-        # J2[i] = (gamma-1)/gamma * (U3[i] - gamma/2 * U2[i]**2/U1[i]) * (A[i]-A[i-1])/dx
         J2[i] = 1/gamma * rho[i] * T[i] * (A[i+1]-A[i])/dx
         dU1dt[i] = -(F1[i+1]-F1[i])/dx
         dU2dt[i] = -(F2[i+1]-F2[i])/dx + J2[i]
@@ -119,7 +122,6 @@ for j in range(Nt):
         T_est[i] = (gamma-1) * (U3_est[i]/U1_est[i] - gamma/2 * (U2_est[i]/U1_est[i])**2)
         F1_est[i] = U2_est[i]
         F2_est[i] = U2_est[i]**2 / U1_est[i] + (gamma-1)/gamma * (U3_est[i] - gamma/2 * U2_est[i]**2 / U1_est[i])
-        # F3_est[i] = gamma * U2_est[i] * U3_est[i] / U1_est[i] - gamma*(gamma-1)/2 * U2_est[i]**3 / U1_est[i]**2
         F3_est[i] = gamma * U2_est[i] * U3_est[i] / U1_est[i] - gamma*(gamma-1)/2 * (U2_est[i]/U1_est[i])**2 * U2_est[i]
 
 
@@ -168,49 +170,71 @@ for j in range(Nt):
         pressure[j] = p
     if j == 999:
         pressure[j] = p
-    if j == 399 or j == 799 or j == 2199:
+    if j == 399 or j == 799 or j == 2199 or j == 1199:
         pressure[j] = p
 
+    rho_history.append(rho[mid])
+    T_history.append(T[mid])
+    p_history.append(p[mid])
+    M_history.append(M[mid])
 
-# pressure[0] = (pe-p0)/L *x + 1
 
 ########## RESULTS ###########
 
-# Tab. 7.7
-print(x.T, A.T, rho[:].T, V[:].T, T[:].T, p[:].T, M[:].T, mass_flow[:   ].T)
+# # Tab. 7.7
+print(x.T[:10], A.T[:10], rho[:10].T, V[:10].T, T[:10].T, p[:10].T, M[:10].T, mass_flow[:10].T)
+#
+# # Tab. 7.8
+print(np.round(np.array((x.T[:10], A.T[:10], rho[:10].T, rho_an[:10], np.abs(rho[:10]-rho_an[:10])/rho[:10]*100, M[:10].T, M_an[:10].T, np.abs(M[:10]-M_an[:10])/M[:10]*100)),3))
 
-# Tab. 7.8
-print(np.round(np.array((x.T, A.T, rho[:].T, rho_an[:], np.abs(rho[:]-rho_an[:])/rho[:]*100, M[:].T, M_an[:].T, np.abs(M[:]-M_an[:])/M[:]*100)),3))
 
-# Tab. 7.5
-# results can be found on Tab. 7.6 if the grid points are changed
 
 # # Tab. 7.6
-# print(f"Density numerical = {rho[1399,int(mid)]}, Density analytical = {rho_an[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
-# print(f"Temperature numerical = {T[1399,int(mid)]}, Temperature analytical = {T_an[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
-# print(f"Pressure numerical = {p[1399,int(mid)]}, Pressure analytical = {p_an[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
-# print(f"Mach numerical = {M[1399,int(mid)]}, Mach analytical = {M_an[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
+print(f"Density numerical = {rho[int(mid)]}, Density analytical = {rho_an[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
+print(f"Temperature numerical = {T[int(mid)]}, Temperature analytical = {T_an[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
+print(f"Pressure numerical = {p[int(mid)]}, Pressure analytical = {p_an[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
+print(f"Mach numerical = {M[int(mid)]}, Mach analytical = {M_an[int(mid)]} for C = {C} at GRID POINT {int(mid+1)}")
+#
+#
+# # # Fig. 7.9
+plt.figure(figsize=(10, 6))
+plt.plot(range(1, len(rho_history) + 1), rho_history, label="At Nozzle Throat")
+plt.xlabel("Number of Time Steps")
+plt.ylabel(r"$\rho / \rho_0$")
+plt.legend()
+plt.grid()
+plt.show()
 
+plt.figure(figsize=(10, 6))
+plt.plot(range(1, len(T_history) + 1), T_history, label="At Nozzle Throat")
+plt.xlabel("Number of Time Steps")
+plt.ylabel(r"$T / T_0$")
+plt.legend()
+plt.grid()
+plt.show()
 
+plt.figure(figsize=(10, 6))
+plt.plot(range(1, len(p_history) + 1), p_history, label="At Nozzle Throat")
+plt.xlabel("Number of Time Steps")
+plt.ylabel(r"$p / p_0$")
+plt.legend()
+plt.grid()
+plt.show()
 
-# Fig. 7.10
-# plt.figure(figsize=(10, 6))
-# plt.plot(range(1, len(drhodt_av_history) + 1), drhodt_av_history, label=rho"$|(\frac{d\rho}{dt})_{avg}|$")
-# plt.plot(range(1, len(dVdt_av_history) + 1), dVdt_av_history, label=rho"$|(\frac{dV}{dt})_{avg}|$")
-# plt.xlabel("Number of Time Steps")
-# plt.ylabel("Residual")
-# plt.title(f"Dimensionless time derivatives at Grid Point {int(mid+1)} Over Time")
-# plt.legend()
-# plt.grid()
-# plt.show()
-
+plt.figure(figsize=(10, 6))
+plt.plot(range(1, len(M_history) + 1), M_history, label="At Nozzle Throat")
+plt.xlabel("Number of Time Steps")
+plt.ylabel(r"$M$")
+plt.legend()
+plt.grid()
+plt.show()
 
 
 # # Fig. 7.16
 plt.figure(figsize=(10, 6))
 plt.plot(x,mass[0], label=r"$0\Delta t$")
 plt.plot(x,mass[499], label=r"$500\Delta t$")
-plt.plot(x,mass[Nt-1], label=r"$5000\Delta t$")
+plt.plot(x,mass[Nt-1], label=rf"${Nt}\Delta t$")
 plt.xlabel("Nondimensionless distance through nozzle (x)")
 plt.ylabel("Nondimensionless mass flow")
 plt.legend()
@@ -222,22 +246,22 @@ plt.figure(figsize=(10, 6))
 plt.plot(x,pressure[0], label=r"$0\Delta t$")
 plt.plot(x,pressure[499], label=r"$500\Delta t$")
 plt.plot(x,pressure[999], label=r"$1000\Delta t$")
-plt.plot(x,pressure[Nt-1], label=r"$5000\Delta t$")
+plt.plot(x,pressure[Nt-1], label=rf"${Nt}\Delta t$")
 plt.xlabel("Nondimensionless distance through nozzle (x)")
-plt.ylabel("Nondimensionless mass flow")
+plt.ylabel("Nondimensionless pressure flow")
 plt.legend()
 plt.grid()
 plt.show()
 
 # Fig. 7.18
-############### CHANGE pe to pe = 0.9 for this plot
+############## CHANGE pe to pe = 0.9 for this plot
 # plt.figure(figsize=(10, 6))
 # plt.plot(x,pressure[0], label=r"$0\Delta t$")
 # plt.plot(x,pressure[399], label=r"$400\Delta t$")
 # plt.plot(x,pressure[799], label=r"$800\Delta t$")
-# plt.plot(x,pressure[2199], label=r"$1200\Delta t$")
+# plt.plot(x,pressure[1199], label=r"$1200\Delta t$")
 # plt.xlabel("Nondimensionless distance through nozzle (x)")
-# plt.ylabel("Nondimensionless mass flow")
+# plt.ylabel("Nondimensionless pressure flow")
 # plt.legend()
 # plt.grid()
 # plt.show()

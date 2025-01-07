@@ -18,8 +18,8 @@ x = np.linspace(0, L, Nx)
 y = np.array([H * ((np.exp(a*i/Ny))-1)/(np.exp(a)-1) for i in range(Ny)])
 dy = np.diff(y)
 
-print(dy[0])
-print(dy[-1])
+# print(dy[0])
+# print(dy[-1])
 
 # Computational grid (uniform)
 eta = np.zeros((Ny))
