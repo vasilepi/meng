@@ -70,6 +70,7 @@ def main():
                 s = s_ro[index]
                 e = e_ro[index]
                 sl.ramberg_osgood_plot(s,E,Ku,nu)
+                err2 = (s_c - s_ro[index])/2
                 sl.masing_plot(stress[i], strain[i], s-err2, E, Ku, nu, direction)
 
             else:
