@@ -39,6 +39,7 @@ def ramberg_osgood_plot(stress,E,Ku,nu):
     s = np.linspace(0,stress,100)   
     eps = ramberg_osgood(s,E,Ku,nu)  
     plt.plot(eps,s)
+    return s, eps
 
 def masing(Ds, E, Ku, nu):
     
@@ -48,7 +49,7 @@ def masing(Ds, E, Ku, nu):
     return De
 
 def masing_plot(stress_from,strain_from,stress_to,E,Ku,nu,dir):
-    s = np.linspace(stress_from,stress_to,100)
+    s = np.linspace(stress_from,stress_to,10000)
     
     Ds = abs(s - stress_from)
     De = masing(Ds,E,Ku,nu)
@@ -61,3 +62,4 @@ def masing_plot(stress_from,strain_from,stress_to,E,Ku,nu,dir):
 
 
     plt.plot(e,s)
+    return s, e
