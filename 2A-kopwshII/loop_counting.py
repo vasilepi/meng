@@ -18,7 +18,7 @@ def main():
     # print(sequence)
 
     # sequence = np.array([0.7, 0.3, 0.65, 0.2, 0.82, 0.5, 0.8,0.3, 1, 0.4])*s_normalization*factor
-    err = 1e-3
+    err = 1/factor/100 # tune based on the factor
     err2 = s_normalization/(factor*1e-1) * Kt
     stress = []
     strain = []
@@ -116,6 +116,6 @@ def main():
 
     plt.grid()
     plt.show()
-    print(stress[:4])
+    # print(stress[:4])
 if __name__ == "__main__":
     main()
