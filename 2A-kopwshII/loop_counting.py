@@ -80,6 +80,9 @@ for i,S in enumerate(sequence[1:]):
                     # Plot updated curve
                     sl.masing_plot(stress[i], strain[i], smas_point, E, Ku, nu, direction)
                     sl.masing_plot(stress[k], strain[k], s, E, Ku, nu, direction)
+                    smas_oldnew, emas_oldnew = sl.masing_curve(stress[k], strain[k], s, E, Ku, nu, direction)
+                    s_mas[k] = smas_oldnew
+                    e_mas[k] = emas_oldnew
                     break  # Exit inner loop once intersection is handled
             if d_intersected:
                 break  # Exit outer loop if intersection is handled
@@ -97,30 +100,30 @@ for i,S in enumerate(sequence[1:]):
         u_intersected = False
 
         # Handle Up Intersections (with Ramberg-Osgood and other Masing curves)
-        for smas_point, emas_point in zip(smas, emas):
-            ro_index = np.argmin(np.abs(s_ro - smas_point))
-            ro_strain = e_ro[ro_index]
-
-            if emas_point <= ro_strain:
-                Ds1 = smas_point - stress[i]
-                DsN = Ds - Ds1
-                plt.scatter(emas_point, smas_point, color='red', label='Ramberg-Osgood Intersection Point')
-                s_c = smas_point
-                e_c = emas_point
-
-                s, e = sl.solve_Neuber_rec(smas[-1], smas_point, emas_point, Kt, E, Ku, nu)
-                sl.ramberg_osgood_plot(s, E, Ku, nu)
-                break
-            else:
-                s_c = s
-                e_c = e
+        # for smas_point, emas_point in zip(smas, emas):
+        #     ro_index = np.argmin(np.abs(s_ro - smas_point))
+        #     ro_strain = e_ro[ro_index]
+        #
+        #     if emas_point <= ro_strain:
+        #         Ds1 = smas_point - stress[i]
+        #         DsN = Ds - Ds1
+        #         plt.scatter(emas_point, smas_point, color='red', label='Ramberg-Osgood Intersection Point')
+        #         s_c = smas_point
+        #         e_c = emas_point
+        #
+        #         s, e = sl.solve_Neuber_rec(smas[-1], smas_point, emas_point, Kt, E, Ku, nu)
+        #         sl.ramberg_osgood_plot(s, E, Ku, nu)
+        #         break
+        #     else:
+        #         s_c = s
+        #         e_c = e
 
         # Check intersections with other "up" Masing curves
         for k in range(len(s_mas)):
             if k >= i:
                 continue
-            prev_direction = "up" if s_mas[k][0] - s_mas[k][1] < 0 else "down"
-            if prev_direction != direction:
+            prev_direction_u = "up" if s_mas[k][0] - s_mas[k][1] < 0 else "down"
+            if prev_direction_u != direction:
                 continue
 
             for smas_point, emas_point in zip(smas, emas):
@@ -138,13 +141,27 @@ for i,S in enumerate(sequence[1:]):
                     e = strain[k] + De_new
 
                     sl.masing_plot(stress[i], strain[i], smas_point, E, Ku, nu, direction)
-                    sl.masing_plot(stress[k], strain[k], s, E, Ku, nu, direction)
+
+
+                    if s < np.max(stress):
+                        sl.masing_plot(stress[k], strain[k], s, E, Ku, nu, direction)
+                        smas_oldnew, emas_oldnew = sl.masing_curve(stress[k], strain[k], s, E, Ku, nu, direction)
+                        s_mas[k] = smas_oldnew
+                        e_mas[k] = emas_oldnew
+                    elif s >= np.max(stress):
+                        sl.masing_plot(stress[k], strain[k], np.max(stress), E, Ku, nu, direction)
+                        smas_oldnew, emas_oldnew = sl.masing_curve(stress[k], strain[k], np.max(stress), E, Ku, nu, direction)
+                        s_mas[k] = smas_oldnew
+                        e_mas[k] = emas_oldnew
+                        s = sl.solve_Neuber(sequence[k], e_mas[k][0], S, Kt, E, Ku, nu, 'R-O')
+                        e = sl.ramberg_osgood(s, E, Ku, nu)
+                        sl.ramberg_osgood_plot(s, E, Ku, nu)
                     break
             if u_intersected:
                 break
 
         if not u_intersected:
-            sl.masing_plot(stress[i], strain[i], s_c, E, Ku, nu, direction)
+            sl.masing_plot(stress[i], strain[i], s, E, Ku, nu, direction)
 
     stress.append(s)
     strain.append(e)
