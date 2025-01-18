@@ -2,6 +2,8 @@ import strain_life_utils as sl
 import numpy as np
 from matplotlib import pyplot as plt
 import utilities as utils
+import time
+start_time = time.time()
 
 E = 210000
 Ku = 1434
@@ -10,7 +12,7 @@ Kt = 1.574
 s_normalization = 174
 factor = 100
 sequence = utils.reader("Strain-Gauge-Console")
-sequence = np.array(sequence[:9])*s_normalization/100 * Kt * factor #notch
+sequence = np.array(sequence[:11])*s_normalization/100  * factor #notch
 # print(sequence)
 
 # sequence = np.array([0.7, 0.3, 0.65, 0.2, 0.82, 0.5, 0.8,0.3, 1, 0.4])*s_normalization*factor
@@ -100,23 +102,22 @@ for i,S in enumerate(sequence[1:]):
         u_intersected = False
 
         # Handle Up Intersections (with Ramberg-Osgood and other Masing curves)
-        # for smas_point, emas_point in zip(smas, emas):
-        #     ro_index = np.argmin(np.abs(s_ro - smas_point))
-        #     ro_strain = e_ro[ro_index]
-        #
-        #     if emas_point <= ro_strain:
-        #         Ds1 = smas_point - stress[i]
-        #         DsN = Ds - Ds1
-        #         plt.scatter(emas_point, smas_point, color='red', label='Ramberg-Osgood Intersection Point')
-        #         s_c = smas_point
-        #         e_c = emas_point
-        #
-        #         s, e = sl.solve_Neuber_rec(smas[-1], smas_point, emas_point, Kt, E, Ku, nu)
-        #         sl.ramberg_osgood_plot(s, E, Ku, nu)
-        #         break
-        #     else:
-        #         s_c = s
-        #         e_c = e
+        for smas_point, emas_point in zip(smas, emas):
+            ro_index = np.argmin(np.abs(s_ro - smas_point))
+            ro_strain = e_ro[ro_index]
+
+            if emas_point <= ro_strain:
+
+                # plt.scatter(emas_point, smas_point, color='red', label='Ramberg-Osgood Intersection Point')
+                s_c = smas_point
+                e_c = emas_point
+
+                s, e = sl.solve_Neuber_rec(smas[-1], smas_point, emas_point, Kt, E, Ku, nu)
+                sl.ramberg_osgood_plot(s, E, Ku, nu)
+                break
+            else:
+                s_c = s
+                e_c = e
 
         # Check intersections with other "up" Masing curves
         for k in range(len(s_mas)):
@@ -161,7 +162,7 @@ for i,S in enumerate(sequence[1:]):
                 break
 
         if not u_intersected:
-            sl.masing_plot(stress[i], strain[i], s, E, Ku, nu, direction)
+            sl.masing_plot(stress[i], strain[i], s_c, E, Ku, nu, direction)
 
     stress.append(s)
     strain.append(e)
@@ -262,3 +263,8 @@ print(loops)
 print(loop)
 # print(s_mas[1])
 # print(stress[-1], strain[-1], stress[-2], strain[-2])
+
+
+
+
+print("time elapsed: {:.2f}s".format(time.time() - start_time))
