@@ -90,89 +90,56 @@ for i,S in enumerate(sequence[1:]):
 
 
 
-
-
     elif direction == "up":
-
         s = stress[i] + Ds
-
         e = strain[i] + De
-
         smas, emas = sl.masing_curve(stress[i], strain[i], s, E, Ku, nu, direction)
-
         u_intersected = False
 
         # Handle Up Intersections (with Ramberg-Osgood and other Masing curves)
-
         for smas_point, emas_point in zip(smas, emas):
-
             ro_index = np.argmin(np.abs(s_ro - smas_point))
-
             ro_strain = e_ro[ro_index]
 
             if emas_point <= ro_strain:
-
                 Ds1 = smas_point - stress[i]
-
                 DsN = Ds - Ds1
-
                 plt.scatter(emas_point, smas_point, color='red', label='Ramberg-Osgood Intersection Point')
-
                 s_c = smas_point
-
                 e_c = emas_point
 
                 s, e = sl.solve_Neuber_rec(smas[-1], smas_point, emas_point, Kt, E, Ku, nu)
-
                 sl.ramberg_osgood_plot(s, E, Ku, nu)
-
                 break
-
             else:
-
                 s_c = s
-
                 e_c = e
 
         # Check intersections with other "up" Masing curves
-
         for k in range(len(s_mas)):
-
             if k >= i:
                 continue
-
             prev_direction = "up" if s_mas[k][0] - s_mas[k][1] < 0 else "down"
-
             if prev_direction != direction:
                 continue
 
             for smas_point, emas_point in zip(smas, emas):
-
                 prev_index = -1
-
                 prev_strain = e_mas[k][prev_index]
 
                 if np.isclose(emas_point, prev_strain, err_e) and np.isclose(smas_point, s_mas[k][prev_index],
-
                                                                              err_s):
                     u_intersected = True
-
                     plt.scatter(emas_point, smas_point, color='green', label='Up Masing Intersection Point')
 
                     Ds_new = sl.solve_Neuber(sequence[k], e_mas[k][0], S, Kt, E, Ku, nu, 'Masing')
-
                     De_new = sl.masing(Ds_new, E, Ku, nu)
-
                     s = stress[k] + Ds_new
-
                     e = strain[k] + De_new
 
                     sl.masing_plot(stress[i], strain[i], smas_point, E, Ku, nu, direction)
-
                     sl.masing_plot(stress[k], strain[k], s, E, Ku, nu, direction)
-
                     break
-
             if u_intersected:
                 break
 
@@ -250,6 +217,15 @@ for j in range(1, len(s_mas)+1):
                 continue
 
 ####### REMOVE DOUBLE LOOPS. EG. 10 AND 11 IN LOOP
+for z in range(len(loop) - 2, -1, -1):  # Iterate in reverse
+    if (
+        loop[z][0] == loop[z+1][0] - 1
+        and loop[z][1] == loop[z+1][3]
+        and loop[z][2] == loop[z+1][4]
+        and loop[z][3] == loop[z+1][1]
+        and loop[z][4] == loop[z+1][2]
+    ):
+        del loop[z+1]
 
 # ar = [1.00001e10 ,1e10]
 # ar2 = [2, 2.00000001]
