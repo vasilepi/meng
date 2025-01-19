@@ -12,12 +12,12 @@ Kt = 1.574
 s_normalization = 174
 factor = 100
 sequence = utils.reader("Strain-Gauge-Console")
-sequence = np.array(sequence[:11])*s_normalization/100  * factor #notch
+sequence = np.array(sequence[:46])*s_normalization/100  * factor #notch
 # print(sequence)
 
 # sequence = np.array([0.7, 0.3, 0.65, 0.2, 0.82, 0.5, 0.8,0.3, 1, 0.4])*s_normalization*factor
-err_e = 1e-3 # tune based on the factor
-err_s = 1e-2
+err_e = 3e-3 # tune based on the factor
+err_s = 3e-2
 stress = []
 strain = []
 branches = []
@@ -35,6 +35,7 @@ e_c = 0
 s_mas = []
 e_mas = []
 
+loop = []
 for i,S in enumerate(sequence[1:]):
     DS_temp = S - sequence[i]
     DS = abs(DS_temp)
@@ -87,6 +88,7 @@ for i,S in enumerate(sequence[1:]):
                     e_mas[k] = emas_oldnew
                     break  # Exit inner loop once intersection is handled
             if d_intersected:
+                loop.append([smas_point, emas_point, stress[i], strain[i]])
                 break  # Exit outer loop if intersection is handled
 
         # If no intersection occurred, plot original curve
@@ -102,28 +104,13 @@ for i,S in enumerate(sequence[1:]):
         u_intersected = False
 
         # Handle Up Intersections (with Ramberg-Osgood and other Masing curves)
-        for smas_point, emas_point in zip(smas, emas):
-            ro_index = np.argmin(np.abs(s_ro - smas_point))
-            ro_strain = e_ro[ro_index]
 
-            if emas_point <= ro_strain:
-
-                # plt.scatter(emas_point, smas_point, color='red', label='Ramberg-Osgood Intersection Point')
-                s_c = smas_point
-                e_c = emas_point
-
-                s, e = sl.solve_Neuber_rec(smas[-1], smas_point, emas_point, Kt, E, Ku, nu)
-                sl.ramberg_osgood_plot(s, E, Ku, nu)
-                break
-            else:
-                s_c = s
-                e_c = e
 
         # Check intersections with other "up" Masing curves
         for k in range(len(s_mas)):
             if k >= i:
                 continue
-            prev_direction_u = "up" if s_mas[k][0] - s_mas[k][1] < 0 else "down"
+            prev_direction_u = "down" if s_mas[k][0] - s_mas[k][1] > 0 else "up"
             if prev_direction_u != direction:
                 continue
 
@@ -157,11 +144,30 @@ for i,S in enumerate(sequence[1:]):
                         s = sl.solve_Neuber(sequence[k], e_mas[k][0], S, Kt, E, Ku, nu, 'R-O')
                         e = sl.ramberg_osgood(s, E, Ku, nu)
                         sl.ramberg_osgood_plot(s, E, Ku, nu)
+                        loop.append([stress[k], strain[k], np.max(stress), np.max(strain)])
                     break
             if u_intersected:
+                loop.append([stress[i], strain[i], smas_point, emas_point])
                 break
 
         if not u_intersected:
+            for smas_point, emas_point in zip(smas, emas):
+                ro_index = np.argmin(np.abs(s_ro - smas_point))
+                ro_strain = e_ro[ro_index]
+
+                if emas_point <= ro_strain:
+
+                    # plt.scatter(emas_point, smas_point, color='red', label='Ramberg-Osgood Intersection Point')
+                    s_c = smas_point
+                    e_c = emas_point
+
+                    s, e = sl.solve_Neuber_rec(smas[-1], smas_point, emas_point, Kt, E, Ku, nu)
+                    sl.ramberg_osgood_plot(s, E, Ku, nu)
+                    loop.append([stress[i], strain[i], s_c, e_c])
+                    break
+                else:
+                    s_c = s
+                    e_c = e
             sl.masing_plot(stress[i], strain[i], s_c, E, Ku, nu, direction)
 
     stress.append(s)
@@ -169,98 +175,88 @@ for i,S in enumerate(sequence[1:]):
     s_mas.append(smas)
     e_mas.append(emas)
 
-loops = 0
-loop = []
-for j in range(1, len(s_mas)+1):
-    # Extract the min/max points for the (j-1)-th Masing curve
-    min_s = np.min(s_mas[j - 1]) if e_mas[j - 1][0] - e_mas[j - 1][1] < 0 else np.max(s_mas[j - 1])
-    max_s = np.max(s_mas[j - 1]) if e_mas[j - 1][0] - e_mas[j - 1][1] < 0 else np.min(s_mas[j - 1])
-    min_e = np.min(e_mas[j - 1]) if e_mas[j - 1][0] - e_mas[j - 1][1] < 0 else np.max(e_mas[j - 1])
-    max_e = np.max(e_mas[j - 1]) if e_mas[j - 1][0] - e_mas[j - 1][1] < 0 else np.min(e_mas[j - 1])
+# loops = 0
+# loop = []
+# for j in range(1, len(s_mas)+1):
+#     # Extract the min/max points for the (j-1)-th Masing curve
+#     min_s = np.min(s_mas[j - 1]) if e_mas[j - 1][0] - e_mas[j - 1][1] < 0 else np.max(s_mas[j - 1])
+#     max_s = np.max(s_mas[j - 1]) if e_mas[j - 1][0] - e_mas[j - 1][1] < 0 else np.min(s_mas[j - 1])
+#     min_e = np.min(e_mas[j - 1]) if e_mas[j - 1][0] - e_mas[j - 1][1] < 0 else np.max(e_mas[j - 1])
+#     max_e = np.max(e_mas[j - 1]) if e_mas[j - 1][0] - e_mas[j - 1][1] < 0 else np.min(e_mas[j - 1])
+#
+#     # Combine into min and max pairs
+#     min_pair = np.array((min_s, min_e))
+#     max_pair = np.array((max_s, max_e))
+#
+#     dir_excl = "d" if s_mas[j-1][0]-s_mas[j-1][1] > 0 else "u"
+#     # Loop through other Masing curves (excluding the current one)
+#     for k in range(len(s_mas)):
+#         if k == j - 1:  # Skip the current (j-1)-th Masing curve
+#             continue
+#
+#         # Combine stress and strain for the k-th Masing curve
+#         ch_temp = np.column_stack((s_mas[k], e_mas[k]))
+#         dir_temp = "d" if s_mas[k][0]-s_mas[k][1] > 0 else "u"
+#
+#
+#         # Check if (s, e)_min and (s, e)_max exist in the k-th Masing curve
+#         # Check if both components (s and e) of (s, e)_min are close to any pair in the k-th Masing curve
+#         ch1 = np.isclose(ch_temp[:, 0], min_pair[0], err_s) & np.isclose(ch_temp[:, 1], min_pair[1],err_e)
+#
+#         # Check if both components (s and e) of (s, e)_max are close to any pair in the k-th Masing curve
+#         ch2 = np.isclose(ch_temp[:, 0], max_pair[0], err_s) & np.isclose(ch_temp[:, 1], max_pair[1],err_e)
+#
+#         # print(ch1)
+#         # Debugging: Print the comparison results for inspection
+#         # print(f"Checking curve {k} against curve {j - 1}")
+#         # print(dir_temp)
+#         # print(dir_excl)
+#         # print(f"Min Pair: {min_pair}, Max Pair: {max_pair}")
+#         # print(f"ch1: {np.any(ch1)}, ch2: {np.any(ch2)}")
+#
+#         # If all conditions are satisfied, print the index of the intersecting curve
+#         if np.any(ch1) == 1 and np.any(ch2) == 1:
+#             if dir_temp != dir_excl:
+#                 if k > j-1:
+#                     # print(f"Curve {k} intersects both min and max of curve {j-1}")
+#                     # print(f"min pair: {min_pair}, max_pair: {max_pair}")
+#                     loops += 1
+#                     loop.append([j-1, min_pair[0], min_pair[1], max_pair[0], max_pair[1]])
+#                 elif k < j-1:
+#                     if dir_temp == "d" and max_s < np.max(s_mas[k]):
+#                             # print(f"Curve {k} intersects both min and max of curve {j - 1}")
+#                             # print(f"min pair: {min_pair}, max_pair: {max_pair}")
+#                             loops += 1
+#                             loop.append([j - 1, min_pair[0], min_pair[1], max_pair[0], max_pair[1]])
+#                     else:
+#                         continue
+#                     if dir_temp == "u" and min_s > np.min(s_mas[k]):
+#                             # print(f"Curve {k} intersects both min and max of curve {j - 1}")
+#                             # print(f"min pair: {min_pair}, max_pair: {max_pair}")
+#                             loops += 1
+#                             loop.append([j - 1, min_pair[0], min_pair[1], max_pair[0], max_pair[1]])
+#                     else:
+#                         continue
+#             else:
+#                 continue
+#
+# ####### REMOVE DOUBLE LOOPS. EG. 10 AND 11 IN LOOP
+# for z in range(len(loop) - 2, -1, -1):  # Iterate in reverse
+#     if (
+#         loop[z][0] == loop[z+1][0] - 1
+#         and loop[z][1] == loop[z+1][3]
+#         and loop[z][2] == loop[z+1][4]
+#         and loop[z][3] == loop[z+1][1]
+#         and loop[z][4] == loop[z+1][2]
+#     ):
+#         del loop[z+1]
 
-    # Combine into min and max pairs
-    min_pair = np.array((min_s, min_e))
-    max_pair = np.array((max_s, max_e))
 
-    dir_excl = "d" if s_mas[j-1][0]-s_mas[j-1][1] > 0 else "u"
-    # Loop through other Masing curves (excluding the current one)
-    for k in range(len(s_mas)):
-        if k == j - 1:  # Skip the current (j-1)-th Masing curve
-            continue
-
-        # Combine stress and strain for the k-th Masing curve
-        ch_temp = np.column_stack((s_mas[k], e_mas[k]))
-        dir_temp = "d" if s_mas[k][0]-s_mas[k][1] > 0 else "u"
-
-
-        # Check if (s, e)_min and (s, e)_max exist in the k-th Masing curve
-        # Check if both components (s and e) of (s, e)_min are close to any pair in the k-th Masing curve
-        ch1 = np.isclose(ch_temp[:, 0], min_pair[0], err_s) & np.isclose(ch_temp[:, 1], min_pair[1],err_e)
-
-        # Check if both components (s and e) of (s, e)_max are close to any pair in the k-th Masing curve
-        ch2 = np.isclose(ch_temp[:, 0], max_pair[0], err_s) & np.isclose(ch_temp[:, 1], max_pair[1],err_e)
-
-        # print(ch1)
-        # Debugging: Print the comparison results for inspection
-        # print(f"Checking curve {k} against curve {j - 1}")
-        # print(dir_temp)
-        # print(dir_excl)
-        # print(f"Min Pair: {min_pair}, Max Pair: {max_pair}")
-        # print(f"ch1: {np.any(ch1)}, ch2: {np.any(ch2)}")
-
-        # If all conditions are satisfied, print the index of the intersecting curve
-        if np.any(ch1) == 1 and np.any(ch2) == 1:
-            if dir_temp != dir_excl:
-                if k > j-1:
-                    # print(f"Curve {k} intersects both min and max of curve {j-1}")
-                    # print(f"min pair: {min_pair}, max_pair: {max_pair}")
-                    loops += 1
-                    loop.append([j-1, min_pair[0], min_pair[1], max_pair[0], max_pair[1]])
-                elif k < j-1:
-                    if dir_temp == "d" and max_s < np.max(s_mas[k]):
-                            # print(f"Curve {k} intersects both min and max of curve {j - 1}")
-                            # print(f"min pair: {min_pair}, max_pair: {max_pair}")
-                            loops += 1
-                            loop.append([j - 1, min_pair[0], min_pair[1], max_pair[0], max_pair[1]])
-                    else:
-                        continue
-                    if dir_temp == "u" and min_s > np.min(s_mas[k]):
-                            # print(f"Curve {k} intersects both min and max of curve {j - 1}")
-                            # print(f"min pair: {min_pair}, max_pair: {max_pair}")
-                            loops += 1
-                            loop.append([j - 1, min_pair[0], min_pair[1], max_pair[0], max_pair[1]])
-                    else:
-                        continue
-            else:
-                continue
-
-####### REMOVE DOUBLE LOOPS. EG. 10 AND 11 IN LOOP
-for z in range(len(loop) - 2, -1, -1):  # Iterate in reverse
-    if (
-        loop[z][0] == loop[z+1][0] - 1
-        and loop[z][1] == loop[z+1][3]
-        and loop[z][2] == loop[z+1][4]
-        and loop[z][3] == loop[z+1][1]
-        and loop[z][4] == loop[z+1][2]
-    ):
-        del loop[z+1]
-
-# ar = [1.00001e10 ,1e10]
-# ar2 = [2, 2.00000001]
-# arr = np.column_stack((ar, ar2))
-
-#     print("Yes")
-# c1 = np.isclose([1e10, 2], arr)
-# c2 = np.isclose([1.000001e10, 3.000001], [1.000001e10, 3])
-# if np.all(c1) == 1 and np.all(c2) == 1:
-#     print("yes")
-# else:
-#     print("no")
-# print(c1)
 plt.grid()
 plt.show()
-print(loops)
+# print(loops)
 print(loop)
+print(len(loop))
 # print(s_mas[1])
 # print(stress[-1], strain[-1], stress[-2], strain[-2])
 
