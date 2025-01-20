@@ -3,25 +3,35 @@ import numpy as np
 from matplotlib import pyplot as plt
 import utilities as utils
 import time
+import scipy.optimize as opt
+from scipy.optimize import root_scalar
+from scipy.optimize import fsolve
 start_time = time.time()
 
 E = 210000
-Ku = 1434
-nu=0.14
-Kt = 1.574
+Ku = 922
+nu = 0.15
+b = -0.0971
+c = -0.619
+sf = 774
+ef = 0.502
+Kt = 2.17
 s_normalization = 174
 factor = 100
 sequence = utils.reader("Strain-Gauge-Console")
-sequence = np.array(sequence[:46])*s_normalization/100  * factor #notch
+sequence = (np.array(sequence[:9]))*(s_normalization/100  * factor) #notch
 # print(sequence)
 
 # sequence = np.array([0.7, 0.3, 0.65, 0.2, 0.82, 0.5, 0.8,0.3, 1, 0.4])*s_normalization*factor
-err_e = 3e-3 # tune based on the factor
-err_s = 3e-2
+err_e = 1e-4 * factor # tune based on the factor
+err_s = 1e-4 * factor
+err3 = 2e-5 * factor
 stress = []
 strain = []
-branches = []
+
+# initiate stress-strain graph
 plt.figure(figsize=(16, 9))
+
 stress.append(sl.solve_Neuber(0,0,sequence[0],Kt,E,Ku,nu,'R-O'))
 strain.append(sl.ramberg_osgood(stress[0],E,Ku,nu))
 # print(stress[0])
@@ -29,8 +39,7 @@ sl.ramberg_osgood_plot(stress[0],E,Ku,nu)
 # sl.ramberg_osgood_plot(np.max(sequence), E,Ku,nu)
 s_ro = np.linspace(0,(np.max(sequence)),100*factor)
 e_ro = s_ro/E + (s_ro/Ku)**(1/nu)
-s_c = 0
-e_c = 0
+
 
 s_mas = []
 e_mas = []
@@ -155,9 +164,9 @@ for i,S in enumerate(sequence[1:]):
                 ro_index = np.argmin(np.abs(s_ro - smas_point))
                 ro_strain = e_ro[ro_index]
 
-                if emas_point <= ro_strain:
+                if emas_point - ro_strain <= err3:
 
-                    # plt.scatter(emas_point, smas_point, color='red', label='Ramberg-Osgood Intersection Point')
+                    plt.scatter(emas_point, smas_point, color='red', label='Ramberg-Osgood Intersection Point')
                     s_c = smas_point
                     e_c = emas_point
 
@@ -175,92 +184,109 @@ for i,S in enumerate(sequence[1:]):
     s_mas.append(smas)
     e_mas.append(emas)
 
-# loops = 0
-# loop = []
-# for j in range(1, len(s_mas)+1):
-#     # Extract the min/max points for the (j-1)-th Masing curve
-#     min_s = np.min(s_mas[j - 1]) if e_mas[j - 1][0] - e_mas[j - 1][1] < 0 else np.max(s_mas[j - 1])
-#     max_s = np.max(s_mas[j - 1]) if e_mas[j - 1][0] - e_mas[j - 1][1] < 0 else np.min(s_mas[j - 1])
-#     min_e = np.min(e_mas[j - 1]) if e_mas[j - 1][0] - e_mas[j - 1][1] < 0 else np.max(e_mas[j - 1])
-#     max_e = np.max(e_mas[j - 1]) if e_mas[j - 1][0] - e_mas[j - 1][1] < 0 else np.min(e_mas[j - 1])
-#
-#     # Combine into min and max pairs
-#     min_pair = np.array((min_s, min_e))
-#     max_pair = np.array((max_s, max_e))
-#
-#     dir_excl = "d" if s_mas[j-1][0]-s_mas[j-1][1] > 0 else "u"
-#     # Loop through other Masing curves (excluding the current one)
-#     for k in range(len(s_mas)):
-#         if k == j - 1:  # Skip the current (j-1)-th Masing curve
-#             continue
-#
-#         # Combine stress and strain for the k-th Masing curve
-#         ch_temp = np.column_stack((s_mas[k], e_mas[k]))
-#         dir_temp = "d" if s_mas[k][0]-s_mas[k][1] > 0 else "u"
-#
-#
-#         # Check if (s, e)_min and (s, e)_max exist in the k-th Masing curve
-#         # Check if both components (s and e) of (s, e)_min are close to any pair in the k-th Masing curve
-#         ch1 = np.isclose(ch_temp[:, 0], min_pair[0], err_s) & np.isclose(ch_temp[:, 1], min_pair[1],err_e)
-#
-#         # Check if both components (s and e) of (s, e)_max are close to any pair in the k-th Masing curve
-#         ch2 = np.isclose(ch_temp[:, 0], max_pair[0], err_s) & np.isclose(ch_temp[:, 1], max_pair[1],err_e)
-#
-#         # print(ch1)
-#         # Debugging: Print the comparison results for inspection
-#         # print(f"Checking curve {k} against curve {j - 1}")
-#         # print(dir_temp)
-#         # print(dir_excl)
-#         # print(f"Min Pair: {min_pair}, Max Pair: {max_pair}")
-#         # print(f"ch1: {np.any(ch1)}, ch2: {np.any(ch2)}")
-#
-#         # If all conditions are satisfied, print the index of the intersecting curve
-#         if np.any(ch1) == 1 and np.any(ch2) == 1:
-#             if dir_temp != dir_excl:
-#                 if k > j-1:
-#                     # print(f"Curve {k} intersects both min and max of curve {j-1}")
-#                     # print(f"min pair: {min_pair}, max_pair: {max_pair}")
-#                     loops += 1
-#                     loop.append([j-1, min_pair[0], min_pair[1], max_pair[0], max_pair[1]])
-#                 elif k < j-1:
-#                     if dir_temp == "d" and max_s < np.max(s_mas[k]):
-#                             # print(f"Curve {k} intersects both min and max of curve {j - 1}")
-#                             # print(f"min pair: {min_pair}, max_pair: {max_pair}")
-#                             loops += 1
-#                             loop.append([j - 1, min_pair[0], min_pair[1], max_pair[0], max_pair[1]])
-#                     else:
-#                         continue
-#                     if dir_temp == "u" and min_s > np.min(s_mas[k]):
-#                             # print(f"Curve {k} intersects both min and max of curve {j - 1}")
-#                             # print(f"min pair: {min_pair}, max_pair: {max_pair}")
-#                             loops += 1
-#                             loop.append([j - 1, min_pair[0], min_pair[1], max_pair[0], max_pair[1]])
-#                     else:
-#                         continue
-#             else:
-#                 continue
-#
-# ####### REMOVE DOUBLE LOOPS. EG. 10 AND 11 IN LOOP
-# for z in range(len(loop) - 2, -1, -1):  # Iterate in reverse
-#     if (
-#         loop[z][0] == loop[z+1][0] - 1
-#         and loop[z][1] == loop[z+1][3]
-#         and loop[z][2] == loop[z+1][4]
-#         and loop[z][3] == loop[z+1][1]
-#         and loop[z][4] == loop[z+1][2]
-#     ):
-#         del loop[z+1]
+
+# cumulative count
+count = {}
+for arr in loop:
+    arr_tuple = tuple(arr)
+    if arr_tuple in count:
+        count[arr_tuple] += 1
+    else:
+        count[arr_tuple] = 1
+
+# Convert back to the desired output format
+loops_cum = [[count, arr] for arr, count in count.items()]
+# print(loops_cum)
 
 
+
+
+
+# stress-strain
 plt.grid()
 plt.show()
-# print(loops)
-print(loop)
+
+
+
+# print(loop)
 print(len(loop))
-# print(s_mas[1])
-# print(stress[-1], strain[-1], stress[-2], strain[-2])
+
+###### CYCLES TO FAILURE ######
+# xwris epidrash sm
+def solve_for_N(ea, sf, E, b, ef, c):
+    def equation(N):
+        return (sf / E) * (2 * N) ** b + ef * (2 * N) ** c - ea
+
+    N_initial_guess = 1e10
+    N_solution = opt.fsolve(equation, N_initial_guess, xtol=1e-15, maxfev=100000)
+
+    return N_solution[0]
+
+
+damage = 0
+for i in range(len(loops_cum)):
+    ea = abs(loops_cum[i][1][3] - loops_cum[i][1][1])
+    cycles_f = solve_for_N(ea, sf, E, b, ef, c)
+    damage += 1 / cycles_f
+    
+print(f"Damage without mean stress effect: {(1 / damage):.3e}")
+
+
+# me epidrash sm (PSWT)
+def PSWT_for_N(ea, smax, sf, E, b, ef, c):
+    def equation_PSWT(N):
+        return (sf**2 / E) * (2 * N) ** (2*b) + sf*ef*E * (2 * N) ** (b+c) - ea*E*smax
+
+    N_initial_guess_pswt = 1e8
+    N_solution_pswt = opt.fsolve(equation_PSWT, N_initial_guess_pswt, xtol=1e-15, maxfev=100000)
+
+    return N_solution_pswt[0]
+
+
+damage_pswt = 0
+for i in range(len(loops_cum)):
+    ea_pswt = abs(loops_cum[i][1][3] - loops_cum[i][1][1])
+    smax = (loops_cum[i][1][2]+loops_cum[i][1][0])/2 + abs(loops_cum[i][1][2] - loops_cum[i][1][0])
+    cycles_f_pswt = PSWT_for_N(ea_pswt, smax, sf, E, b, ef, c)
+    damage_pswt += 1 / cycles_f_pswt
+
+print(f"Damage with mean stress effect - PSWT: {(1 / damage_pswt):.3e}")
+
+
+# me epidrash sm (morrow)
+def morr_for_N(de, sm, sf, E, b, ef, c):
+    def equation_morr(N):
+        return ((sf-sm) / E) * (2 * N) ** b + ef * (2 * N) ** c - de/2
+
+    N_initial_guess_morr = 1e8
+    N_solution_morr = opt.fsolve(equation_morr, N_initial_guess_morr, maxfev=100000)
+
+    return N_solution_morr[0]
+
+
+damage_morr = 0
+for i in range(len(loops_cum)):
+    de = abs(loops_cum[i][1][3] - loops_cum[i][1][1])
+    sm = (loops_cum[i][1][2]+loops_cum[i][1][0])/2
+    cycles_f_morr = morr_for_N(de, sm, sf, E, b, ef, c)
+    damage_morr += 1 / cycles_f_morr
+
+print(f"Damage with mean stress effect - MORROW: {(1 / damage_morr):.3e}")
 
 
 
+
+
+# strain-life
+Nplot = np.arange(1e3,1e6, 1)
+eaplot = (sf/E * (2*Nplot)**b + ef*(2*Nplot)**c)*100
+
+# strain-life graph
+# plt.figure(figsize = (10,6))
+# plt.plot(Nplot, eaplot)
+# plt.grid()
+# plt.xscale('log')
+# plt.ylim((0, 1))
+# plt.show()
 
 print("time elapsed: {:.2f}s".format(time.time() - start_time))

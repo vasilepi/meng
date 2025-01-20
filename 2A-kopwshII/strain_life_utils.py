@@ -84,7 +84,7 @@ def masing_plot(stress_from,strain_from,stress_to,E,Ku,nu,dir):
 
 
     plt.plot(e,s)
-
+    return s, e
 
 
 def masing_curve(stress_from, strain_from, stress_to, E, Ku, nu, dir):
