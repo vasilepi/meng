@@ -41,23 +41,24 @@ def solve_pswt(strain_amplitude,max_stress,sf,ef,b,c,E):
 
 
 
-
+         #90% #50% #10%
 E = 210000
-Ku = 834
+Ku = 834 #922 #834 #775
 nu = 0.15
 Kt = 1.574
 s_normalization = 174 #MPa
-# plt.figure(dpi=500)
-sf = 774
-ef = 0.502
+
+sf = 853  #774 #853 #940
+ef = 0.707 #0.502 #0.707 #0.996
 b = -0.0971
 c = -0.619
-scale = 100
+scale = 1
 
 
 df = np.loadtxt('Strain Gauge Console.txt')
-sequence = np.array(df[1:10]) * s_normalization/100 * scale * Kt
+sequence = np.array(df[1:]) * s_normalization/100 * scale * Kt
 
+plt.figure(figsize=(10,6))
 DS = sequence[0]
 si = sl.solve_Neuber(DS, 0, 0, E, Ku, nu, 'R-O')
 ei = sl.ramberg_osgood(si, E, Ku, nu)
@@ -168,8 +169,40 @@ for [DS, stress_from, strain_from, dir] in Loops_cum:
 
 
 plt.grid(True)
+plt.title('Hysterisis Loops - Stress Strain')
+plt.ylabel('Stress')
+plt.xlabel('Strain')
 plt.show()
 
+
+# strain life
+Nplot = np.arange(1e3, 1e8, 100)
+eaplot = (sf/E * (2*Nplot)**b + ef*(2*Nplot)**c)*100 # %
+
+# strain-life graph
+plt.figure(figsize = (10,6))
+plt.plot(Nplot, eaplot)
+plt.title('Strain Life - 50%')
+plt.ylabel('Strain %')
+plt.xlabel('Cycles to failure')
+plt.grid()
+plt.xscale('log')
+plt.ylim((0, 1))
+plt.show()
+
+
+
+# plot sequence
+# t = np.linspace(sequence[0], np.max(sequence), len(sequence))
+# plt.figure(figsize=(10,6))
+# plt.plot(t, sequence, label = 'Elastic notch stress')
+# plt.plot(t, sequence/Kt, label = 'Elastic stress')
+# plt.title('Stress history')
+# plt.ylabel('Stress %')
+# plt.xlabel('Points (not physical time)')
+# plt.legend()
+# plt.grid(True)
+# plt.show()
 
 
 end_time = time.time()
