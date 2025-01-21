@@ -11,7 +11,7 @@ def solveNf(strain_amplitude,sf,ef,b,c,E):
 
     eq = lambda Nf: strain_amplitude - sf/E * (2*Nf)**b - ef * (2*Nf)**c
 
-    Nf_init = 1e4
+    Nf_init = 1e5
 
     Nf_final = fsolve(eq, Nf_init)
 
