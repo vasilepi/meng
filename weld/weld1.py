@@ -194,7 +194,8 @@ m = 3 # Steel
 
 Cfat = 2E6 * Ds_fat**m
 fat71log = np.linspace(1e4,2e6)
-fat71 = (Cfat/fat71log)**(1/m) * ft *fR
+fat71 = (Cfat/fat71log)**(1/m) 
+fat71mod = (Cfat/fat71log)**(1/m) * ft *fR
 
 #FATx hot-spot
 
@@ -230,9 +231,10 @@ plt.scatter(N, Ds, color = 'black')
 plt.plot(N_pred,Ds)
 plt.plot(N977, Ds)
 plt.plot(fat71log,fat71)
+plt.plot(fat71log,fat71mod)
 plt.xscale('log')
 plt.yscale('log')
-plt.legend(['Experimental Data', '50% Probability', '97.7% Probability', 'FAT71'])
+plt.legend(['Experimental Data', '50% Probability', '97.7% Probability', 'FAT71', 'FAT71 - Modified'])
 plt.xlabel(r"$N$")
 plt.ylabel(r"$\Delta \sigma$ (MPa)")
 plt.show()
