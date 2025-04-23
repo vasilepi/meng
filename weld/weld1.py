@@ -18,7 +18,7 @@ Fmax = Fm + Fa
 t = 2.24 # mm
 l = 50 # mm
 aw = 1.6 # mm
-A = l*aw # mm^2
+A = 223.983 # mm^2
 
 smin = Fmin/A * 1000 # MPa
 smax = Fmax/A *1000 # MPa
@@ -95,22 +95,22 @@ for j in range(0,len(shs_idx)):
 
 
 # major principal
-shs100_comp2 = np.array([6.438e-1, 5.306e-1])    # 0
-shs200_comp2 = np.array([1.288, 1.061])    # 1
-shs300_comp2 = np.array([1.931, 1.592])    # 2
-shs32900_comp2 = np.array([2.118e+2, 1.746e+2])     # 3
-shs36100_comp2 = np.array([2.324E+2, 1.916E+2])  # 4
-shs40100_comp2 = np.array([2.582E+2, 2.128E+2])   # 5
-shs42100_comp2 = np.array([2.711E+2, 2.234E+2])  # 6
-shs44100_comp2 = np.array([2.839E+2, 2.34E+2])  # 7
-shs46200_comp2 = np.array([2.975E+2, 2.452E+2])  # 8
-shs48200_comp2 = np.array([3.103E+2, 2.558E+2])  # 9
-shs52200_comp2 = np.array([3.361E+2, 2.77E+2])  # 10
-shs56100_comp2 = np.array([3.612E+2, 2.977E+2])   # 11
-shs62100_comp2 = np.array([3.998E+2, 3.295E+2])   # 12
-shs68100_comp2 = np.array([4.384E+2, 3.614E+2])   # 13
-shs74900_comp2 = np.array([4.822E+2, 3.974E+2])  # 14
-shs80100_comp2 = np.array([5.157E+2, 2.317E+2])  # 15
+shs100_comp2 = np.array([7.342e-1, 6.038e-1])    # 0
+shs200_comp2 = 2*shs100_comp2 # 1
+shs300_comp2 = 3*shs100_comp2    # 2
+shs32900_comp2 = 329*shs100_comp2     # 3
+shs36100_comp2 = 361*shs100_comp2  # 4
+shs40100_comp2 = 401*shs100_comp2   # 5
+shs42100_comp2 = 421*shs100_comp2  # 6
+shs44100_comp2 = 441*shs100_comp2  # 7
+shs46200_comp2 = 462*shs100_comp2  # 8
+shs48200_comp2 = 482*shs100_comp2  # 9
+shs52200_comp2 = 522*shs100_comp2  # 10
+shs56100_comp2 = 561*shs100_comp2   # 11
+shs62100_comp2 = 621*shs100_comp2   # 12
+shs68100_comp2 = 681*shs100_comp2   # 13
+shs74900_comp2 = 749*shs100_comp2  # 14
+shs80100_comp2 = 801*shs100_comp2  # 15
 
 shs_full2 = np.array((shs100_comp2,shs200_comp2,shs300_comp2,shs32900_comp2,shs36100_comp2,shs40100_comp2,shs42100_comp2,shs44100_comp2,shs46200_comp2,shs48200_comp2,shs52200_comp2,shs56100_comp2,shs62100_comp2,shs68100_comp2,shs74900_comp2,shs80100_comp2))
 
@@ -159,6 +159,18 @@ N977_shs = 10**(y977_shs)
 
 ### FAT
 
+
+## Stress-Ratio factor
+R = 0 # give
+
+
+if R <-1:
+    fR = 1.6
+elif R>0.5:
+    fR = 1
+else:
+    fR = -0.4*R + 1.2
+
 ## Wall thickness factor
 # give n
 n_thick = 0.3
@@ -168,7 +180,7 @@ if l/t<2:
 else:
     teff=np.max([0.5*l,t])
 
-print(teff)
+# print(teff)
 
 tref = 25
 ft = (tref/teff)**n_thick
@@ -181,16 +193,26 @@ Ds_fat = 71 # MPa
 m = 3 # Steel
 
 Cfat = 2E6 * Ds_fat**m
-fat71log = np.linspace(1e4,1e7)
-fat71 = (Cfat/fat71log)**(1/m) * ft
+fat71log = np.linspace(1e4,2e6)
+fat71 = (Cfat/fat71log)**(1/m) * ft *fR
 
-#FAT100 hot-spot
-Ds_shs_fat = 100 # MPa
+#FATx hot-spot
+
+# ref-assess
+# at 100N
+shs_ref = 0.057
+shs_assess = shs2[0]
+
+# print(shs2[0])
+
+Ds_shs_fat = shs_ref/shs_assess * Ds_fat # MPa
 Cfat_shs = 2E6 * Ds_shs_fat**m
-fat100log = np.linspace(1e4,1e7)
-fat100 = (Cfat_shs/fat100log)**(1/m) * ft
+fatHSlog = np.linspace(1e4,2e6)
+fatHS = (Cfat_shs/fatHSlog)**(1/m) * ft * fR
 
-
+C100 = 2E6 * 100**m
+fat100log = np.linspace(1e4,2e6)
+fat100 = (C100/fat100log)**(1/m) * ft * fR
 
 
 
@@ -222,6 +244,7 @@ plt.scatter(N, Ds_shs2, color='red', label = "Major Principal")
 plt.plot(N_pred_shs,Ds_shs2, label = "MP 50% Probability")
 plt.plot(N977_shs, Ds_shs2, label = "MP 97.7% Probability")
 plt.plot(fat100log,fat100, label = "FAT100")
+plt.plot(fatHSlog,fatHS, label = "FAT" + str(round(Ds_shs_fat,2)))
 plt.legend()
 plt.xscale('log')
 plt.yscale('log')
