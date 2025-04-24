@@ -186,7 +186,7 @@ tref = 25
 ft = (tref/teff)**n_thick
 
 
-
+# print(ft*fR)
 
 #FAT71 nominal
 Ds_fat = 71 # MPa
@@ -201,20 +201,20 @@ fat71mod = (Cfat/fat71log)**(1/m) * ft *fR
 
 # ref-assess
 # at 100N
-shs_ref = 0.057
-shs_assess = shs2[0]
+# shs_ref = 0.057
+# shs_assess = shs2[0]
 
-# print(shs2[0])
+# # print(shs2[0])
 
-Ds_shs_fat = shs_ref/shs_assess * Ds_fat # MPa
-Cfat_shs = 2E6 * Ds_shs_fat**m
-fatHSlog = np.linspace(1e4,2e6)
-fatHS = (Cfat_shs/fatHSlog)**(1/m) * ft * fR
+# Ds_shs_fat = shs_ref/shs_assess * 100 # MPa
+# Cfat_shs = 2E6 * Ds_shs_fat**m
+# fatHSlog = np.linspace(1e4,2e6)
+# fatHS = (Cfat_shs/fatHSlog)**(1/m) * ft * fR
 
 C100 = 2E6 * 100**m
 fat100log = np.linspace(1e4,2e6)
-fat100 = (C100/fat100log)**(1/m) * ft * fR
-
+fat100mod = (C100/fat100log)**(1/m) * ft * fR
+fat100 = (C100/fat100log)**(1/m)
 
 
 # PLOT
@@ -241,12 +241,13 @@ plt.show()
 
 plt.figure(figsize=(9,5))
 plt.grid(True, which='both')
-plt.scatter(N, Ds_shs, color='black', label = "Normal to weld toe")
-plt.scatter(N, Ds_shs2, color='red', label = "Major Principal")
-plt.plot(N_pred_shs,Ds_shs2, label = "MP 50% Probability")
-plt.plot(N977_shs, Ds_shs2, label = "MP 97.7% Probability")
+# plt.scatter(N, Ds_shs, color='black', label = "Normal to weld toe")
+plt.scatter(N, Ds_shs2, color='black', label = "Major Principal")
+plt.plot(N_pred_shs,Ds_shs2, label = "50% Probability")
+plt.plot(N977_shs, Ds_shs2, label = "97.7% Probability")
 plt.plot(fat100log,fat100, label = "FAT100")
-plt.plot(fatHSlog,fatHS, label = "FAT" + str(round(Ds_shs_fat,2)))
+plt.plot(fat100log,fat100mod, label = "FAT100 - Modified")
+# plt.plot(fatHSlog,fatHS, label = "FAT" + str(round(Ds_shs_fat,2)))
 plt.legend()
 plt.xscale('log')
 plt.yscale('log')
