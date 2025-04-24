@@ -1,0 +1,20 @@
+# Fdb version 4
+["pdflatex"] 1745441834.76775 "c:/Users/Vasilis/Documents/GitHub/TeX/meng/weld/1st/main.tex" "main.pdf" "main" 1745441835.33233 2
+  "c:/Users/Vasilis/Documents/GitHub/TeX/meng/weld/1st/main.tex" 1745441627 163 bcf1bda06a737ffe901a405aa838ec44 ""
+  "c:/texlive/2025/texmf-dist/tex/latex/base/article.cls" 1745418968 20144 63d8bacaf52e5abf4db3bc322373e1d4 ""
+  "c:/texlive/2025/texmf-dist/tex/latex/base/size10.clo" 1745418968 8448 5cf247d4bd0c7d5d711bbbdf111fae2e ""
+  "c:/texlive/2025/texmf-dist/tex/latex/fontspec/fontspec.sty" 1745415983 3755 4872b99d810c024f9c09bb1c62ffee3b ""
+  "c:/texlive/2025/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def" 1745418837 30366 9174e170fd3bb912f901db16e9e9ee8b ""
+  "c:/texlive/2025/texmf-dist/tex/latex/l3kernel/expl3.sty" 1745418859 6565 df1fb3b0b12c0f255915045e52ce3193 ""
+  "c:/texlive/2025/texmf-dist/tex/latex/l3packages/xparse/xparse.sty" 1745418882 9783 ab4bee47700c04aadedb8da27591b0ab ""
+  "c:/texlive/2025/texmf-dist/web2c/texmf.cnf" 1745408227 42148 61becc7c670cd061bb319c643c27fdd4 ""
+  "c:/texlive/2025/texmf-var/web2c/pdftex/pdflatex.fmt" 1745430335 3561286 edec7e9caf69bcf03192fea75a8d1fa9 ""
+  "c:/texlive/2025/texmf.cnf" 1745430102 713 e69b156964470283e0530f5060668171 ""
+  "main.aux" 1745441834 32 3985256e7290058c681f74d7a3565a19 "pdflatex"
+  "main.tex" 1745441627 163 bcf1bda06a737ffe901a405aa838ec44 ""
+  "preamble.tex" 1745441627 2264 8f466304a36bc0331767e7488c317ea2 ""
+  (generated)
+  "main.aux"
+  "main.log"
+  "main.pdf"
+  (rewritten before read)
