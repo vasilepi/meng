@@ -155,6 +155,38 @@ N977_shs = 10**(y977_shs)
 
 
 
+### effective notch
+# synt egk
+Kt = 1.8
+Ds_ens = Ds * Kt
+
+# # statistics
+x_hat_ens = np.log10(Ds_ens)
+nn_ens = len(x_hat_ens)
+#statistical
+x_ens_ = np.mean(x_hat_ens)
+
+x2_ens = x_hat_ens**2
+
+xy_ens = x_hat_ens*y_hat
+
+# y^
+b_ens = (sum(xy_ens)-sum(x_hat_ens)*sum(y_hat)/nn_ens)/(sum(x2_ens)-nn_ens*x_ens_**2)
+a_ens = sum(y_hat)/nn_ens - b_ens * sum(x_hat_ens)/nn_ens
+
+y_pred_ens = a_ens + b_ens*x_hat_ens
+N_pred_ens = 10**y_pred_ens
+
+yx_ens_ = y_hat + b_ens*(x_ens_ - x_hat_ens)
+yx_y2_ens = (yx_ens_ - y_)**2
+
+sigma_ens = np.sqrt(sum(yx_y2_ens)/nn_ens)
+
+# 97.7%
+y977_ens = y_pred_ens - 2.27*sigma_ens
+N977_ens = 10**(y977_ens)
+
+
 
 
 ### FAT
@@ -216,6 +248,12 @@ fat100log = np.linspace(1e4,2e6)
 fat100mod = (C100/fat100log)**(1/m) * ft * fR
 fat100 = (C100/fat100log)**(1/m)
 
+# FAT 630 Effective Notch
+meff = 5
+C630 = 2E6 * 630**meff
+fat630log = np.linspace(1e4,2e6)
+fat630 = (C630/fat630log)**(1/meff)
+
 
 # PLOT
 # plt.figure(figsize=(8,5))
@@ -248,6 +286,19 @@ plt.plot(N977_shs, Ds_shs2, label = "97.7% Probability")
 plt.plot(fat100log,fat100, label = "FAT100")
 plt.plot(fat100log,fat100mod, label = "FAT100 - Modified")
 # plt.plot(fatHSlog,fatHS, label = "FAT" + str(round(Ds_shs_fat,2)))
+plt.legend()
+plt.xscale('log')
+plt.yscale('log')
+plt.xlabel(r"$N$")
+plt.ylabel(r"$\Delta \sigma$ (MPa)")
+plt.show()
+
+plt.figure(figsize=(9,5))
+plt.grid(True, which='both')
+plt.scatter(N, Ds_ens, color='black', label = "Effective Notch Stress")
+plt.plot(N_pred_ens,Ds_ens, label = "50% Probability")
+plt.plot(N977_ens, Ds_ens, label = "97.7% Probability")
+plt.plot(fat630log,fat630, label = "FAT630")
 plt.legend()
 plt.xscale('log')
 plt.yscale('log')

@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex 2025.4.23)  25 APR 2025 14:38
+This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex 2025.4.23)  25 APR 2025 15:30
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1313,11 +1313,11 @@ Package biblatex Info: Automatic encoding selection.
 \openout3 = `main.bcf'.
 
 Package biblatex Info: Trying to load bibliographic data...
-Package biblatex Info: ... file 'main.bbl' not found.
-
-No file main.bbl.
+Package biblatex Info: ... file 'main.bbl' found.
+ (out/main.bbl)
 Package biblatex Info: Reference section=0 on input line 6.
 Package biblatex Info: Reference segment=0 on input line 6.
+
 *geometry* driver: auto-detecting
 *geometry* detected driver: xetex
 *geometry* verbose mode - [ preamble ] result:
@@ -1468,9 +1468,9 @@ File: media/grid.png Graphic file (type bmp)
 [4]
 File: media/hsfat.png Graphic file (type bmp)
 <media/hsfat.png>
- (out/main.lof
 
-[5])
+
+[5] (out/main.lof)
 \tf@lof=\write7
 \openout7 = `main.lof'.
 
@@ -1492,12 +1492,12 @@ Package logreq Info: Writing requests to 'main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 37538 strings out of 470267
- 757305 string characters out of 5488342
- 1567582 words of memory out of 5000000
- 63527 multiletter control sequences out of 15000+600000
- 639758 words of font info for 127 fonts, out of 8000000 for 9000
+ 37780 strings out of 470267
+ 762499 string characters out of 5488342
+ 1568049 words of memory out of 5000000
+ 63764 multiletter control sequences out of 15000+600000
+ 639774 words of font info for 129 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 91i,10n,127p,740b,3992s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 91i,10n,127p,1012b,5047s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
 Output written on out/main.pdf (7 pages).
