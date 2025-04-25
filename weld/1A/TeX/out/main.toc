@@ -3,7 +3,8 @@
 \contentsline {subsection}{\numberline {1.1}Παρουσίαση προβλήματος}{1}{subsection.1.1}%
 \contentsline {subsection}{\numberline {1.2}Στατιστική ανάλυση}{2}{subsection.1.2}%
 \contentsline {section}{\numberline {2}Υπολογισμοί συγκόλλησης}{2}{section.2}%
-\contentsline {subsection}{\numberline {2.1}Μέθοδος Ονομαστικής Τάσης}{2}{subsection.2.1}%
-\contentsline {subsection}{\numberline {2.2}Μέθοδος Κατασκευαστικής Τάσης}{3}{subsection.2.2}%
-\contentsline {subsection}{\numberline {2.3}Μέθοδος Ενεργής Τάσης Εγκοπής}{3}{subsection.2.3}%
-\contentsline {section}{\numberline {3}Συμπεράσματα}{3}{section.3}%
+\contentsline {subsection}{\numberline {2.1}Συντελεστές διόρθωσης}{2}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Μέθοδος Ονομαστικής Τάσης}{3}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Μέθοδος Κατασκευαστικής Τάσης}{3}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}Μέθοδος Ενεργής Τάσης Εγκοπής}{6}{subsection.2.4}%
+\contentsline {section}{\numberline {3}Αποτελέσματα Και Συζήτηση}{6}{section.3}%
