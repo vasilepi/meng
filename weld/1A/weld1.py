@@ -156,8 +156,8 @@ N977_shs = 10**(y977_shs)
 
 
 ### effective notch
-# synt egk
-Kt = 3
+############# synt egk
+Kt = 1000/180
 Ds_ens = Ds * Kt
 
 # # statistics
