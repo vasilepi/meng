@@ -1,0 +1,49 @@
+{
+    "git.autofetch": true,
+    "git.enableSmartCommit": true,
+    "git.confirmSync": false,
+    "latex-workshop.view.pdf.autoReload.enabled": true,
+    "latex-workshop.view.pdf.viewer": "tab",
+    
+    "latex-workshop.latex.tools": [
+        {
+            "name": "xelatex",
+            "command": "xelatex",
+            "args": [
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "-output-directory=%OUTDIR%",
+                "%DOC%"
+            ]
+        },
+        {
+            "name": "biber",
+            "command": "biber",
+            "args": [
+                "--input-directory=out",
+                "--output-directory=out",
+                "%DOCFILE%"
+            ]
+        }
+    ],
+    
+    "latex-workshop.latex.recipes": [
+        {
+            "name": "xelatex",
+            "tools": ["xelatex"]
+        },
+        {
+            "name": "xelatex → biber → xelatex ×2",
+            "tools": ["xelatex", "biber", "xelatex", "xelatex"]
+        }
+    ],
+    
+    "latex-workshop.latex.outDir": "./out",
+    "latex-workshop.latex.recipe.default": "xelatex → biber → xelatex ×2",
+    "latex-workshop.latex.autoBuild.run": "onSave",
+    
+    "workbench.productIconTheme": "a-file-icon-vscode-product-icon-theme",
+    "workbench.iconTheme": "charmed-icons",
+    "editor.wordWrap": "bounded"
+}
