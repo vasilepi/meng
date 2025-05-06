@@ -142,7 +142,7 @@ R_starp = 1/(1/r1p)
 
 # print(E_star, R_star)
 ap = (3*fp*R_starp/E_starp/4)**(1/3)
-print(ap)
+# print(ap)
 
 pop = 3*fp/2/np.pi/ap**2
 rp = np.linspace(-ap, ap)
