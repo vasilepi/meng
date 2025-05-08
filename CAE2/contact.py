@@ -82,6 +82,37 @@ fcml = np.array([
     980.0000191, 990.0000095, 1000
 ])
 
+## fine mesh
+zfml = np.array([
+0, 0.005003789, 0.010017803, 0.015027278, 0.020032821,
+0.025035491, 0.030036062, 0.03503501, 0.040032446, 0.045027066,
+0.049999967, 0.061036248, 0.074990384, 0.092531234, 0.114564791,
+0.14188014, 0.175012439, 0.214248434, 0.259717554, 0.311469913
+]
+)
+sxfml = np.array([
+-719.64, -710.35, -625.51, -561.30,
+-511.81, -463.85, -431.72, -401.43,
+-377.25, -347.33, -332.78, -300.33,
+-262.24, -227.66, -195.20, -167.50,
+-143.79, -124.59, -113.14, -99.65
+]
+)
+syfml = np.array([
+    -1155.07, -976.54, -766.02, -610.59, -493.00,
+    -400.41, -328.50, -267.55, -217.41, -175.05,
+    -141.44, -126.48, -87.90, -57.63, -39.73,
+    -25.09, -16.10, -7.23, -4.09, -1.72
+])
+
+szfml = np.array([
+    -1252.35, -1265.81, -1256.90, -1222.93, -1185.36,
+    -1140.95, -1101.03, -1057.88, -1022.85, -989.70,
+    -935.15, -835.85, -749.17, -657.62, -575.11,
+    -497.10, -431.91, -377.30, -331.22, -295.91
+])
+
+
 
 # # plot
 plt.figure(figsize=(9,5))
@@ -108,6 +139,7 @@ plt.figure(figsize=(9,5))
 plt.grid(True, which='both')
 plt.plot(zlin, slinx1, label='Analytical')
 plt.plot(zcml, sxcml, label='Coarse-Mesh')
+plt.plot(zfml, sxfml, label='Fine-Mesh')
 plt.legend()
 plt.xlabel(r"$z\; (mm)$")
 plt.ylabel(r"$\sigma_x\; (MPa)$")
@@ -117,6 +149,7 @@ plt.figure(figsize=(9,5))
 plt.grid(True, which='both')
 plt.plot(zlin, sliny, label='Analytical')
 plt.plot(zcml, sycml, label='Coarse-Mesh')
+plt.plot(zfml, syfml, label='Fine-Mesh')
 plt.legend()
 plt.xlabel(r"$z\; (mm)$")
 plt.ylabel(r"$\sigma_y\; (MPa)$")
@@ -126,7 +159,9 @@ plt.figure(figsize=(9,5))
 plt.grid(True, which='both')
 plt.plot(zlin, slinz, label='Analytical')
 plt.plot(zcml, szcml, label='Coarse-Mesh')
+plt.plot(zfml, szfml, label='Fine-Mesh')
 plt.legend()
+plt.xlim([0, 0.5])
 plt.xlabel(r"$z\; (mm)$")
 plt.ylabel(r"$\sigma_z\; (MPa)$")
 plt.show()
@@ -196,7 +231,35 @@ fcmp = np.array([
     920, 930, 940, 950, 960, 970, 980, 990, 1000
 ])
 
+## fine mesh
 
+zfmp = np.array(
+[
+0, 0.002500126, 0.005000253, 0.007500379, 0.010000505, 0.012500632,
+0.015000758, 0.017500883, 0.020001009, 0.022501135, 0.025001261, 0.027501388,
+0.030001514, 0.032501642, 0.03500177, 0.037501894, 0.040002022, 0.042502146,
+0.045002274, 0.047502398, 0.050002526, 0.055821229, 0.072617374, 0.100390956,
+0.139141977, 0.188870445, 0.249576345
+]
+)
+
+sxfmp = np.array([
+-4266.86, -4117.79, -3917.56, -3760.38, -3622.58,
+-3506.41, -3407.09, -3317.95, -3236.87, -3163.47,
+-3094.96, -3032.05, -2969.62, -2915.27, -2858.6,
+-2803.61, -2747.02, -2693.98, -2637.63, -2580.91,
+-2526.25, -2394.23, -2085.66, -1642.68, -1149.18,
+-706.26, -375.9
+])
+
+szfmp = np.array([
+-5605.02, -5578.9, -5431.02, -5319.48, -5232.72,
+-5151.97, -5081.39, -5014.08, -4954.83, -4896.26,
+-4843.59, -4793.7, -4749.2, -4706.98, -4668.8,
+-4635.87, -4602.45, -4575.79, -4554.91, -4541.35,
+-4504.2, -4428.39, -4333.23, -4171.71, -3895.86,
+-3478.48, -2940.33
+])
 
 #plot
 plt.figure(figsize=(9,5))
@@ -223,6 +286,7 @@ plt.figure(figsize=(9,5))
 plt.grid(True, which='both')
 plt.plot(zp, sp1, label = 'Analytical')
 plt.plot(zcmp, sxcmp,label='Coarse-Mesh')
+plt.plot(zfmp, sxfmp,label='Fine-Mesh')
 plt.legend()
 plt.xlabel(r"$z\; (mm)$")
 plt.ylabel(r"$\sigma_{x,y}\; (MPa)$")
@@ -232,6 +296,7 @@ plt.figure(figsize=(9,5))
 plt.grid(True, which='both')
 plt.plot(zp, spz, label = 'Analytical')
 plt.plot(zcmp, szcmp,label='Coarse-Mesh')
+plt.plot(zfmp, szfmp,label='Fine-Mesh')
 plt.legend()
 plt.xlabel(r"$z\; (mm)$")
 plt.ylabel(r"$\sigma_z\; (MPa)$")
