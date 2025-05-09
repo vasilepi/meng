@@ -1,0 +1,6 @@
+\xpg@aux {}{greek}
+\contentsline {section}{\numberline {1}Εισαγωγή}{1}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Παρουσίαση προβλήματος}{1}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}Συνοπτική θεωρία}{1}{subsection.1.2}%
+\contentsline {subsubsection}{\numberline {1.2.1}Μέθοδος ποινής}{1}{subsubsection.1.2.1}%
+\contentsline {subsubsection}{\numberline {1.2.2}Θεωρία Hertz}{1}{subsubsection.1.2.2}%
