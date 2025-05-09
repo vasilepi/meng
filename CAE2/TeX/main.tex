@@ -48,5 +48,70 @@
 
 \subsubsection{Θεωρία Hertz}
 
+\begin{align}
+    &F_1-F_2-u(k_1+k_2)=0\\
+    &F_1+F_2=0
+\end{align}
+
+\begin{equation}
+    \vec{F} = \begin{bmatrix}
+        F_1\\
+        F_2
+    \end{bmatrix},\; \vec{u}=\begin{bmatrix}
+        u\\
+        0
+    \end{bmatrix},\; K_i = \begin{bmatrix}
+        k_1+k_2 & 0\\
+        0 & 0\\
+    \end{bmatrix},\; A = 
+    \begin{bmatrix}
+        1 & -1\\
+        1 & 1
+    \end{bmatrix}
+\end{equation}
+\begin{equation}
+    A\cdot \vec{F} - K_i \cdot \vec{u} = \vec{0}
+\end{equation}
+
+\begin{equation}
+    \vec{F} - A^{-1}\cdot K_i \cdot \vec{u} = \vec{0} 
+\end{equation}
+
+\begin{equation}
+    K = A^{-1}\cdot K_i
+\end{equation}
+
+\begin{equation}
+    \Pi = \frac{1}{2}K\vec{u} \vec{u}^T - \vec{F} \vec{u}^T
+\end{equation}
+
+\begin{equation}
+    g = \begin{bmatrix}
+        H-(l+u)\\
+        H-l
+    \end{bmatrix},\; \epsilon=\begin{bmatrix}
+        a & b \\
+        c & d
+    \end{bmatrix}, a,b,c,d >> k_1+k_2
+\end{equation}
+
+\begin{equation}
+    \Pi_p = \frac{1}{2}K\vec{u} \vec{u}^T - \vec{F} \vec{u}^T - \frac{1}{2}\epsilon \vec{g} \vec{g}^T = \begin{bmatrix}
+        x & y\\
+        z & w
+    \end{bmatrix}_{2\times 2}
+\end{equation}
+
+\begin{align}
+    \frac{\partial x}{\partial u} &= 0\\
+    \frac{\partial y}{\partial u} &= 0\\
+    \frac{\partial z}{\partial u} &= 0\\
+    \frac{\partial w}{\partial u} &= 0
+\end{align}
+
+\begin{equation}
+    \vec{N} = -\epsilon \vec{g}
+\end{equation}
+
 
 \end{document}
