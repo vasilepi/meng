@@ -4,3 +4,4 @@
 \contentsline {subsection}{\numberline {1.2}Συνοπτική θεωρία}{1}{subsection.1.2}%
 \contentsline {subsubsection}{\numberline {1.2.1}Μέθοδος ποινής}{1}{subsubsection.1.2.1}%
 \contentsline {subsubsection}{\numberline {1.2.2}Θεωρία Hertz}{2}{subsubsection.1.2.2}%
+\contentsline {section}{\numberline {2}Μοντελοποίηση}{3}{section.2}%
