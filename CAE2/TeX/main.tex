@@ -45,73 +45,95 @@
 
 \subsection{Συνοπτική θεωρία}
 \subsubsection{Μέθοδος ποινής}
+Σύμφωνα με τη μέθοδο της ποινής, αφού τα σώματα έρθουν σε επαφή, ξεκινάει να δρα ένα ελατήριο με πολύ μεγάλη στιβαρότητα στον κόμβο της επαφής. Η σταθερά του ελατηρίου αυτού είναι $\epsilon >> k$. Έτσι, εισάγεται ένα νέο δυναμικό στο ισοζύγιο ενέργειας, αυτό του ελατηρίου με στιβαρότητα $\epsilon$. Πλέον, το πρόβλημα προς ελαχιστοποίηση είναι το:
+ \begin{align}
+    &\Pi_p = \frac{1}{2}k_1u_1^2 + \frac{1}{2}k_2 u_2 ^2 - F u + \frac{1}{2}\epsilon \le g >^2\\
+    &\text{s.t.}\;  g\cdot N = 0\\
+\end{align}
+
+Όπου $N$, η δύναμη επαφής η οποία υπολογίζεται ως:
+\begin{equation}
+    N = -\epsilon \cdot g
+\end{equation}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\linewidth]{media/pen.png}
+    \caption{Μέθοδος ποινής.}
+    \label{fig:pen}
+\end{figure}
+
+
 
 \subsubsection{Θεωρία Hertz}
-
+Η γραμμική θεωρία του Hertz αναφέρει ότι, κατά την επαφή δημιουργείται ημιπλάτος επαφής που υπολογίζεται ως:
+\begin{equation}
+    \alpha = \sqrt{\frac{4 F R^*}{\pi E^* l}}
+\end{equation}
+Με τα ισοδύναμα μεγέθη $Ε^*$, $R^*$, για επαφή δύο κυλίνδρων $R_1, E_1, l$ και $R_2, E_2, l$ να υπολογίζονται ως:
 \begin{align}
-    &F_1-F_2-u(k_1+k_2)=0\\
-    &F_1+F_2=0
+    \frac{1}{E^*} & = \frac{1-\nu_1^2}{E_1} + \frac{1-\nu_2^2}{E_2} \\
+    \frac{1}{R^*} &= \frac{1}{R_1} + \frac{1}{R_2} 
 \end{align}
 
+Η πίεση επαφής κατά την διεύθυνση της επαφής δίνεται ως:
 \begin{equation}
-    \vec{F} = \begin{bmatrix}
-        F_1\\
-        F_2
-    \end{bmatrix},\; \vec{u}=\begin{bmatrix}
-        u\\
-        0
-    \end{bmatrix},\; K_i = \begin{bmatrix}
-        k_1+k_2 & 0\\
-        0 & 0\\
-    \end{bmatrix},\; A = 
-    \begin{bmatrix}
-        1 & -1\\
-        1 & 1
-    \end{bmatrix}
-\end{equation}
-\begin{equation}
-    A\cdot \vec{F} - K_i \cdot \vec{u} = \vec{0}
+    p = \frac{2F}{\pi \alpha l} \sqrt{1 - \bigg(\frac{x}{\alpha}\bigg)^2} = p_0\sqrt{1 - \bigg(\frac{x}{\alpha}\bigg)^2}
 \end{equation}
 
+
+Η σχέση δύναμης μετατόπισης είναι γραμμική και δίνεται ως:
 \begin{equation}
-    \vec{F} - A^{-1}\cdot K_i \cdot \vec{u} = \vec{0} 
+    F = \frac{\pi}{4}E^* l u
 \end{equation}
 
-\begin{equation}
-    K = A^{-1}\cdot K_i
-\end{equation}
-
-\begin{equation}
-    \Pi = \frac{1}{2}K\vec{u} \vec{u}^T - \vec{F} \vec{u}^T
-\end{equation}
-
-\begin{equation}
-    g = \begin{bmatrix}
-        H-(l+u)\\
-        H-l
-    \end{bmatrix},\; \epsilon=\begin{bmatrix}
-        a & b \\
-        c & d
-    \end{bmatrix}, a,b,c,d >> k_1+k_2
-\end{equation}
-
-\begin{equation}
-    \Pi_p = \frac{1}{2}K\vec{u} \vec{u}^T - \vec{F} \vec{u}^T - \frac{1}{2}\epsilon \vec{g} \vec{g}^T = \begin{bmatrix}
-        x & y\\
-        z & w
-    \end{bmatrix}_{2\times 2}
-\end{equation}
-
+Τέλος, οι κύριες τάσεις συναρτήσει του βάθους στον κύλινδρο δίνονται ως:
 \begin{align}
-    \frac{\partial x}{\partial u} &= 0\\
-    \frac{\partial y}{\partial u} &= 0\\
-    \frac{\partial z}{\partial u} &= 0\\
-    \frac{\partial w}{\partial u} &= 0
+    \sigma_x &= -2\nu p_0 \bigg(\sqrt{1 + \bigg(\frac{z}{\alpha}\bigg)^2} - \bigg|\frac{z}{\alpha}\bigg|\bigg)\\
+
+    \sigma_y &= - p_0 \Bigg(\frac{1+2\frac{z^2}{\alpha^2}}{\sqrt{1 + \bigg(\frac{z}{\alpha}\bigg)^2}} - 2\bigg|\frac{z}{\alpha}\bigg|\Bigg)\\
+
+    \sigma_z &= -\frac{p_0}{\sqrt{1 + \bigg(\frac{z}{\alpha}\bigg)^2}}
 \end{align}
 
+
+
+Αντίστοιχα, η θεωρία του Hertz για σημειακή επαφή, δηλαδή επαφή δύο σφαιρών,  αναφέρει ότι το πλάτος επαφής είναι:
+
 \begin{equation}
-    \vec{N} = -\epsilon \vec{g}
+    \alpha = \sqrt[3]{\frac{3 F R^*}{4 E^*}}
 \end{equation}
+Με τα ισοδύναμα μεγέθη $Ε^*$, $R^*$ να δίνονται με τον ίδιο τρόπο όπως στην επαφή των κυλίνδρων. Η πίεση επαφής κατά την ακτινική διεύθυνση δίνεται ως:
+\begin{equation}
+    p = \frac{3F}{2\pi \alpha^2} \sqrt{1 - \bigg(\frac{r}{\alpha}\bigg)^2} = p_0\sqrt{1 - \bigg(\frac{x}{\alpha}\bigg)^2}
+\end{equation}
+
+Στην περίπτωση επαφής σφαίρας δαπέδου απλώς ορίζεται ότι $R_2 = \inf$. Η σχέση δύναμης μετατόπισης δεν είναι γραμμική αυτή τη φορά και δίνεται ως:
+\begin{equation}
+    F = \frac{4}{3}E^* \sqrt{R^*} u^{3/2}
+\end{equation}
+
+Τέλος, οι κύριες τάσεις συναρτήσει του βάθους δίνονται ως:
+\begin{align}
+    \sigma_{x,y} &= - p_0 \bigg( \bigg(1-\bigg|\frac{z}{\alpha}\bigg| atan\bigg(\frac{1}{|z/\alpha|}\bigg)\bigg)(1+\nu)  - \frac{1}{2 (1 + \bigg(\frac{z}{\alpha}\bigg)^2)} \bigg)\\
+
+    \sigma_z &= -\frac{p_0}{1 + \bigg(\frac{z}{\alpha}\bigg)^2}
+\end{align}
+
+\section{Μοντελοποίηση}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 \end{document}
