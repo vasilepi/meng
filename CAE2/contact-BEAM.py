@@ -1,146 +1,108 @@
-from matplotlib import pyplot as plt
 import numpy as np
-from scipy.optimize import minimize
+from scipy.optimize import fsolve
+import matplotlib.pyplot as plt
 
-P = 5000 # N
-A1 = 1.8  # Area bar 1 [mm^2]
-A2 = 3.1  # Area bar 2 [mm^2]
-l1 = 500  # Length bar 1 [mm]
-l2 = 1000 # Length bar 2 [mm]
-l = 1505  # Distance between walls [mm]
-E = 210e3 # Young's modulus [MPa]
-e = 1e10   # Penalty stiffness [N/mm]
+# parameters
+E = 210000  # MPa
+l = 1505  # mm
+l1 = 500       # mm
+l2 = 1000      # mm
+A1 = 1.8         # cm²
+A2 = 3.1         # cm²
 
-# Stiffnesses
 k1 = E * A1 / l1
 k2 = E * A2 / l2
 
-K1 = k1 * np.array([
-    [1, -1],
-    [-1, 1]
-])
-
-K2 = k2 * np.array([
-    [1, -1],
-    [-1, 1]
-])
+# stiffness matrices
+k_elem_1 = k1 * np.array([[1, -1], [-1, 1]])
+k_elem_2 = k2 * np.array([[1, -1], [-1, 1]])
 
 
-K = np.zeros((4,4))
-K[0:2, 0:2] += K1
-K[2:4, 2:4] += K2
+K_global = np.zeros((4, 4))
+K_global[:2, :2] += k_elem_1
+K_global[2:, 2:] += k_elem_2
 
+# sim
+initial_gap = l - l1 - l2
+penalty = 1e10
+steps = 100
+max_load = 8000
+f_array = np.linspace(0, max_load, steps)
 
+# Result containers
+u2 = []
+u3 = []
+N_force = []
+applied_loads = []
 
-# F = np.array([0., P, 0., 0.])
+# Simulation loop
+for f_applied in f_array:
+    force_vector = np.array([0, f_applied, 0, 0])
+    K_BCs = K_global[1:3, 1:3]
+    F_BCs = force_vector[1:3]
 
+    # Initial approximation
+    u_trial = np.linalg.solve(K_BCs, F_BCs)
+    gap = initial_gap - (u_trial[0] - u_trial[1])
 
-# BCs
-fix = [0, 4]
-free = [i for i in range(0,3) if i not in fix]
-K = K[np.ix_(free, free)]
-# F = F[free]
+    if gap < 0:  # Contact detected
+        def residuals(u_vals, f_vals, K_sub, penalty_coeff, gap_zero):
+            u_a, u_b = u_vals
+            f1, f2 = f_vals
+            k11, k12 = K_sub[0]
+            k21, k22 = K_sub[1]
+            gap_now = gap_zero - (u_a - u_b)
+            res1 = f1 - k11 * u_a - k12 * u_b + penalty_coeff * gap_now
+            res2 = f2 - k21 * u_a - k22 * u_b - penalty_coeff * gap_now
+            return [res1, res2]
 
-
-Farr = np.linspace(0,P,100)
-
-u1=[]
-u2=[]
-N = []
-gap = []
-
-g0 = l - l1 - l2
-
-epsilon = np.eye(K.shape[0]) * e
-# print(epsilon)
-for f in Farr:
-    F = np.array([0,f,0,0])
-    F = F[free]
-    # print(F)
-    u = np.linalg.solve(K,F)
-
-    g = g0 - u
-    # print(g)
-    if g[0] > 0:
-        u1.append(u[0])
-        u2.append(u[1])
-        N.append(0)
-        gap.append(g[0])
-    # print(u)
-
+        u_cont = fsolve(residuals, u_trial, args=(F_BCs, K_BCs, penalty, initial_gap))
+        final_gap = initial_gap - (u_cont[0] - u_cont[1])
+        N = -penalty * final_gap
+        u_final = u_cont
     else:
-        Knew = np.linalg.inv(epsilon)*K + np.eye(K.shape[0])
-        # print(F)
-        Fnew = np.linalg.inv(epsilon) @ F
-        # print("K",Knew)
-        # print("F",Fnew)
-        u = np.linalg.solve(Knew, Fnew)
-        # print(u)
-        
-        # print(gnew)
-        u1.append(u[0] + u1[-1])
-        u2.append(u2[-1]-u[0])
-        gnew1 = u1[-1] - g0
-        gnew2 = g0 - u2[-1]
-        gnew = np.array([gnew1, gnew2])
-        FN = -epsilon @ gnew
-        # pri
-        N.append(FN[0])
-        gap.append(gap[-1] + gnew[0])
-    print("GAP", gap[-1])
+        N = 0
+        u_final = u_trial
 
-s1 = np.array(u1) * E/l1
-s2 = np.array(u2) * E/l2
+    # Store results
+    u2.append(u_final[0])
+    u3.append(-u_final[1])
+    N_force.append(N)
+    applied_loads.append(f_applied)
 
+# Compute axial stresses
+stress_1 = E * np.array(u2) / l1
+stress_2 = E * np.array(u3) / l2
 
-sf = 10000
+# Output final values
+print("CONT FORCE: ", N_force[-1])
+print("DISP B1: ", u2[-1])
+print("DISP B2: ", u3[-1])
+print("STRESS B1: ", stress_1[-1])
+print("STRESS B2: ", stress_2[-1])
 
-print("DISP B1",u1[-1])
-print("STRESS B1", s1[-1])
-print("DISP B2", u2[-1])
-print("STRESS B2", s2[-1])
-print("CONT FORCE", N[-1])
-
-
-plt.figure()
-plt.plot(u1, Farr)
-plt.xlabel("Displacement of Node 1 (mm)")
-plt.ylabel("External Force (N)")
+# Plot F - u
+plt.figure(figsize=(8, 5))
+plt.plot(u2, applied_loads)
+plt.xlabel('Displacement at node 2 (mm)')
+plt.ylabel('External Force P (N)')
 plt.grid()
 plt.show()
 
-plt.figure()
-plt.plot(Farr, s1, label = "Beam 1")
-plt.plot(Farr, s2, label = "Beam 2")
-plt.ylabel("Principal Stress (MPa)")
-plt.xlabel("External Force (N)")
+# Plot F - R
+plt.figure(figsize=(8, 5))
+plt.plot(N_force, applied_loads, color='orange')
+plt.xlabel('Contact Force (N)')
+plt.ylabel('Force P (N)')
+plt.grid()
+plt.show()
+
+# Plot stresses vs force
+plt.figure(figsize=(8, 5))
+plt.plot(applied_loads, stress_1, label='Beam 1')
+plt.plot(applied_loads, stress_2, label='Beam 2')
+plt.xlabel('Contact Force (N)')
+plt.ylabel('Principal Stress (MPa)')
+plt.grid()
 plt.legend()
-plt.grid()
-plt.show()
-
-plt.figure()
-plt.plot(Farr, s1, label = "Beam 1")
-plt.plot(Farr, s2*sf, label = "Beam 2 - Scaled")
-plt.ylabel("Principal Stress (MPa)")
-plt.xlabel("External Force (N)")
-plt.legend()
-plt.grid()
-plt.show()
-
-plt.figure()
-plt.plot(Farr, N)
-plt.ylabel("Contact Force (N)")
-plt.xlabel("External Force (N)")
-plt.grid()
-plt.show()
-
-
-plt.figure()
-plt.plot(Farr, u1, label = "Beam 1")
-plt.plot(Farr, u2, label = "Beam 1")
-plt.plot(Farr, gap, label = "Gap")
-plt.ylabel("Displacement (mm)")
-plt.xlabel("External Force (N)")
-plt.legend()
-plt.grid()
 plt.show()
