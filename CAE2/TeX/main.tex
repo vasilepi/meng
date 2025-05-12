@@ -47,15 +47,43 @@
 \subsubsection{Μέθοδος ποινής}
 Σύμφωνα με τη μέθοδο της ποινής, αφού τα σώματα έρθουν σε επαφή, ξεκινάει να δρα ένα ελατήριο με πολύ μεγάλη στιβαρότητα στον κόμβο της επαφής. Η σταθερά του ελατηρίου αυτού είναι $\epsilon >> k$. Έτσι, εισάγεται ένα νέο δυναμικό στο ισοζύγιο ενέργειας, αυτό του ελατηρίου με στιβαρότητα $\epsilon$. Πλέον, το πρόβλημα προς ελαχιστοποίηση είναι το:
  \begin{align}
-    &\Pi_p = \frac{1}{2}Ku^2 - F u + \frac{1}{2}\epsilon g ^2\\
+    &\Pi_p = \frac{1}{2}Ku^2 - F u + \frac{1}{2}E g ^2\\
     &\text{s.t.}\;  g\cdot N = 0\\
 \end{align}
 
-Με τους πίνακες του συστήματος
+Με τους πίνακες του συστήματος $K, u, F$ να είναι:
+\begin{equation}
+    K = \begin{bmatrix}
+        k_1 &-k_1 & 0 & 0\\
+        -k_1 & k_1 & 0 & 0\\
+        0 &0 & k_2 & -k_2\\
+        0 &0 & -k_2 & k_2\\
+    \end{bmatrix},\; \vec{u} = \begin{pmatrix}
+        0\\ u_1 \\ 0\\ 0
+    \end{pmatrix},\; \vec{F} = \begin{pmatrix}
+        0\\ F\\ 0\\0
+    \end{pmatrix}, \; E = \begin{bmatrix}
+        \epsilon & 0 & 0 & 0\\
+        0 & \epsilon & 0 & 0\\
+         0 & 0 & \epsilon & 0\\
+         0 & 0 & 0 & \epsilon\\
+    \end{bmatrix}, \vec{g} = l - l_1 - l_2 - \vec{u}
+\end{equation}
 
 Όπου $N$, η δύναμη επαφής η οποία υπολογίζεται ως:
 \begin{equation}
     N = -\epsilon \cdot g
+\end{equation}
+
+Τελικά το πρόβλημα καταλήγει στην εξίσωση:
+\begin{align}
+    K\vec{u} - \vec{F} - E\vec{g} = 0 & <=>\\
+    K\vec{u} - \vec{F} - E(l - l_1 - l_2 - \vec{u}) = 0&
+\end{align}
+
+Με έναν απλό μετασχηματισμό καταλήγουμε στην εξίσωση προς επίλυση του προβλήματος της επαφής:
+\begin{equation}
+    (E^{-1} K + I)\cdot \vec{u} = E^{-1}\cdot \vec{F}
 \end{equation}
 
 \begin{figure}[H]
@@ -124,6 +152,7 @@
 
 \section{Μοντελοποίηση}
 
+\subsection{Μέρος Α'}
 
 
 
