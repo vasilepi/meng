@@ -1,8 +1,9 @@
 \xpg@aux {}{greek}
 \contentsline {section}{\numberline {1}Εισαγωγή}{1}{section.1}%
 \contentsline {subsection}{\numberline {1.1}Παρουσίαση προβλήματος}{1}{subsection.1.1}%
-\contentsline {subsection}{\numberline {1.2}Συνοπτική θεωρία}{1}{subsection.1.2}%
-\contentsline {subsubsection}{\numberline {1.2.1}Μέθοδος ποινής}{1}{subsubsection.1.2.1}%
+\contentsline {subsection}{\numberline {1.2}Συνοπτική θεωρία}{2}{subsection.1.2}%
+\contentsline {subsubsection}{\numberline {1.2.1}Μέθοδος ποινής}{2}{subsubsection.1.2.1}%
 \contentsline {subsubsection}{\numberline {1.2.2}Θεωρία Hertz}{2}{subsubsection.1.2.2}%
 \contentsline {section}{\numberline {2}Μοντελοποίηση}{3}{section.2}%
 \contentsline {subsection}{\numberline {2.1}Μέρος Α'}{3}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Μέρος Β'}{4}{subsection.2.2}%

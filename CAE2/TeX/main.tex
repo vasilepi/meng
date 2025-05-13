@@ -65,8 +65,8 @@
     \end{pmatrix}, \; E = \begin{bmatrix}
         \epsilon & 0 & 0 & 0\\
         0 & \epsilon & 0 & 0\\
-         0 & 0 & \epsilon & 0\\
-         0 & 0 & 0 & \epsilon\\
+         0 & 0 & -\epsilon & 0\\
+         0 & 0 & 0 & -\epsilon\\
     \end{bmatrix}, \vec{g} = l - l_1 - l_2 - \vec{u}
 \end{equation}
 
@@ -147,12 +147,100 @@
 \section{Μοντελοποίηση}
 
 \subsection{Μέρος Α'}
+Για το πρώτο μέρος της εργασίας, η μοντελοποίηση αφορά την επίλυση του συστήματος των εξισώσεν που παρουσιάστηκαν παραπάνω. Ορίζοντας τους κόμβους και τα στοιχεία του συστήματος, το πρόβλημα έγκειται στην επίλυση του απλού συστήματος $4\times 4$. Ωστόσο, μιας και οι κόμβοι 1 και 4 είναι πακτωμένοι, διαγράφοντας τις αντίστοιχες γραμμές και στήλες, το πρόβλημα καταλήγει στο σύστημα $2\times 2$ εξισώσεων:
+\begin{align}
+    k_1 u_2 - F - \epsilon (l-l_1-l_2-u_2) =& 0\\
+    k_2 u_3 + \epsilon (l - l_1 -l_2 - u_3) =& 0
+\end{align}
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\linewidth]{media/nodes.png}
+    \caption{Μοντελοποίηση προβλήματος πρώτου μέρους.}
+    \label{fig:nodes}
+\end{figure}
 
+Προφανώς, κατά την επαφή θα ισχύει ότι οι κόμβοι 2 και 3 κινούνται μαζί. Έτσι, αναμένεται οι μετατοπίσεις τους να έχουν αντίθετη φορά και έως ότου αρχίσει η επαφή ο κόμβος 2 να έχει μηδενική μετατόπιση.
 
+\subsection{Μέρος Β'}
+Στο δεύτερο μέρος, ζητούνται μοντέλα επαφών ΠΣ. Ζητείται η μοντελοποίηση τόσο με αδρό πλέγμα όσο και με πυκνό. Για το αδρό πλέγμα η προϋπόθεση είναι ότι ο μέγιστος αριθμός κόμβων δεν πρέπει να ξεπερνάει το όριο της φοιτητικής αδείας. Επομένως, τα μοντέλα των κυλίνδρων δημιουργούνται μισά και αντίστοιχα της σφαίρας επίσης μισό. Το δάπεδο στο οποίο ακουμπάει η σφαίρα, με άπειρη ακτίνα, πρέπει να έχει πάχος παρόμοιο με αυτό της σφάιρας.  
+\par Όσο αναφορά τις παραμέτρους επίλυσης, γεωμετρικά τα μοντέλα δεν ακουμπάνε. Έτσι, ορίζεται η παράμετρος \texttt{ADJUST} στη καρτέλα της επαφής, ώστε να μετακινηθούν τα σώματα το ένα μέσα στο άλλο για να ξεκινήσει η επίλυση της επαφής. Οι οριακές συνθήκες των δύο προβλημάτων φαίνονται παρακάτω.
 
+\begin{table}[H]
+    \centering
+    \rowcolors{2}{gray}{white}
+    \begin{tabular}{|c|c|}
+        \hline
+        \rowcolor{Dandelion}
+        \multicolumn{2}{|c|}{Linear}\\ \hline
+        Επιφάνεια εφαρμογής δύναμης & Περιορισμός στο επίπεδο της\\
+        \hline
+        Eλεύθερη επιφάνεια μη φορτισμένου κυλίνδρου & Περιορισμός σε όλους τους μεταφορικούς β.ε.\\
+        \hline
+        Άξονες συμμετρίας κυλίνδρων στη μία πλευρά & Περιορισμός στο β.ε. κατά την εγκάρσια στον άξονα διεύθυνση\\ \hline
+        \rowcolor{yellow}
+        \multicolumn{2}{|c|}{Point}\\ \hline
+        Επιφάνεια εφαρμογής δύναμης & Περιορισμός στο επίπεδο της\\
+        \hline
+        Επίπεδη ελεύθερη επιφάνεια δαπέδου & Περιορισμός σε όλους τους μεταφορικούς β.ε.\\
+        \hline
+    \end{tabular}
+    \caption{Οριακές συνθήκες προβλημάτων επαφής.}
+    \label{tab:bcs}
+\end{table}
 
+Παρακάτω φαίνονται τα μοντέλα ΠΣ των προβλημάτων καθώς και οι περιοχές πύκνωσης με πλάτος λίγο περισσότερο από το θεωρητικά αναμενόμενο πλάτος επαφής.
 
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.49\linewidth}
+        \centering
+        \includegraphics[width=0.7\linewidth]{media/lcoarse.png}
+        \caption{Μοντέλο γραμμικής επαφής.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.49\linewidth}
+        \centering
+        \includegraphics[width=0.6\linewidth]{media/pcoarse.png}
+        \caption{Μοντέλο σημειακής επαφής.}
+    \end{subfigure}
+    \caption{Μοντέλα πεπερασμένων στοιχείων με αδρό πλέγμα.}
+    \label{fig:mod}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.49\linewidth}
+        \centering
+        \includegraphics[width=0.7\linewidth]{media/lfine.png}
+        \caption{Μοντέλο γραμμικής επαφής.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.49\linewidth}
+        \centering
+        \includegraphics[width=0.8\linewidth]{media/pfine.png}
+        \caption{Μοντέλο σημειακής επαφής.}
+    \end{subfigure}
+    \caption{Μοντέλα πεπερασμένων στοιχείων με πυκνό πλέγμα.}
+    \label{fig:mod2}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.49\linewidth}
+        \centering
+        \includegraphics[width=0.6\linewidth]{media/lfine2.png}
+        \caption{Μοντέλο γραμμικής επαφής.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.49\linewidth}
+        \centering
+        \includegraphics[width=0.7\linewidth]{media/pfine2.png}
+        \caption{Μοντέλο σημειακής επαφής.}
+    \end{subfigure}
+    \caption{Πύκνωση πλέγματος στο σημείο επαφής.}
+    \label{fig:mod3}
+\end{figure}
 
 
 
