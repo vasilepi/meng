@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex 2025.4.12)  13 MAY 2025 13:51
+This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex 2025.4.12)  13 MAY 2025 16:54
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1525,6 +1525,26 @@ Missing character: There is no ʹ (U+02B9) in font GFS Artemisia Italic/OT:scrip
 
 
 [4]
+File: media/apotyxia1.png Graphic file (type bmp)
+<media/apotyxia1.png>
+
+Missing character: There is no ʹ (U+02B9) in font GFS Artemisia Regular/OT:script=grek;language=dflt;!
+Missing character: There is no ʹ (U+02B9) in font GFS Artemisia Italic/OT:script=grek;language=dflt;!
+Missing character: There is no ʹ (U+02B9) in font GFS Artemisia Regular/OT:script=grek;language=dflt;!
+Missing character: There is no ʹ (U+02B9) in font GFS Artemisia Italic/OT:script=grek;language=dflt;!
+File: media/apotyxia22.png Graphic file (type bmp)
+<media/apotyxia22.png>
+Missing character: There is no ʹ (U+02B9) in font GFS Artemisia Regular/OT:script=grek;language=dflt;!
+Missing character: There is no ʹ (U+02B9) in font GFS Artemisia Italic/OT:script=grek;language=dflt;!
+Missing character: There is no ʹ (U+02B9) in font GFS Artemisia Regular/OT:script=grek;language=dflt;!
+Missing character: There is no ʹ (U+02B9) in font GFS Artemisia Italic/OT:script=grek;language=dflt;!
+File: media/apotyxia3.png Graphic file (type bmp)
+<media/apotyxia3.png>
+Missing character: There is no ʹ (U+02B9) in font GFS Artemisia Regular/OT:script=grek;language=dflt;!
+Missing character: There is no ʹ (U+02B9) in font GFS Artemisia Italic/OT:script=grek;language=dflt;!
+Missing character: There is no ʹ (U+02B9) in font GFS Artemisia Regular/OT:script=grek;language=dflt;!
+Missing character: There is no ʹ (U+02B9) in font GFS Artemisia Italic/OT:script=grek;language=dflt;!
+
 
 [5] (out/main.aux)
  ***********
@@ -1532,16 +1552,16 @@ LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
  ***********
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: EC53F3BADF7510A7C87AFE15308A4E87;1235.
+(rerunfilecheck)             Checksum: 3E9CE20C62B86C8334B0D8E1E668744F;1478.
 Package logreq Info: Writing requests to 'main.run.xml'.
 \openout1 = `main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 37569 strings out of 473832
- 761400 string characters out of 5729481
- 1579721 words of memory out of 5000000
- 60003 multiletter control sequences out of 15000+600000
+ 37599 strings out of 473832
+ 762078 string characters out of 5729481
+ 1579991 words of memory out of 5000000
+ 60030 multiletter control sequences out of 15000+600000
  571714 words of font info for 116 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
  91i,14n,127p,733b,3946s stack positions out of 10000i,1000n,20000p,200000b,200000s

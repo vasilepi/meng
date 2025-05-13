@@ -243,6 +243,69 @@
 \end{figure}
 
 
+\section{Αποτελέσματα Και Συζήτηση}
+Από την επίλυση του προγράμματος για το πρώτο μέρος προκύπτουν η δύναμη αντίδρασης στην επαφή, οι μετατοπίσεις των δύο ράβδων και οι τάσεις που προκύπτουν στη κάθε ράβδο. Στον \ref{tab:ded} φαίνονται τα δεδομένα της επίλυσης και στον \ref{tab:apot} τα αποτελέσματα του πρώτου μέρους.
+\begin{table}[H]
+    \centering
+    \rowcolors{2}{gray}{white}
+    \begin{tabular}{|c|c|}
+        \hline
+        \rowcolor{Dandelion}
+        Δεδομένο & Τιμή\\ \hline
+        $F$ & $8000\; N$\\ \hline
+        $l$ & $1505\; mm$\\ \hline
+        $l_1$ & $500\; mm$\\ \hline
+        $l_2$ & $1000\; mm$\\ \hline
+        $A_1$ & $1.8\; mm^2$\\ \hline
+        $A_2$ & $3.1\; mm^2$\\ \hline
+        $\epsilon$ & 1E10 \\ \hline
+    \end{tabular}
+    \caption{Δεδομένα προβλήματος πρώτου μέρους.}
+    \label{tab:ded}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \rowcolors{2}{gray}{white}
+    \begin{tabular}{|c|c|}
+        \hline
+        \rowcolor{yellow}
+        Αποτέλεσμα & Τιμή\\ \hline
+        $N$ & $1952\; N$\\ \hline
+        $u_2$ & $7.999\; mm$\\ \hline
+        $u_3$ & $-2.999\; mm$\\ \hline
+        $\sigma_1$ & $3359\; MPa$\\ \hline
+        $\sigma_2$ & $-629\; MPa$\\ \hline
+    \end{tabular}
+    \caption{Αποτελέσματα προβλήματος πρώτου μέρους.}
+    \label{tab:apot}
+\end{table}
+
+Να σημειωθεί, ότι η τιμή για τη σταθερά ποινής δοκιμάστηκε. Όπως αναμενόταν πολύ μεγάλες τιμές της κάουν το πρόβλημα ασταθές. Στο \ref{fig:astox} φαίνεται, για αποτυχημένη επίλυση τα διαγράμματα δύναμης - μετατόπισης, δύναμης - αντίδρασης επαφής και τάσης - δύναμης και πως αυτά δεν συγκλίνουν.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.3\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{media/apotyxia1.png}
+        \caption{Διάγραμμα δύναμης προς μετατόπιση.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.3\linewidth}
+        \centering
+        \includegraphics[width= \linewidth]{media/apotyxia22.png}
+        \caption{Διάγραμμα δύναμης προς δύναμη αντίδρασης.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.3\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{media/apotyxia3.png}
+        \caption{Διάγραμμα τάσης προς εξωτερική δύναμη.}
+    \end{subfigure}
+    \caption{Αποτυχημένη επίλυση με πολύ μεγάλη σταθερά ποινής, ίση με 1E100.}
+    \label{fig:astox}
+\end{figure}
+
 
 
 
