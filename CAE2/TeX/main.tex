@@ -127,9 +127,9 @@
 \begin{equation}
     \alpha = \sqrt[3]{\frac{3 F R^*}{4 E^*}}
 \end{equation}
-Με τα ισοδύναμα μεγέθη $Ε^*$, $R^*$ να δίνονται με τον ίδιο τρόπο όπως στην επαφή των κυλίνδρων. Η πίεση επαφής κατά την ακτινική διεύθυνση δίνεται ως:
+Με τα ισοδύναμα μεγέθη $E^*$, $R^*$ να δίνονται με τον ίδιο τρόπο όπως στην επαφή των κυλίνδρων. Η πίεση επαφής κατά την ακτινική διεύθυνση δίνεται ως:
 \begin{equation}
-    p = \frac{3F}{2\pi \alpha^2} \sqrt{1 - \bigg(\frac{r}{\alpha}\bigg)^2} = p_0\sqrt{1 - \bigg(\frac{x}{\alpha}\bigg)^2}
+    p = \frac{3F}{2\pi \alpha^2} \sqrt{1 - \bigg(\frac{r}{\alpha}\bigg)^2} = p_0\sqrt{1 - \bigg(\frac{r}{\alpha}\bigg)^2}
 \end{equation}
 
 Στην περίπτωση επαφής σφαίρας δαπέδου απλώς ορίζεται ότι $R_2 = \inf$. Η σχέση δύναμης μετατόπισης δεν είναι γραμμική αυτή τη φορά και δίνεται ως:
@@ -306,6 +306,111 @@
     \label{fig:astox}
 \end{figure}
 
+Τα αποτελέσματα που προκύπτουν πραγματικά, συμφωνούν με τη θεωρία. Η μετατόπιση όπως φαίνεται αυξάνεται υπό σταθερή κλίση έως το σημείο επαφής. Έπειτα αυξάνεται με πολύ μεγαλύτερη κλίση.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{media/Fu.png}
+    \caption{Διάγραμμα δύναμης προς μετατόπιση του κόμβου 2, δηλαδή του κόμβου της επαφής.}
+    \label{fig:a1}
+\end{figure}
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{media/FR.png}
+    \caption{Διάγραμμα δύναμης προς αντίδραση επαφής.}
+    \label{fig:a2}
+\end{figure}
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{media/sF.png}
+    \caption{Διάγραμμα τάσης προς την εξωτερική δύναμη στον κόμβο 2.}
+    \label{fig:a3}
+\end{figure}
+
+
+Όσο αναφορά το δεύτερο μέρος, τα μοντέλα με πυκνό πλέγμα αποδείχθηκαν πολύ ικανοποιητικά καθώς έρχονται σε ταύτιση με τα θεωρητικά αποτελέσματα. Προφανώς, τα μοντέλα με αδρό πλέγμα δεν απέδωσαν καλά. Όσο πιο μακριά από το σημείο επαφής υπολογίζεται τιμή τόσο πιο κοντά στη θεωρητική της βρίσκεται. Επίσης, τα μοντέλα με αδρό πλέγμα αποδείχθηκαν εντελώς ανίκανα να υπολογίσουν τη συνάρτηση της πίεσης. Σχετικά με τη δύναμη, όλα τα μοντέλα έρχονται σε ταύτιση με την αναλυτική λύση.
+
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.49\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{media/plin.png}
+        \caption{Πρόβλημα γραμμικής επαφής.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.49\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{media/pp.png}
+        \caption{Πρόβλημα σημειακής επαφής.}
+    \end{subfigure}
+    \caption{Πίεση επαφής.}
+    \label{fig:b1}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.49\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{media/flin.png}
+        \caption{Πρόβλημα γραμμικής επαφής.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.49\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{media/fp.png}
+        \caption{Πρόβλημα σημειακής επαφής.}
+    \end{subfigure}
+    \caption{Σχέση δύναμης προς μετατόπιση.}
+    \label{fig:b2}
+\end{figure}
+
+
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.32\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{media/sxlin.png}
+        \caption{$\sigma_x$}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.32\linewidth}
+        \centering
+        \includegraphics[width= \linewidth]{media/sylin.png}
+        \caption{$\sigma_y$}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.32\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{media/szlin.png}
+        \caption{$\sigma_z$}
+    \end{subfigure}
+    \caption{Κύριες τάσεις επαφής για το πρόβλημα γραμμικής επαφής.}
+    \label{fig:b3}
+\end{figure}
+
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.49\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{media/sxp.png}
+        \caption{$\sigma_{x,y}$}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.49\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{media/szp.png}
+        \caption{$\sigma_{z}$}
+    \end{subfigure}
+    \caption{Κύριες τάσεις επαφής για το πρόβλημα σημειακής επαφής.}
+    \label{fig:b4}
+\end{figure}
 
 
 
