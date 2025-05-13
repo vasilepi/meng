@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex 2025.4.12)  13 MAY 2025 21:55
+This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex 2025.4.12)  13 MAY 2025 22:31
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1550,11 +1550,11 @@ File: media/Fu.png Graphic file (type bmp)
 <media/Fu.png>
 File: media/FR.png Graphic file (type bmp)
 <media/FR.png>
-File: media/sF.png Graphic file (type bmp)
-<media/sF.png>
 
 
 [6]
+File: media/sF.png Graphic file (type bmp)
+<media/sF.png>
 File: media/plin.png Graphic file (type bmp)
 <media/plin.png>
 
@@ -1568,8 +1568,12 @@ Missing character: There is no ʹ (U+02B9) in font GFS Artemisia Regular/OT:scri
 Missing character: There is no ʹ (U+02B9) in font GFS Artemisia Italic/OT:script=grek;language=dflt;!
 Missing character: There is no ʹ (U+02B9) in font GFS Artemisia Regular/OT:script=grek;language=dflt;!
 Missing character: There is no ʹ (U+02B9) in font GFS Artemisia Italic/OT:script=grek;language=dflt;!
+
+
+[7]
 File: media/flin.png Graphic file (type bmp)
 <media/flin.png>
+
 Missing character: There is no ʹ (U+02B9) in font GFS Artemisia Regular/OT:script=grek;language=dflt;!
 Missing character: There is no ʹ (U+02B9) in font GFS Artemisia Italic/OT:script=grek;language=dflt;!
 Missing character: There is no ʹ (U+02B9) in font GFS Artemisia Regular/OT:script=grek;language=dflt;!
@@ -1585,37 +1589,37 @@ File: media/sxlin.png Graphic file (type bmp)
 Missing character: There is no ʹ (U+02B9) in font GFS Artemisia Regular/OT:script=grek;language=dflt;!
 Missing character: There is no ʹ (U+02B9) in font GFS Artemisia Italic/OT:script=grek;language=dflt;!
 LaTeX Font Info:    Font shape `OT1/NotoSerif-TLF/m/n' will be
-(Font)              scaled to size 8.09995pt on input line 379.
+(Font)              scaled to size 8.09995pt on input line 382.
 LaTeX Font Info:    Font shape `OT1/NotoSerif-TLF/m/n' will be
-(Font)              scaled to size 5.93996pt on input line 379.
+(Font)              scaled to size 5.93996pt on input line 382.
 LaTeX Font Info:    Font shape `OML/notomi/m/it' will be
-(Font)              scaled to size 9.0pt on input line 379.
+(Font)              scaled to size 9.0pt on input line 382.
 LaTeX Font Info:    Font shape `OML/notomi/m/it' will be
-(Font)              scaled to size 6.6pt on input line 379.
+(Font)              scaled to size 6.6pt on input line 382.
 LaTeX Font Info:    Font shape `LMS/ntxsy/m/n' will be
-(Font)              scaled to size 9.0pt on input line 379.
+(Font)              scaled to size 9.0pt on input line 382.
 LaTeX Font Info:    Font shape `LMS/ntxsy/m/n' will be
-(Font)              scaled to size 6.6pt on input line 379.
+(Font)              scaled to size 6.6pt on input line 382.
 LaTeX Font Info:    Font shape `LMX/ntxexx/m/n' will be
-(Font)              scaled to size 9.0pt on input line 379.
+(Font)              scaled to size 9.0pt on input line 382.
 LaTeX Font Info:    Font shape `LMX/ntxexx/m/n' will be
-(Font)              scaled to size 6.6pt on input line 379.
+(Font)              scaled to size 6.6pt on input line 382.
 LaTeX Font Info:    Font shape `U/ntxmia/m/it' will be
-(Font)              scaled to size 9.0pt on input line 379.
+(Font)              scaled to size 9.0pt on input line 382.
 LaTeX Font Info:    Font shape `U/ntxmia/m/it' will be
-(Font)              scaled to size 6.6pt on input line 379.
+(Font)              scaled to size 6.6pt on input line 382.
 LaTeX Font Info:    Font shape `U/ntxsym/m/n' will be
-(Font)              scaled to size 9.0pt on input line 379.
+(Font)              scaled to size 9.0pt on input line 382.
 LaTeX Font Info:    Font shape `U/ntxsym/m/n' will be
-(Font)              scaled to size 6.6pt on input line 379.
+(Font)              scaled to size 6.6pt on input line 382.
 LaTeX Font Info:    Font shape `U/ntxsyc/m/n' will be
-(Font)              scaled to size 9.0pt on input line 379.
+(Font)              scaled to size 9.0pt on input line 382.
 LaTeX Font Info:    Font shape `U/ntxsyc/m/n' will be
-(Font)              scaled to size 6.6pt on input line 379.
+(Font)              scaled to size 6.6pt on input line 382.
 LaTeX Font Info:    Font shape `U/ntxexa/m/n' will be
-(Font)              scaled to size 9.0pt on input line 379.
+(Font)              scaled to size 9.0pt on input line 382.
 LaTeX Font Info:    Font shape `U/ntxexa/m/n' will be
-(Font)              scaled to size 6.6pt on input line 379.
+(Font)              scaled to size 6.6pt on input line 382.
 Missing character: There is no ʹ (U+02B9) in font GFS Artemisia Regular/OT:script=grek;language=dflt;!
 Missing character: There is no ʹ (U+02B9) in font GFS Artemisia Italic/OT:script=grek;language=dflt;!
 File: media/sylin.png Graphic file (type bmp)
@@ -1630,12 +1634,8 @@ Missing character: There is no ʹ (U+02B9) in font GFS Artemisia Regular/OT:scri
 Missing character: There is no ʹ (U+02B9) in font GFS Artemisia Italic/OT:script=grek;language=dflt;!
 Missing character: There is no ʹ (U+02B9) in font GFS Artemisia Regular/OT:script=grek;language=dflt;!
 Missing character: There is no ʹ (U+02B9) in font GFS Artemisia Italic/OT:script=grek;language=dflt;!
-
-
-[7]
 File: media/sxp.png Graphic file (type bmp)
 <media/sxp.png>
-
 Missing character: There is no ʹ (U+02B9) in font GFS Artemisia Regular/OT:script=grek;language=dflt;!
 Missing character: There is no ʹ (U+02B9) in font GFS Artemisia Italic/OT:script=grek;language=dflt;!
 Missing character: There is no ʹ (U+02B9) in font GFS Artemisia Regular/OT:script=grek;language=dflt;!
@@ -1653,8 +1653,18 @@ Missing character: There is no ʹ (U+02B9) in font GFS Artemisia Italic/OT:scrip
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
  ***********
-Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 3E9CE20C62B86C8334B0D8E1E668744F;1478.
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+
+Package rerunfilecheck Warning: File `main.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `main.out':
+(rerunfilecheck)             Before: 3E9CE20C62B86C8334B0D8E1E668744F;1478
+(rerunfilecheck)             After:  20CDF408594E673C40F7E7BEAEEA288E;1716.
 Package logreq Info: Writing requests to 'main.run.xml'.
 \openout1 = `main.run.xml'.
 
