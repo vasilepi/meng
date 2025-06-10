@@ -1,9 +1,15 @@
 [0] Config.pm:308> INFO - This is Biber 2.20
-[0] Config.pm:311> INFO - Logfile is 'out\main.blg'
-[89] biber-MSWIN64:340> INFO - === 
-[129] Biber.pm:420> INFO - Reading 'out\main.bcf'
-[213] Biber.pm:994> INFO - Found 0 citekeys in bib section 0
-[223] bbl.pm:676> INFO - Writing 'out\main.bbl' with encoding 'UTF-8'
-[223] bbl.pm:779> INFO - Output to out\main.bbl
-[227] Biber.pm:131> WARN - The file 'out\main.bcf' does not contain any citations!
-[228] Biber.pm:133> INFO - WARNINGS: 1
+[0] Config.pm:311> INFO - Logfile is 'out/main.blg'
+[40] biber-darwin:340> INFO - === Tue Jun 10, 2025, 18:05:15
+[49] Biber.pm:420> INFO - Reading 'out/main.bcf'
+[94] Biber.pm:991> INFO - Using all citekeys in bib section 0
+[102] Biber.pm:4463> INFO - Processing section 0
+[108] Biber.pm:4654> INFO - Looking for bibtex file 'bib.bib' for section 0
+[109] bibtex.pm:1713> INFO - LaTeX decoding ...
+[112] bibtex.pm:1519> INFO - Found BibTeX data source 'bib.bib'
+[138] UCollate.pm:68> INFO - Overriding locale 'el-GR' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[138] UCollate.pm:68> INFO - Overriding locale 'el-GR' defaults 'variable = shifted' with 'variable = non-ignorable'
+[138] Biber.pm:4283> INFO - Sorting list 'nty/global//global/global/global' of type 'entry' with template 'nty' and locale 'el-GR'
+[138] Biber.pm:4289> INFO - No sort tailoring available for locale 'el-GR'
+[144] bbl.pm:676> INFO - Writing 'out/main.bbl' with encoding 'UTF-8'
+[145] bbl.pm:779> INFO - Output to out/main.bbl
