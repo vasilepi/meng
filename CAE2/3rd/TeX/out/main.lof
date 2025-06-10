@@ -1,3 +1,14 @@
-\contentsline {figure}{\numberline {1}{\ignorespaces \xpg@aux {}{greek}Οριακές συνθήκες για επίτευξη καθαρού εφελκυσμού κύβου.}}{2}{figure.caption.3}%
-\contentsline {figure}{\numberline {2}{\ignorespaces \xpg@aux {}{greek}Αναλυτικές καμπύλες μονοτωνικής συμπεριφοράς ανοιξείδωτου χάλυβα 316L.}}{3}{figure.caption.4}%
-\contentsline {figure}{\numberline {3}{\ignorespaces \xpg@aux {}{greek}Μη καλή προσέγγιση μονοτονικής συμπερφοράς λόγω μεγάλου βήματος επίλυσης.}}{3}{figure.caption.5}%
+\contentsline {figure}{\numberline {1}{\ignorespaces \xpg@aux {}{greek}Μοντέλα πλαστικότητας υπό κυκλική εναλλασόμενη φόρτιση.}}{2}{figure.caption.3}%
+\contentsline {figure}{\numberline {2}{\ignorespaces \xpg@aux {}{greek}Οριακές συνθήκες για επίτευξη καθαρού εφελκυσμού κύβου.}}{3}{figure.caption.4}%
+\contentsline {figure}{\numberline {3}{\ignorespaces \xpg@aux {}{greek}Αναλυτικές καμπύλες μονοτωνικής συμπεριφοράς ανοιξείδωτου χάλυβα 316L.}}{3}{figure.caption.5}%
+\contentsline {figure}{\numberline {4}{\ignorespaces \xpg@aux {}{greek}Μη καλή προσέγγιση μονοτονικής συμπερφοράς λόγω μεγάλου βήματος επίλυσης.}}{4}{figure.caption.6}%
+\contentsline {figure}{\numberline {5}{\ignorespaces \xpg@aux {}{greek}Λανθασμένη επίλυση με μη εκτεταμένο πίνακα πλαστικότητας και ισοτροπικό μοντέλο.}}{5}{figure.caption.7}%
+\contentsline {figure}{\numberline {6}{\ignorespaces \xpg@aux {}{greek}Εξέλιξη βλάβης έως θράυση υλικού όπως αναγράφεται στο εγχειρίδιο του ABAQUS.}}{6}{figure.caption.8}%
+\contentsline {figure}{\numberline {7}{\ignorespaces \xpg@aux {}{greek}Triaxiality για διάφορους ρυθμούς παραμόρφωσης για ανοξείδωτο χάλυβα 316L σύμφωνα με την \blx@tocontentsinit {0}\cite {triaxiality}.}}{6}{figure.caption.9}%
+\contentsline {figure}{\numberline {8}{\ignorespaces \xpg@aux {}{greek}Εξέλιξη θραύσης για ανοξείδωτο χάλυβα 316L σύμφωνα με την \blx@tocontentsinit {0}\cite {fracture}.}}{7}{figure.caption.10}%
+\contentsline {figure}{\numberline {9}{\ignorespaces \xpg@aux {}{greek}Επίλυση μονοτωνικής συμπεριφοράς.}}{8}{figure.caption.12}%
+\contentsline {figure}{\numberline {10}{\ignorespaces \xpg@aux {}{greek}Σύγκριση μοντέλων με ισοτροπική κράτυνση και διαφορετικά μοντέλα πλαστικότητας υπό κυκλική φόρτιση.}}{8}{figure.caption.13}%
+\contentsline {figure}{\numberline {11}{\ignorespaces \xpg@aux {}{greek}Επίλυση κυκλικής συμπεριφοράς.}}{8}{figure.caption.14}%
+\contentsline {figure}{\numberline {12}{\ignorespaces \xpg@aux {}{greek}Επίλυση εξέλιξης θράυσης υλικού.}}{9}{figure.caption.15}%
+\contentsline {figure}{\numberline {13}{\ignorespaces \xpg@aux {}{greek}Διαγραφή στοιχείων μέγιστης υποβάθμισης.}}{9}{figure.caption.16}%
+\contentsline {figure}{\numberline {14}{\ignorespaces \xpg@aux {}{greek}Εξέλιξη βλάβης με τη μετατόπιση.}}{9}{figure.caption.17}%

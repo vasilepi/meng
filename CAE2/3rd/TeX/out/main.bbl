@@ -103,7 +103,6 @@
       \field{title}{Characterization of an austenitic stainless steel preform deposited by wire arc additive manufacturing}
       \field{volume}{123}
       \field{year}{2022}
-      \true{nocite}
       \field{pages}{1\bibrangedash 14}
       \range{pages}{14}
       \verb{doi}
@@ -145,7 +144,6 @@
       \field{title}{Numerical and Experimental Comparison of Fractural Characteristics of 316L Stainless Steel}
       \field{volume}{32}
       \field{year}{2022}
-      \true{nocite}
       \verb{doi}
       \verb 10.1007/s11665-022-07152-1
       \endverb

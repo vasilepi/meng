@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex 2025.4.12)  10 JUN 2025 19:12
+This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex 2025.4.12)  11 JUN 2025 01:11
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1245,9 +1245,60 @@ Package: autobreak 2017/02/23 v0.3 simple line breaking of long formulae
 Package: catchfile 2019/12/09 v1.8 Catch the contents of a file (HO)
  (/usr/local/texlive/2025/texmf-dist/tex/generic/etexcmds/etexcmds.sty
 Package: etexcmds 2019/12/15 v1.7 Avoid name clashes with e-TeX commands (HO)
-))))
-\@quotelevel=\count475
-\@quotereset=\count476
+))) (/usr/local/texlive/2025/texmf-dist/tex/latex/listings/listings.sty
+\lst@mode=\count475
+\lst@gtempboxa=\box74
+\lst@token=\toks50
+\lst@length=\count476
+\lst@currlwidth=\dimen305
+\lst@column=\count477
+\lst@pos=\count478
+\lst@lostspace=\dimen306
+\lst@width=\dimen307
+\lst@newlines=\count479
+\lst@lineno=\count480
+\lst@maxwidth=\dimen308
+ (/usr/local/texlive/2025/texmf-dist/tex/latex/listings/lstpatch.sty
+File: lstpatch.sty 2024/09/23 1.10c (Carsten Heinz)
+) (/usr/local/texlive/2025/texmf-dist/tex/latex/listings/lstmisc.sty
+File: lstmisc.sty 2024/09/23 1.10c (Carsten Heinz)
+\c@lstnumber=\count481
+\lst@skipnumbers=\count482
+\lst@framebox=\box75
+) (/usr/local/texlive/2025/texmf-dist/tex/latex/listings/listings.cfg
+File: listings.cfg 2024/09/23 1.10c listings configuration
+))
+Package: listings 2024/09/23 1.10c (Carsten Heinz)
+
+Package fontspec Info: 
+(fontspec)             Could not resolve font "Fira Code/BI" (it probably
+(fontspec)             doesn't exist).
+
+
+Package fontspec Info: 
+(fontspec)             Could not resolve font "Fira Code/B" (it probably
+(fontspec)             doesn't exist).
+
+
+Package fontspec Info: 
+(fontspec)             Could not resolve font "Fira Code/I" (it probably
+(fontspec)             doesn't exist).
+
+
+Package fontspec Info: 
+(fontspec)             Font family 'FiraCode(0)' created for font 'Fira Code'
+(fontspec)             with options
+(fontspec)             [WordSpace={1,0,0},HyphenChar=None,PunctuationSpace=WordSpace].
+(fontspec)              
+(fontspec)              This font family consists of the following NFSS
+(fontspec)             series/shapes:
+(fontspec)              
+(fontspec)             - 'normal' (m/n) with NFSS spec.: <->"Fira
+(fontspec)             Code/OT:script=latn;language=dflt;"
+
+)
+\@quotelevel=\count483
+\@quotereset=\count484
  (out/main.aux)
 \openout1 = `main.aux'.
 
@@ -1291,12 +1342,13 @@ LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 5.
 LaTeX Font Info:    ... okay on input line 5.
 LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 5.
 LaTeX Font Info:    ... okay on input line 5.
-\c@mv@tabular=\count477
-\c@mv@boldtabular=\count478
+\c@mv@tabular=\count485
+\c@mv@boldtabular=\count486
 LaTeX Info: Command `\dddot' is already robust on input line 5.
 LaTeX Info: Command `\ddddot' is already robust on input line 5.
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: hyperref package is loaded.
+Package caption Info: listings package is loaded.
 Package caption Info: End \AtBeginDocument code.
 Package biblatex Info: Trying to load language 'american'...
 Package biblatex Info: ... file 'american.lbx' found.
@@ -1368,6 +1420,7 @@ Package hyperref Info: Link coloring ON on input line 5.
 \@outlinefile=\write5
 \openout5 = `main.out'.
 
+\c@lstlisting=\count487
  (./title.tex
 File: media/autheng.jpg Graphic file (type bmp)
 <media/autheng.jpg>
@@ -1454,8 +1507,13 @@ LaTeX Font Info:    Font shape `U/ntxexa/m/n' will be
 
 
 [1]
+File: media/hard.png Graphic file (type bmp)
+<media/hard.png>
 File: media/bcs.png Graphic file (type bmp)
 <media/bcs.png>
+
+
+[2]
 File: media/ragood.png Graphic file (type bmp)
 <media/ragood.png>
 
@@ -1469,41 +1527,93 @@ Missing character: There is no ʹ (U+02B9) in font GFS Artemisia Regular/OT:scri
 Missing character: There is no ʹ (U+02B9) in font GFS Artemisia Italic/OT:script=grek;language=dflt;!
 Missing character: There is no ʹ (U+02B9) in font GFS Artemisia Regular/OT:script=grek;language=dflt;!
 Missing character: There is no ʹ (U+02B9) in font GFS Artemisia Italic/OT:script=grek;language=dflt;!
-
-
-[2]
 File: media/static-false.png Graphic file (type bmp)
 <media/static-false.png>
- (out/main.lof)
+
+
+[3]
+File: media/dynamic-false.png Graphic file (type bmp)
+<media/dynamic-false.png>
+
+
+[4]
+File: media/abaqDE.png Graphic file (type bmp)
+<media/abaqDE.png>
+
+
+[5]
+File: media/triaxiCurve.png Graphic file (type bmp)
+<media/triaxiCurve.png>
+File: media/fractureCurve.png Graphic file (type bmp)
+<media/fractureCurve.png>
+
+
+[6]
+File: media/static.png Graphic file (type bmp)
+<media/static.png>
+
+
+[7]
+File: media/dynamic-iso.png Graphic file (type bmp)
+<media/dynamic-iso.png>
+File: media/dynamic.png Graphic file (type bmp)
+<media/dynamic.png>
+File: media/fracture.png Graphic file (type bmp)
+<media/fracture.png>
+
+
+[8]
+File: media/sdeg1.png Graphic file (type bmp)
+<media/sdeg1.png>
+
+Missing character: There is no ʹ (U+02B9) in font GFS Artemisia Regular/OT:script=grek;language=dflt;!
+Missing character: There is no ʹ (U+02B9) in font GFS Artemisia Italic/OT:script=grek;language=dflt;!
+Missing character: There is no ʹ (U+02B9) in font GFS Artemisia Regular/OT:script=grek;language=dflt;!
+Missing character: There is no ʹ (U+02B9) in font GFS Artemisia Italic/OT:script=grek;language=dflt;!
+File: media/sdeg2.png Graphic file (type bmp)
+<media/sdeg2.png>
+Missing character: There is no ʹ (U+02B9) in font GFS Artemisia Regular/OT:script=grek;language=dflt;!
+Missing character: There is no ʹ (U+02B9) in font GFS Artemisia Italic/OT:script=grek;language=dflt;!
+Missing character: There is no ʹ (U+02B9) in font GFS Artemisia Regular/OT:script=grek;language=dflt;!
+Missing character: There is no ʹ (U+02B9) in font GFS Artemisia Italic/OT:script=grek;language=dflt;!
+File: media/sdeg3.png Graphic file (type bmp)
+<media/sdeg3.png>
+Missing character: There is no ʹ (U+02B9) in font GFS Artemisia Regular/OT:script=grek;language=dflt;!
+Missing character: There is no ʹ (U+02B9) in font GFS Artemisia Italic/OT:script=grek;language=dflt;!
+Missing character: There is no ʹ (U+02B9) in font GFS Artemisia Regular/OT:script=grek;language=dflt;!
+Missing character: There is no ʹ (U+02B9) in font GFS Artemisia Italic/OT:script=grek;language=dflt;!
+File: media/sdeg-u.png Graphic file (type bmp)
+<media/sdeg-u.png>
+(out/main.lof
+
+[9])
 \tf@lof=\write7
 \openout7 = `main.lof'.
 
-
-
-[3] (out/main.lot)
+ (out/main.lot)
 \tf@lot=\write8
 \openout8 = `main.lot'.
 
 
 
-[4] (out/main.aux)
+[10] (out/main.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
  ***********
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 2A7FFDA45A15C0E5E275C6A3CDE96136;929.
+(rerunfilecheck)             Checksum: BE1EFA55FD7D9F8AE163BE79392EDCF1;1583.
 Package logreq Info: Writing requests to 'main.run.xml'.
 \openout1 = `main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 37741 strings out of 473832
- 765128 string characters out of 5729481
- 1586673 words of memory out of 5000000
- 60176 multiletter control sequences out of 15000+600000
- 571706 words of font info for 115 fonts, out of 8000000 for 9000
+ 39120 strings out of 473832
+ 787157 string characters out of 5729481
+ 1673597 words of memory out of 5000000
+ 61517 multiletter control sequences out of 15000+600000
+ 571770 words of font info for 123 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 91i,12n,127p,737b,5046s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 91i,12n,127p,935b,6337s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on out/main.pdf (5 pages).
+Output written on out/main.pdf (11 pages).
