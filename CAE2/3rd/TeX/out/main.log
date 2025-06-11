@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex 2025.4.12)  11 JUN 2025 01:11
+This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex 2025.4.12)  11 JUN 2025 12:02
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1584,9 +1584,9 @@ Missing character: There is no ʹ (U+02B9) in font GFS Artemisia Regular/OT:scri
 Missing character: There is no ʹ (U+02B9) in font GFS Artemisia Italic/OT:script=grek;language=dflt;!
 File: media/sdeg-u.png Graphic file (type bmp)
 <media/sdeg-u.png>
-(out/main.lof
 
-[9])
+
+[9] (out/main.lof)
 \tf@lof=\write7
 \openout7 = `main.lof'.
 
@@ -1610,10 +1610,10 @@ Package logreq Info: Writing requests to 'main.run.xml'.
 Here is how much of TeX's memory you used:
  39120 strings out of 473832
  787157 string characters out of 5729481
- 1673597 words of memory out of 5000000
+ 1673598 words of memory out of 5000000
  61517 multiletter control sequences out of 15000+600000
  571770 words of font info for 123 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 91i,12n,127p,935b,6337s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 91i,12n,127p,935b,6335s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
 Output written on out/main.pdf (11 pages).
