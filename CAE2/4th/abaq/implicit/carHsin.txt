@@ -1,0 +1,171 @@
+**
+**ANSA_VERSION;24.1.2;
+**
+**
+** file created by  A N S A  Thu Jun 12 19:55:33 2025
+**
+** output from :
+**
+** C:/temp/carH.ansa
+**
+** Settings :
+**
+** Output format : 2024
+**
+** Output : All
+**
+*HEADING
+
+**
+**
+**
+*NODE
+       1,                      1.5,                       0.,                       4.
+       2,                      4.5,                       0.,                       4.
+       3,                       0.,                       0.,                       4.
+       4,                       0.,                       0.,                       2.
+       5,                      4.5,                       0.,                       2.
+       6,                       0.,                       0.,                       0.
+       7,                      4.5,                       0.,                       0.
+**
+** SPRING ELEMENTS
+**
+*ELEMENT, TYPE=SPRING2, ELSET=P1;kw1
+       5,        6,        4
+*ELEMENT, TYPE=SPRING2, ELSET=P2;k1
+       6,        4,        3
+*ELEMENT, TYPE=SPRING2, ELSET=P3;kw2
+       7,        7,        5
+*ELEMENT, TYPE=SPRING2, ELSET=P4;k2
+       8,        5,        2
+**
+** DASHPOT ELEMENTS
+**
+*ELEMENT, TYPE=DASHPOT2, ELSET=P5;cw1
+       9,        6,        4
+*ELEMENT, TYPE=DASHPOT2, ELSET=P6;c1
+      10,        4,        3
+*ELEMENT, TYPE=DASHPOT2, ELSET=P7;cw2
+      11,        7,        5
+*ELEMENT, TYPE=DASHPOT2, ELSET=P8;c2
+      12,        5,        2
+**
+** 
+**
+**
+** MPC
+**
+**ANSA_ID;1;
+*MPC
+BEAM,        2,        1
+BEAM,        3,        1
+**
+** MASS and ROTARY
+**
+*MASS, ELSET=MS3;m1
+                    105.,
+*ELEMENT, TYPE=MASS, ELSET=MS3;m1
+       3,        4
+*MASS, ELSET=MS4;m2
+                    110.,
+*ELEMENT, TYPE=MASS, ELSET=MS4;m2
+       4,        5
+*MASS, ELSET=MS2;
+                   1500.,
+*ELEMENT, TYPE=MASS, ELSET=MS2;
+       2,        1
+*ROTARY INERTIA, ELSET=RI2;
+                      0.,                    1805.,                       0.
+*ELEMENT, TYPE=ROTARYI, ELSET=RI2;
+      13,        1
+**
+** 
+**
+**
+** SECTION DATA
+**
+*SPRING, ELSET=P1;kw1, RTOL=0.03
+       3,        3
+                    360000,
+*SPRING, ELSET=P2;k1, RTOL=0.03
+       3,        3
+                    24200,
+*SPRING, ELSET=P3;kw2, RTOL=0.03
+       3,        3
+                    340000,
+*SPRING, ELSET=P4;k2, RTOL=0.03
+       3,        3
+                    27100,
+*DASHPOT, ELSET=P5;cw1, RTOL=0.03
+       3,        3
+                     150,
+*DASHPOT, ELSET=P6;c1, RTOL=0.03
+       3,        3
+                      3000,
+*DASHPOT, ELSET=P7;cw2, RTOL=0.03
+       3,        3
+                     160,
+*DASHPOT, ELSET=P8;c2, RTOL=0.03
+       3,        3
+                     2800,
+**
+** AMPLITUDES
+**
+*AMPLITUDE, NAME=A1;r1, DEFINITION=PERIODIC, VALUE=RELATIVE, TIME=STEP TIME
+       1,        62.83185307179586,                       0.,                       0.,
+                      0,                      0.1
+*AMPLITUDE, NAME=A2;r2, DEFINITION=PERIODIC, VALUE=RELATIVE, TIME=STEP TIME
+       1,        94.24777960769379,                       0.,                       0.,
+                      0,                     0.15
+**
+** 
+**
+**
+** BOUNDARY
+**
+*BOUNDARY, FIXED
+**ANSA_ID;1;
+       1,        1,        2
+       1,        4
+       1,        6
+**
+** STEPS
+**
+**ANSA_ID;1;
+**
+** STEP 1
+**
+*STEP, NAME=Anonymous STEP 1, AMPLITUDE=RAMP, INC=5000
+*DYNAMIC
+                    0.01,                      1.,                    1.E-9,                     0.01
+**
+** BOUNDARY
+**
+*BOUNDARY, TYPE=DISPLACEMENT, AMPLITUDE=A1;r1
+**ANSA_ID;3;
+       6,        3,         ,                       1.
+*BOUNDARY, TYPE=DISPLACEMENT, AMPLITUDE=A2;r2
+**ANSA_ID;2;
+       7,        3,         ,                       1.
+*OUTPUT, FIELD, TIME INTERVAL=0.001, VARIABLE=ALL
+*NODE OUTPUT
+U,
+A,
+*END STEP
+**ANSA_COLOR;1;SPRING_PROP;.984313726425171;.066666670143604;.678431391716003;1.;
+**ANSA_COLOR;2;SPRING_PROP;.600000023841858;0.82745099067688;.184313729405403;1.;
+**ANSA_COLOR;3;SPRING_PROP;.505882382392883;.831372559070587;.603921592235565;1.;
+**ANSA_COLOR;4;SPRING_PROP;.701960802078247;.078431375324726;.933333337306976;1.;
+**ANSA_COLOR;5;DASHPOT_PROP;.682352960109711;.572549045085907;.172549024224281;1.
+**;
+**ANSA_COLOR;6;DASHPOT_PROP;0.95686274766922;.309803932905197;.325490206480026;1.
+**;
+**ANSA_COLOR;7;DASHPOT_PROP;.517647087574005;.294117659330368;.388235300779343;1.
+**;
+**ANSA_COLOR;8;DASHPOT_PROP;.866666674613953;.517647087574005;.364705890417099;1.
+**;
+**ANSA_COLOR;1;STEP;.984313726425171;.066666670143604;.678431391716003;1.;
+**ANSA_PART;PART;ID;1;NAME;Untitled;BELONGS_HERE;YES;STUDY_VERSION;0;PID_OFFSET;0
+**;COLOR;153;211;47;0;IS_COLOR_ACTIVE;-1;PART_TYPE;Undefined;ATTRIBUTES;2;DM/File
+** Type;ANSA;DM/Status;WIP;CONTAINS;DASHPOT_PROP;5-8;MASS;2-4;MPC;1;SPRING_PROP;1
+**-4;

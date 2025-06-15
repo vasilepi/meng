@@ -1,0 +1,276 @@
+1
+
+   Abaqus Learning Edition 2024                                  Date 13-Jun-2025   Time 19:42:55
+   
+
+
+
+     PROCESSING PART, INSTANCE, AND ASSEMBLY INFORMATION
+   *******************************************************
+
+
+     END PROCESSING PART, INSTANCE, AND ASSEMBLY INFORMATION
+   ***********************************************************
+
+
+
+
+     OPTIONS BEING PROCESSED
+   ***************************
+
+
+  *HEADING
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+  *ELEMENT, TYPE=SPRING2, ELSET=P1;SPRING_00000001
+  *ELEMENT, TYPE=SPRING2, ELSET=P2;SPRING_00000002
+  *ELEMENT, TYPE=SPRING2, ELSET=P3;SPRING_00000003
+  *ELEMENT, TYPE=SPRING2, ELSET=P4;SPRING_00000004
+  *ELEMENT, TYPE=DASHPOT2, ELSET=P9;cw1
+  *ELEMENT, TYPE=DASHPOT2, ELSET=P10;c1
+  *ELEMENT, TYPE=DASHPOT2, ELSET=P11;cw2
+  *ELEMENT, TYPE=DASHPOT2, ELSET=P12;c2
+  *ELEMENT, TYPE=MASS, ELSET=MS3;
+  *ELEMENT, TYPE=MASS, ELSET=MS4;
+  *ELEMENT, TYPE=MASS, ELSET=MS2;
+  *ELEMENT, TYPE=ROTARYI, ELSET=RI2;
+  *dashpot, elset=P9;CW1, rtol=0.03
+  *dashpot, elset=P10;C1, rtol=0.03
+  *dashpot, elset=P11;CW2, rtol=0.03
+  *dashpot, elset=P12;C2, rtol=0.03
+  *spring, elset=P1;SPRING_00000001, rtol=0.03
+  *spring, elset=P2;SPRING_00000002, rtol=0.03
+  *spring, elset=P3;SPRING_00000003, rtol=0.03
+  *spring, elset=P4;SPRING_00000004, rtol=0.03
+  *mass, elset=MS3;
+  *mass, elset=MS4;
+  *mass, elset=MS2;
+  *rotaryinertia, elset=RI2;
+  *spring, elset=P1;SPRING_00000001, rtol=0.03
+  *spring, elset=P2;SPRING_00000002, rtol=0.03
+  *spring, elset=P3;SPRING_00000003, rtol=0.03
+  *spring, elset=P4;SPRING_00000004, rtol=0.03
+  *dashpot, elset=P9;CW1, rtol=0.03
+  *dashpot, elset=P10;C1, rtol=0.03
+  *dashpot, elset=P11;CW2, rtol=0.03
+  *dashpot, elset=P12;C2, rtol=0.03
+  *mass, elset=MS3;
+  *mass, elset=MS4;
+  *mass, elset=MS2;
+  *rotaryinertia, elset=RI2;
+  *boundary, fixed
+  *boundary, fixed
+  *mpc
+
+ ***NOTE: MPCS (EXTERNAL or INTERNAL, including those generated from rigid body 
+          definitions), KINEMATIC COUPLINGS, AND/OR EQUATIONS WILL ACTIVATE 
+          ADDITIONAL DEGREES OF FREEDOM
+  *step, name=AnonymousSTEP1
+  *frequency, eigensolver=LANCZOS
+  *step, name=AnonymousSTEP1
+  *step, name=AnonymousSTEP1
+  *frequency, eigensolver=LANCZOS
+  *frequency, eigensolver=LANCZOS
+  *endstep
+  *boundary, fixed
+
+ ***WARNING: THE FIXED PARAMETER IS IGNORED AT THE MODEL LEVEL
+  *step, name=AnonymousSTEP1
+  *frequency, eigensolver=LANCZOS
+  *frequency, eigensolver=LANCZOS
+  *endstep
+
+ ***WARNING: Boundary conditions are specified on inactive dof 1 at 2 nodes. 
+             The nodes have been identified in node set WarnNodeBCInactiveDof1.
+
+ ***WARNING: Boundary conditions are specified on inactive dof 2 at 2 nodes. 
+             The nodes have been identified in node set WarnNodeBCInactiveDof2.
+
+ ***WARNING: Boundary conditions are specified on inactive dof 4 at 2 nodes. 
+             The nodes have been identified in node set WarnNodeBCInactiveDof4.
+
+ ***WARNING: Boundary conditions are specified on inactive dof 5 at 2 nodes. 
+             The nodes have been identified in node set WarnNodeBCInactiveDof5.
+
+ ***WARNING: Boundary conditions are specified on inactive dof 6 at 2 nodes. 
+             The nodes have been identified in node set WarnNodeBCInactiveDof6.
+
+
+
+                            P R O B L E M   S I Z E
+
+
+          NUMBER OF ELEMENTS IS                                    12
+          NUMBER OF NODES IS                                        7
+          NUMBER OF NODES DEFINED BY THE USER                       7
+          TOTAL NUMBER OF VARIABLES IN THE MODEL                   26
+          (DEGREES OF FREEDOM PLUS MAX NO. OF ANY LAGRANGE MULTIPLIER
+           VARIABLES. INCLUDE *PRINT,SOLVE=YES TO GET THE ACTUAL NUMBER.)
+
+
+
+                              END OF USER INPUT PROCESSING
+
+
+
+     JOB TIME SUMMARY
+       USER TIME (SEC)      =     0.20    
+       SYSTEM TIME (SEC)    =     0.10    
+       TOTAL CPU TIME (SEC) =     0.30    
+       WALLCLOCK TIME (SEC) =            0
+1
+
+   Abaqus Learning Edition 2024                                  Date 13-Jun-2025   Time 19:43:04
+   
+
+                                                                                               STEP    1  INCREMENT    1
+                                                                                          TIME COMPLETED IN THIS STEP   0.00    
+
+
+                        S T E P       1     C A L C U L A T I O N   O F   E I G E N V A L U E S
+
+                                            F O R   N A T U R A L   F R E Q U E N C I E S
+
+
+
+                                                                                          
+
+     THE LANCZOS EIGENSOLVER IS USED FOR THIS ANALYSIS
+     SYSTEM DATA WILL BE WRITTEN TO THE .SIM FILE
+
+     Abaqus WILL COMPUTE UNCOUPLED
+      STRUCTURAL AND ACOUSTIC MODES
+     NUMBER OF EIGENVALUES                      6
+     HIGHEST FREQUENCY OF INTEREST                   3000.0    
+     LOWEST FREQUENCY OF INTEREST                   1.00000E-02
+     MAXIMUM NUMBER OF STEPS WITHIN RUN               35
+     BLOCK SIZE FOR LANCZOS PROCEDURE                  6
+     SHIFT POINT, IN (CYCLES/TIME)**2, IS           9.98001E-05
+     THE EIGENVECTORS ARE SCALED SO THAT 
+      THE GENERALIZED MASS IN EACH VECTOR IS UNITY
+
+     THIS IS A LINEAR PERTURBATION STEP.
+     ALL LOADS ARE DEFINED AS CHANGE IN LOAD TO THE REFERENCE STATE
+
+
+
+                    TOTAL MASS OF MODEL
+
+                       1715.000    
+
+
+                    LOCATION OF THE CENTER OF MASS OF THE MODEL
+
+                       1.600583           0.000000           3.749271    
+
+
+                    MOMENTS OF INERTIA ABOUT THE ORIGIN
+                           I(XX)               I(YY)               I(ZZ)
+
+                       24860.00           32267.50           5602.500    
+
+
+                    PRODUCTS OF INERTIA ABOUT THE ORIGIN
+                           I(XY)               I(XZ)               I(YZ)
+
+                       0.000000          -9990.000           0.000000    
+
+
+                    MOMENTS OF INERTIA ABOUT THE CENTER OF MASS
+                           I(XX)               I(YY)               I(ZZ)
+
+                       752.1866           3766.086           1208.899    
+
+
+                    PRODUCTS OF INERTIA ABOUT THE CENTER OF MASS
+                           I(XY)               I(XZ)               I(YZ)
+
+                       0.000000           301.7493           0.000000    
+  
+                   M E M O R Y   E S T I M A T E
+  
+ PROCESS      FLOATING PT       MINIMUM MEMORY        MEMORY TO
+              OPERATIONS           REQUIRED          MINIMIZE I/O
+             PER ITERATION           (MB)               (MB)
+  
+     1          1.02E+03               18                 27
+  
+ NOTE:
+      (1) SINCE ABAQUS DOES NOT PRE-ALLOCATE MEMORY AND ONLY ALLOCATES MEMORY AS NEEDED DURING THE ANALYSIS,
+          THE MEMORY REQUIREMENT PRINTED HERE CAN ONLY BE VIEWED AS A GENERAL GUIDELINE BASED ON THE BEST
+          KNOWLEDGE AVAILABLE AT THE BEGINNING OF A STEP BEFORE THE SOLUTION PROCESS HAS BEGUN.
+      (2) THE ESTIMATE IS NORMALLY UPDATED AT THE BEGINNING OF EVERY STEP. IT IS THE MAXIMUM VALUE OF THE
+          ESTIMATE FROM THE CURRENT STEP TO THE LAST STEP OF THE ANALYSIS, WITH UNSYMMETRIC SOLUTION TAKEN
+          INTO ACCOUNT IF APPLICABLE. 
+      (3) SINCE THE ESTIMATE IS BASED ON THE ACTIVE DEGREES OF FREEDOM IN THE FIRST ITERATION OF THE 
+          CURRENT STEP, THE MEMORY ESTIMATE MIGHT BE SIGNIFICANTLY DIFFERENT THAN ACTUAL USAGE FOR 
+          PROBLEMS WITH SUBSTANTIAL CHANGES IN ACTIVE DEGREES OF FREEDOM BETWEEN STEPS (OR EVEN WITHIN
+          THE SAME STEP). EXAMPLES ARE: PROBLEMS WITH SIGNIFICANT CONTACT CHANGES, PROBLEMS WITH MODEL
+          CHANGE, PROBLEMS WITH BOTH STATIC STEP AND STEADY STATE DYNAMIC PROCEDURES WHERE ACOUSTIC 
+          ELEMENTS WILL ONLY BE ACTIVATED IN THE STEADY STATE DYNAMIC STEPS.
+      (4) FOR MULTI-PROCESS EXECUTION, THE ESTIMATED VALUE OF FLOATING POINT OPERATIONS FOR EACH PROCESS
+          IS BASED ON AN INITIAL SCHEDULING OF OPERATIONS AND MIGHT NOT REFLECT THE ACTUAL FLOATING 
+          POINT OPERATIONS COMPLETED ON EACH PROCESS. OPERATIONS ARE DYNAMICALLY BALANCED DURING EXECUTION, 
+          SO THE ACTUAL BALANCE OF OPERATIONS BETWEEN PROCESSES IS EXPECTED TO BE BETTER THAN THE ESTIMATE
+          PRINTED HERE.
+      (5) THE UPPER LIMIT OF MEMORY THAT CAN BE ALLOCATED BY ABAQUS WILL IN GENERAL DEPEND ON THE VALUE OF
+          THE "MEMORY" PARAMETER AND THE AMOUNT OF PHYSICAL MEMORY AVAILABLE ON THE MACHINE. PLEASE SEE
+          THE "ABAQUS ANALYSIS USER'S MANUAL" FOR MORE DETAILS. THE ACTUAL USAGE OF MEMORY AND OF DISK
+          SPACE FOR SCRATCH DATA WILL DEPEND ON THIS UPPER LIMIT AS WELL AS THE MEMORY REQUIRED TO MINIMIZE
+          I/O. IF THE MEMORY UPPER LIMIT IS GREATER THAN THE MEMORY REQUIRED TO MINIMIZE I/O, THEN THE ACTUAL
+          MEMORY USAGE WILL BE CLOSE TO THE ESTIMATED "MEMORY TO MINIMIZE I/O" VALUE, AND THE SCRATCH DISK
+          USAGE WILL BE CLOSE-TO-ZERO; OTHERWISE, THE ACTUAL MEMORY USED WILL BE CLOSE TO THE PREVIOUSLY
+          MENTIONED MEMORY LIMIT, AND THE SCRATCH DISK USAGE WILL BE ROUGHLY PROPORTIONAL TO THE DIFFERENCE
+          BETWEEN THE ESTIMATED "MEMORY TO MINIMIZE I/O" AND THE MEMORY UPPER LIMIT. HOWEVER ACCURATE
+          ESTIMATE OF THE SCRATCH DISK SPACE IS NOT POSSIBLE.
+      (6) USING "*RESTART, WRITE" CAN GENERATE A LARGE AMOUNT OF DATA WRITTEN IN THE WORK DIRECTORY.
+
+
+                              E I G E N V A L U E    O U T P U T     
+
+ MODE NO      EIGENVALUE              FREQUENCY         GENERALIZED MASS   COMPOSITE MODAL DAMPING            
+                             (RAD/TIME)   (CYCLES/TIME)
+
+
+       1       26.861         5.1828        0.82487         1.0000         0.0000    
+       2       157.78         12.561         1.9992         1.0000         0.0000    
+       3       3349.1         57.871         9.2105         1.0000         0.0000    
+       4       3662.1         60.515         9.6313         1.0000         0.0000    
+
+
+          P A R T I C I P A T I O N   F A C T O R S
+
+ MODE NO    X-COMPONENT    Y-COMPONENT    Z-COMPONENT    X-ROTATION     Y-ROTATION     Z-ROTATION 
+
+       1      3.36917E-16   -3.87835E-16    -38.290        7.75670E-16     49.138       -1.36210E-15
+       2      3.58660E-17    7.63509E-17     7.9393       -1.52702E-16    -55.702        2.97339E-16
+       3      3.79823E-12   -1.24936E-13     9.7793        2.49872E-13    -43.475        6.13057E-13
+       4      4.53304E-12   -1.49122E-13     9.4983        2.98244E-13    0.40799        7.31611E-13
+
+
+                    E F F E C T I V E   M A S S
+
+ MODE NO    X-COMPONENT    Y-COMPONENT    Z-COMPONENT    X-ROTATION     Y-ROTATION     Z-ROTATION 
+
+       1      1.13513E-31    1.50416E-31     1466.1        6.01664E-31     2414.5        1.85532E-30
+       2      1.28637E-33    5.82946E-33     63.032        2.33179E-32     3102.7        8.84103E-32
+       3      1.44265E-23    1.56090E-26     95.634        6.24361E-26     1890.1        3.75839E-25
+       4      2.05484E-23    2.22374E-26     90.218        8.89494E-26    0.16646        5.35254E-25
+
+ TOTAL        3.49750E-23    3.78465E-26     1715.0        1.51386E-25     7407.5        9.11096E-25
+
+
+          THE ANALYSIS HAS BEEN COMPLETED
+
+
+
+                              ANALYSIS COMPLETE
+                              WITH      6 WARNING MESSAGES ON THE DAT FILE
+                              AND       2 WARNING MESSAGES ON THE MSG FILE
+
+
+
+     JOB TIME SUMMARY
+       USER TIME (SEC)      =     0.50    
+       SYSTEM TIME (SEC)    =     0.10    
+       TOTAL CPU TIME (SEC) =     0.60    
+       WALLCLOCK TIME (SEC) =            2

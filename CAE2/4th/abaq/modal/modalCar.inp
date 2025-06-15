@@ -1,0 +1,153 @@
+**
+**ANSA_VERSION;24.1.2;
+**
+**
+** file created by  A N S A  Fri Jun 13 19:42:44 2025
+**
+** output from :
+**
+** C:/temp/modalCar.ansa
+**
+** Settings :
+**
+** Output format : 2024
+**
+** Output : Model
+**
+*HEADING
+
+**
+**
+**
+*NODE
+       1,                      1.5,                       0.,                       4.
+       2,                       0.,                       0.,                       4.
+       3,                      4.5,                       0.,                       4.
+       4,                       0.,                       0.,                       2.
+       5,                      4.5,                       0.,                       2.
+       6,                       0.,                       0.,                       0.
+       7,                      4.5,                       0.,                       0.
+**
+** SPRING ELEMENTS
+**
+*ELEMENT, TYPE=SPRING2, ELSET=P1;SPRING_00000001
+       5,        6,        4
+*ELEMENT, TYPE=SPRING2, ELSET=P2;SPRING_00000002
+       6,        4,        2
+*ELEMENT, TYPE=SPRING2, ELSET=P3;SPRING_00000003
+       7,        7,        5
+*ELEMENT, TYPE=SPRING2, ELSET=P4;SPRING_00000004
+       8,        5,        3
+**
+** DASHPOT ELEMENTS
+**
+*ELEMENT, TYPE=DASHPOT2, ELSET=P9;cw1
+       9,        6,        4
+*ELEMENT, TYPE=DASHPOT2, ELSET=P10;c1
+      10,        4,        2
+*ELEMENT, TYPE=DASHPOT2, ELSET=P11;cw2
+      11,        7,        5
+*ELEMENT, TYPE=DASHPOT2, ELSET=P12;c2
+      12,        5,        3
+**
+** 
+**
+**
+** MPC
+**
+**ANSA_ID;1;
+*MPC
+BEAM,        2,        1
+BEAM,        3,        1
+**
+** MASS and ROTARY
+**
+*MASS, ELSET=MS3;
+                    105.,
+*ELEMENT, TYPE=MASS, ELSET=MS3;
+       3,        4
+*MASS, ELSET=MS4;
+                    110.,
+*ELEMENT, TYPE=MASS, ELSET=MS4;
+       4,        5
+*MASS, ELSET=MS2;
+                   1500.,
+*ELEMENT, TYPE=MASS, ELSET=MS2;
+       2,        1
+*ROTARY INERTIA, ELSET=RI2;
+                      0.,                    1805.,                       0.
+*ELEMENT, TYPE=ROTARYI, ELSET=RI2;
+      13,        1
+**
+** 
+**
+**
+** SECTION DATA
+**
+*SPRING, ELSET=P1;SPRING_00000001, RTOL=0.03
+       3,        3
+                 360000.,
+*SPRING, ELSET=P2;SPRING_00000002, RTOL=0.03
+       3,        3
+                  24200.,
+*SPRING, ELSET=P3;SPRING_00000003, RTOL=0.03
+       3,        3
+                 340000.,
+*SPRING, ELSET=P4;SPRING_00000004, RTOL=0.03
+       3,        3
+                  27100.,
+*DASHPOT, ELSET=P9;cw1, RTOL=0.03
+       3,        3
+                    150.,
+*DASHPOT, ELSET=P10;c1, RTOL=0.03
+       3,        3
+                   3000.,
+*DASHPOT, ELSET=P11;cw2, RTOL=0.03
+       3,        3
+                    160.,
+*DASHPOT, ELSET=P12;c2, RTOL=0.03
+       3,        3
+                   2800.,
+**
+** 
+**
+**
+** BOUNDARY
+**
+*BOUNDARY, FIXED
+**ANSA_ID;1;
+       1,        1,        2
+       1,        4
+       1,        6
+**ANSA_ID;2;
+       6,        1,        6
+**ANSA_ID;3;
+       7,        1,        6
+**
+** STEPS
+**
+**ANSA_ID;1;
+**
+** STEP 1
+**
+*STEP, NAME=Anonymous STEP 1
+*FREQUENCY, EIGENSOLVER=LANCZOS
+       6,                     0.01,                    3000.
+*END STEP
+**ANSA_COLOR;1;SPRING_PROP;.701960802078247;.341176480054855;.678431391716003;1.;
+**ANSA_COLOR;2;SPRING_PROP;.572549045085907;.278431385755539;.027450980618596;1.;
+**ANSA_COLOR;3;SPRING_PROP;.733333349227905;.462745100259781;.290196090936661;1.;
+**ANSA_COLOR;4;SPRING_PROP;.686274528503418;.886274516582489;.466666668653488;1.;
+**ANSA_COLOR;9;DASHPOT_PROP;.768627464771271;.686274528503418;.003921568859369;1.
+**;
+**ANSA_COLOR;10;DASHPOT_PROP;.952941179275513;.576470613479614;.647058844566345;1
+**.;
+**ANSA_COLOR;11;DASHPOT_PROP;.925490200519562;.713725507259369;.196078434586525;1
+**.;
+**ANSA_COLOR;12;DASHPOT_PROP;.686274528503418;.098039217293262;.662745118141174;1
+**.;
+**ANSA_COLOR;1;STEP;.572549045085907;.278431385755539;.027450980618596;1.;
+**ANSA_PART;PART;ID;1;NAME;Untitled;BELONGS_HERE;YES;STUDY_VERSION;0;PID_OFFSET;0
+**;COLOR;146;71;7;0;IS_COLOR_ACTIVE;-1;PART_TYPE;Undefined;ATTRIBUTES;2;DM/File T
+**ype;ANSA;DM/Status;WIP;CONTAINS;DASHPOT_PROP;9-12;MASS;2-4;MPC;1;SPRING_PROP;1-
+**4;

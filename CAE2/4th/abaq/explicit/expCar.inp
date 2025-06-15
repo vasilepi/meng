@@ -1,0 +1,190 @@
+**
+**ANSA_VERSION;24.1.2;
+**
+**
+** file created by  A N S A  Sat Jun 14 14:00:44 2025
+**
+** output from :
+**
+** C:/temp/expCar.ansa
+**
+** Settings :
+**
+** Output format : 2024
+**
+** Output : All
+**
+*HEADING
+
+**
+**
+**
+*NODE
+       1,                      1.5,                       0.,                       4.
+       2,                       0.,                       0.,                       4.
+       3,                      4.5,                       0.,                       4.
+       4,                       0.,                       0.,                       2.
+       5,                      4.5,                       0.,                       2.
+       6,                       0.,                       0.,                       0.
+       7,                      4.5,                       0.,                       0.
+**
+** CONNECTOR ELEMENTS
+**
+*ELEMENT, TYPE=CONN3D2, ELSET=P1;W1
+       5,        6,        4
+*ELEMENT, TYPE=CONN3D2, ELSET=P2;1
+       6,        4,        2
+*ELEMENT, TYPE=CONN3D2, ELSET=P3;W2
+       7,        7,        5
+*ELEMENT, TYPE=CONN3D2, ELSET=P4;2
+       8,        5,        3
+**
+** 
+**
+**
+** MPC
+**
+**ANSA_ID;1;
+*MPC
+BEAM,        2,        1
+BEAM,        3,        1
+**
+** MASS and ROTARY
+**
+*MASS, ELSET=MS3;
+                    105.,
+*ELEMENT, TYPE=MASS, ELSET=MS3;
+       3,        4
+*MASS, ELSET=MS4;
+                    110.,
+*ELEMENT, TYPE=MASS, ELSET=MS4;
+       4,        5
+*MASS, ELSET=MS2;
+                   1500.,
+*ELEMENT, TYPE=MASS, ELSET=MS2;
+       2,        1
+*ROTARY INERTIA, ELSET=RI2;
+                      0.,                    1805.,                       0.
+*ELEMENT, TYPE=ROTARYI, ELSET=RI2;
+       9,        1
+**
+** 
+**
+**
+** SECTION DATA
+**
+*CONNECTOR SECTION, ELSET=P1;W1, BEHAVIOR=M1;KW1-CW1
+AXIAL,
+*CONNECTOR SECTION, ELSET=P2;1, BEHAVIOR=M2;K1-C1
+AXIAL,
+*CONNECTOR SECTION, ELSET=P3;W2, BEHAVIOR=M3;KW2-CW2
+AXIAL,
+*CONNECTOR SECTION, ELSET=P4;2, BEHAVIOR=M4;K2-C2
+AXIAL,
+**
+** MATERIALS
+**
+*CONNECTOR BEHAVIOR, NAME=M1;KW1-CW1
+**ANSA_ID;5;
+*CONNECTOR ELASTICITY, COMPONENT=1
+                 360000.,                       0.
+**ANSA_ID;1;
+*CONNECTOR DAMPING, COMPONENT=1, TYPE=VISCOUS
+                    150.,                       0.
+*CONNECTOR BEHAVIOR, NAME=M2;K1-C1
+**ANSA_ID;6;
+*CONNECTOR ELASTICITY, COMPONENT=1
+                  24200.,                       0.
+**ANSA_ID;2;
+*CONNECTOR DAMPING, COMPONENT=1, TYPE=VISCOUS
+                   3000.,                       0.
+*CONNECTOR BEHAVIOR, NAME=M3;KW2-CW2
+**ANSA_ID;7;
+*CONNECTOR ELASTICITY, COMPONENT=1
+                 340000.,                       0.
+**ANSA_ID;3;
+*CONNECTOR DAMPING, COMPONENT=1, TYPE=VISCOUS
+                    160.,                       0.
+*CONNECTOR BEHAVIOR, NAME=M4;K2-C2
+**ANSA_ID;8;
+*CONNECTOR ELASTICITY, COMPONENT=1
+                  27100.,                       0.
+**ANSA_ID;4;
+*CONNECTOR DAMPING, COMPONENT=1, TYPE=VISCOUS
+                   2800.,                       0.
+**
+** AMPLITUDES
+**
+*AMPLITUDE, NAME=A1;R1, DEFINITION=PERIODIC, VALUE=RELATIVE, TIME=STEP TIME
+       2,        62.83185307179586,                       0.,                       0.,
+                      0.,                      0.1,                       0.,                       0.
+*AMPLITUDE, NAME=A2;R2, DEFINITION=PERIODIC, VALUE=RELATIVE, TIME=STEP TIME
+       1,        94.24777960769379,                       0.,                       0.,
+                      0.,                     0.15
+**
+** 
+**
+**
+** STEPS
+**
+**ANSA_ID;1;
+**
+** STEP 1
+**
+*STEP, NAME=Anonymous STEP 1
+*DYNAMIC, EXPLICIT, DIRECT USER CONTROL
+                   0.00001,                       1.
+**
+** BOUNDARY
+**
+*BOUNDARY, FIXED
+**ANSA_ID;3;
+       1,        1,        2
+       1,        4
+       1,        6
+**ANSA_ID;4;
+       4,        1,        2
+       4,        4,        6
+**ANSA_ID;5;
+       5,        1,        2
+       5,        4,        6
+*BOUNDARY, TYPE=DISPLACEMENT, AMPLITUDE=A1;R1
+**ANSA_ID;1;
+       6,        3,         ,                       1.
+*BOUNDARY, TYPE=DISPLACEMENT, AMPLITUDE=A2;R2
+**ANSA_ID;2;
+       7,        3,         ,                       1.
+*OUTPUT, FIELD, TIME INTERVAL=0.001, VARIABLE=ALL
+*NODE OUTPUT
+U,
+V,
+A,
+*END STEP
+**ANSA_COLOR;1;CONNECTOR_SECTION;.878431379795074;.631372570991516;.1607843190431
+**59;1.;
+**ANSA_COLOR;2;CONNECTOR_SECTION;0.65490198135376;.152941182255745;.5411764979362
+**49;1.;
+**ANSA_COLOR;3;CONNECTOR_SECTION;.886274516582489;.250980406999588;.1686274558305
+**74;1.;
+**ANSA_COLOR;4;CONNECTOR_SECTION;.572549045085907;.929411768913269;.0392156876623
+**63;1.;
+**ANSA_COLOR;1;CONNECTOR BEHAVIOR;0.65490198135376;.152941182255745;.541176497936
+**249;1.;
+**ANSA_COLOR;2;CONNECTOR BEHAVIOR;.572549045085907;.929411768913269;.039215687662
+**363;1.;
+**ANSA_COLOR;3;CONNECTOR BEHAVIOR;.811764717102051;.019607843831182;.513725519180
+**298;1.;
+**ANSA_COLOR;4;CONNECTOR BEHAVIOR;.874509811401367;.419607847929001;.964705884456
+**635;1.;
+**ANSA_COLOR;1;STEP;.878431379795074;.631372570991516;.160784319043159;1.;
+**ANSA_NAME_COMMENT;1;CONNECTOR_DAMPING;CW1;;NO;NO;NO;
+**ANSA_NAME_COMMENT;2;CONNECTOR_DAMPING;C1;;NO;NO;NO;
+**ANSA_NAME_COMMENT;3;CONNECTOR_DAMPING;CW2;;NO;NO;NO;
+**ANSA_NAME_COMMENT;4;CONNECTOR_DAMPING;C2;;NO;NO;NO;
+**ANSA_NAME_COMMENT;5;CONNECTOR_ELASTICITY;KW1;;NO;NO;NO;
+**ANSA_NAME_COMMENT;6;CONNECTOR_ELASTICITY;K1;;NO;NO;NO;
+**ANSA_NAME_COMMENT;7;CONNECTOR_ELASTICITY;KW2;;NO;NO;NO;
+**ANSA_NAME_COMMENT;8;CONNECTOR_ELASTICITY;K2;;NO;NO;NO;
+**ANSA_PART;PART;ID;1;NAME;Untitled;BELONGS_HERE;YES;STUDY_VERSION;0;PID_OFFSET;0
+**;COLOR;167;39;138;0;IS_COLOR_ACTIVE;-1;PART_TYPE;Undefined;ATTRIBUTES;2;DM/File
+** Type;ANSA;DM/Status;WIP;CONTAINS;CONNECTOR_SECTION;1-4;MASS;2-4;MPC;1;

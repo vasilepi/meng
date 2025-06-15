@@ -1,0 +1,279 @@
+1
+
+   Abaqus Learning Edition 2024                                  Date 13-Jun-2025   Time 13:38:32
+   
+
+
+
+     PROCESSING PART, INSTANCE, AND ASSEMBLY INFORMATION
+   *******************************************************
+
+
+     END PROCESSING PART, INSTANCE, AND ASSEMBLY INFORMATION
+   ***********************************************************
+
+
+
+
+     OPTIONS BEING PROCESSED
+   ***************************
+
+
+  *HEADING
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+  *ELEMENT, TYPE=SPRING2, ELSET=P1;kw1
+  *ELEMENT, TYPE=SPRING2, ELSET=P2;k1
+  *ELEMENT, TYPE=SPRING2, ELSET=P3;kw2
+  *ELEMENT, TYPE=SPRING2, ELSET=P4;k2
+  *ELEMENT, TYPE=DASHPOT2, ELSET=P5;cw1
+  *ELEMENT, TYPE=DASHPOT2, ELSET=P6;c1
+  *ELEMENT, TYPE=DASHPOT2, ELSET=P7;cw2
+  *ELEMENT, TYPE=DASHPOT2, ELSET=P8;c2
+  *ELEMENT, TYPE=MASS, ELSET=MS3;m1
+  *ELEMENT, TYPE=MASS, ELSET=MS4;m2
+  *ELEMENT, TYPE=MASS, ELSET=MS2;
+  *ELEMENT, TYPE=ROTARYI, ELSET=RI2;
+  *dashpot, elset=P5;CW1, rtol=0.03
+  *dashpot, elset=P6;C1, rtol=0.03
+  *dashpot, elset=P7;CW2, rtol=0.03
+  *dashpot, elset=P8;C2, rtol=0.03
+  *spring, elset=P1;KW1, rtol=0.03
+  *spring, elset=P2;K1, rtol=0.03
+  *spring, elset=P3;KW2, rtol=0.03
+  *spring, elset=P4;K2, rtol=0.03
+  *mass, elset=MS3;M1
+  *mass, elset=MS4;M2
+  *mass, elset=MS2;
+  *rotaryinertia, elset=RI2;
+  *spring, elset=P1;KW1, rtol=0.03
+  *spring, elset=P2;K1, rtol=0.03
+  *spring, elset=P3;KW2, rtol=0.03
+  *spring, elset=P4;K2, rtol=0.03
+  *dashpot, elset=P5;CW1, rtol=0.03
+  *dashpot, elset=P6;C1, rtol=0.03
+  *dashpot, elset=P7;CW2, rtol=0.03
+  *dashpot, elset=P8;C2, rtol=0.03
+  *mass, elset=MS3;M1
+  *mass, elset=MS4;M2
+  *mass, elset=MS2;
+  *rotaryinertia, elset=RI2;
+  *boundary, fixed
+  *boundary, type=DISPLACEMENT, amplitude=A1;R1
+  *boundary, type=DISPLACEMENT, amplitude=A2;R2
+  *boundary, fixed
+  *boundary, type=DISPLACEMENT, amplitude=A1;R1
+  *boundary, type=DISPLACEMENT, amplitude=A2;R2
+  *mpc
+  *output, field, timeinterval=0.001, variable=ALL
+  *output, field, timeinterval=0.001, variable=ALL
+  *output, field, timeinterval=0.001, variable=ALL
+
+ ***NOTE: MPCS (EXTERNAL or INTERNAL, including those generated from rigid body 
+          definitions), KINEMATIC COUPLINGS, AND/OR EQUATIONS WILL ACTIVATE 
+          ADDITIONAL DEGREES OF FREEDOM
+  *step, name=AnonymousSTEP1, amplitude=RAMP, inc=5000
+  *output, field, timeinterval=0.001, variable=ALL
+  *step, name=AnonymousSTEP1, amplitude=RAMP, inc=5000
+  *step, name=AnonymousSTEP1, amplitude=RAMP, inc=5000
+  *dynamic
+  *boundary, type=DISPLACEMENT, amplitude=A1;R1
+  *boundary, type=DISPLACEMENT, amplitude=A2;R2
+  *output, field, timeinterval=0.001, variable=ALL
+  *nodeoutput
+  *endstep
+
+ ***WARNING: OUTPUT AT EXACT, PREDEFINED TIME POINTS WAS REQUESTED IN THIS 
+             STEP. IN ORDER TO WRITE OUTPUT AT EXACT TIME POINTS SPECIFIED, 
+             Abaqus MIGHT USE TIME INCREMENTS SMALLER THAN THE MINIMUM TIME 
+             INCREMENT ALLOWED IN THE STEP. IN ADDITION, THE NUMBER OF 
+             INCREMENTS REQUIRED TO COMPLETE THE STEP WILL IN GENERAL INCREASE.
+  *boundary, fixed
+
+ ***WARNING: THE FIXED PARAMETER IS IGNORED AT THE MODEL LEVEL
+  *step, name=AnonymousSTEP1, amplitude=RAMP, inc=5000
+  *dynamic
+  *boundary, type=DISPLACEMENT, amplitude=A1;R1
+  *boundary, type=DISPLACEMENT, amplitude=A2;R2
+  *endstep
+
+
+
+                            P R O B L E M   S I Z E
+
+
+          NUMBER OF ELEMENTS IS                                    12
+          NUMBER OF NODES IS                                        7
+          NUMBER OF NODES DEFINED BY THE USER                       7
+          TOTAL NUMBER OF VARIABLES IN THE MODEL                   26
+          (DEGREES OF FREEDOM PLUS MAX NO. OF ANY LAGRANGE MULTIPLIER
+           VARIABLES. INCLUDE *PRINT,SOLVE=YES TO GET THE ACTUAL NUMBER.)
+
+
+
+                              END OF USER INPUT PROCESSING
+
+
+
+     JOB TIME SUMMARY
+       USER TIME (SEC)      =     0.10    
+       SYSTEM TIME (SEC)    =      0.0    
+       TOTAL CPU TIME (SEC) =     0.10    
+       WALLCLOCK TIME (SEC) =            1
+1
+
+   Abaqus Learning Edition 2024                                  Date 13-Jun-2025   Time 13:38:33
+   
+
+                                                                                               STEP    1  INCREMENT    1
+                                                                                          TIME COMPLETED IN THIS STEP   0.00    
+
+
+                        S T E P       1     D Y N A M I C   A N A L Y S I S - I M P L I C I T  I N T E G R A T I O N
+
+
+                                                                                          
+
+          DYNAMIC APPLICATION PACKED SCHEME IS                 TRANSIENT FIDELITY  
+          HILBER-HUGHES-TAYLOR (HHT) TIME INTEGRATOR IS USED
+
+     AUTOMATIC TIME CONTROL WITH -
+          A SUGGESTED INITIAL TIME INCREMENT OF                1.000E-02
+          AND A TOTAL TIME PERIOD OF                            1.00    
+          THE MINIMUM TIME INCREMENT ALLOWED IS                1.000E-09
+          THE MAXIMUM TIME INCREMENT ALLOWED IS                1.000E-02
+          SCALE FACTOR ON TIME AVERAGE FORCE FOR HALF-
+           -INCREMENT RESIDUAL COMPUTATIONS IS                 1.000E+03
+
+          HILBER-HUGHES-TAYLOR METHOD PARAMETERS:  ALPHA   IS  -5.000000E-02
+                                                   BETA    IS   0.275625    
+                                                   GAMMA   IS   0.550000    
+          SINGULAR MASS TREATMENT TYPE IS                     ERROR
+          CONSERVATIVE TIME INCREMENTATION IS USED
+          STEP AMPLITUDE IS                                    RAMP
+
+
+
+                    TOTAL MASS OF MODEL
+
+                       1715.000    
+
+
+                    LOCATION OF THE CENTER OF MASS OF THE MODEL
+
+                       1.600583           0.000000           3.749271    
+
+
+                    MOMENTS OF INERTIA ABOUT THE ORIGIN
+                           I(XX)               I(YY)               I(ZZ)
+
+                       24860.00           32267.50           5602.500    
+
+
+                    PRODUCTS OF INERTIA ABOUT THE ORIGIN
+                           I(XY)               I(XZ)               I(YZ)
+
+                       0.000000          -9990.000           0.000000    
+
+
+                    MOMENTS OF INERTIA ABOUT THE CENTER OF MASS
+                           I(XX)               I(YY)               I(ZZ)
+
+                       752.1866           3766.086           1208.899    
+
+
+                    PRODUCTS OF INERTIA ABOUT THE CENTER OF MASS
+                           I(XY)               I(XZ)               I(YZ)
+
+                       0.000000           301.7493           0.000000    
+  
+                   M E M O R Y   E S T I M A T E
+  
+ PROCESS      FLOATING PT       MINIMUM MEMORY        MEMORY TO
+              OPERATIONS           REQUIRED          MINIMIZE I/O
+             PER ITERATION           (MB)               (MB)
+  
+     1          1.21E+02               17                 24
+  
+ NOTE:
+      (1) SINCE ABAQUS DOES NOT PRE-ALLOCATE MEMORY AND ONLY ALLOCATES MEMORY AS NEEDED DURING THE ANALYSIS,
+          THE MEMORY REQUIREMENT PRINTED HERE CAN ONLY BE VIEWED AS A GENERAL GUIDELINE BASED ON THE BEST
+          KNOWLEDGE AVAILABLE AT THE BEGINNING OF A STEP BEFORE THE SOLUTION PROCESS HAS BEGUN.
+      (2) THE ESTIMATE IS NORMALLY UPDATED AT THE BEGINNING OF EVERY STEP. IT IS THE MAXIMUM VALUE OF THE
+          ESTIMATE FROM THE CURRENT STEP TO THE LAST STEP OF THE ANALYSIS, WITH UNSYMMETRIC SOLUTION TAKEN
+          INTO ACCOUNT IF APPLICABLE. 
+      (3) SINCE THE ESTIMATE IS BASED ON THE ACTIVE DEGREES OF FREEDOM IN THE FIRST ITERATION OF THE 
+          CURRENT STEP, THE MEMORY ESTIMATE MIGHT BE SIGNIFICANTLY DIFFERENT THAN ACTUAL USAGE FOR 
+          PROBLEMS WITH SUBSTANTIAL CHANGES IN ACTIVE DEGREES OF FREEDOM BETWEEN STEPS (OR EVEN WITHIN
+          THE SAME STEP). EXAMPLES ARE: PROBLEMS WITH SIGNIFICANT CONTACT CHANGES, PROBLEMS WITH MODEL
+          CHANGE, PROBLEMS WITH BOTH STATIC STEP AND STEADY STATE DYNAMIC PROCEDURES WHERE ACOUSTIC 
+          ELEMENTS WILL ONLY BE ACTIVATED IN THE STEADY STATE DYNAMIC STEPS.
+      (4) FOR MULTI-PROCESS EXECUTION, THE ESTIMATED VALUE OF FLOATING POINT OPERATIONS FOR EACH PROCESS
+          IS BASED ON AN INITIAL SCHEDULING OF OPERATIONS AND MIGHT NOT REFLECT THE ACTUAL FLOATING 
+          POINT OPERATIONS COMPLETED ON EACH PROCESS. OPERATIONS ARE DYNAMICALLY BALANCED DURING EXECUTION, 
+          SO THE ACTUAL BALANCE OF OPERATIONS BETWEEN PROCESSES IS EXPECTED TO BE BETTER THAN THE ESTIMATE
+          PRINTED HERE.
+      (5) THE UPPER LIMIT OF MEMORY THAT CAN BE ALLOCATED BY ABAQUS WILL IN GENERAL DEPEND ON THE VALUE OF
+          THE "MEMORY" PARAMETER AND THE AMOUNT OF PHYSICAL MEMORY AVAILABLE ON THE MACHINE. PLEASE SEE
+          THE "ABAQUS ANALYSIS USER'S MANUAL" FOR MORE DETAILS. THE ACTUAL USAGE OF MEMORY AND OF DISK
+          SPACE FOR SCRATCH DATA WILL DEPEND ON THIS UPPER LIMIT AS WELL AS THE MEMORY REQUIRED TO MINIMIZE
+          I/O. IF THE MEMORY UPPER LIMIT IS GREATER THAN THE MEMORY REQUIRED TO MINIMIZE I/O, THEN THE ACTUAL
+          MEMORY USAGE WILL BE CLOSE TO THE ESTIMATED "MEMORY TO MINIMIZE I/O" VALUE, AND THE SCRATCH DISK
+          USAGE WILL BE CLOSE-TO-ZERO; OTHERWISE, THE ACTUAL MEMORY USED WILL BE CLOSE TO THE PREVIOUSLY
+          MENTIONED MEMORY LIMIT, AND THE SCRATCH DISK USAGE WILL BE ROUGHLY PROPORTIONAL TO THE DIFFERENCE
+          BETWEEN THE ESTIMATED "MEMORY TO MINIMIZE I/O" AND THE MEMORY UPPER LIMIT. HOWEVER ACCURATE
+          ESTIMATE OF THE SCRATCH DISK SPACE IS NOT POSSIBLE.
+      (6) USING "*RESTART, WRITE" CAN GENERATE A LARGE AMOUNT OF DATA WRITTEN IN THE WORK DIRECTORY.
+  
+                   M E M O R Y   E S T I M A T E
+  
+ PROCESS      FLOATING PT       MINIMUM MEMORY        MEMORY TO
+              OPERATIONS           REQUIRED          MINIMIZE I/O
+             PER ITERATION           (MB)               (MB)
+  
+     1          1.02E+03               17                 24
+  
+ NOTE:
+      (1) SINCE ABAQUS DOES NOT PRE-ALLOCATE MEMORY AND ONLY ALLOCATES MEMORY AS NEEDED DURING THE ANALYSIS,
+          THE MEMORY REQUIREMENT PRINTED HERE CAN ONLY BE VIEWED AS A GENERAL GUIDELINE BASED ON THE BEST
+          KNOWLEDGE AVAILABLE AT THE BEGINNING OF A STEP BEFORE THE SOLUTION PROCESS HAS BEGUN.
+      (2) THE ESTIMATE IS NORMALLY UPDATED AT THE BEGINNING OF EVERY STEP. IT IS THE MAXIMUM VALUE OF THE
+          ESTIMATE FROM THE CURRENT STEP TO THE LAST STEP OF THE ANALYSIS, WITH UNSYMMETRIC SOLUTION TAKEN
+          INTO ACCOUNT IF APPLICABLE. 
+      (3) SINCE THE ESTIMATE IS BASED ON THE ACTIVE DEGREES OF FREEDOM IN THE FIRST ITERATION OF THE 
+          CURRENT STEP, THE MEMORY ESTIMATE MIGHT BE SIGNIFICANTLY DIFFERENT THAN ACTUAL USAGE FOR 
+          PROBLEMS WITH SUBSTANTIAL CHANGES IN ACTIVE DEGREES OF FREEDOM BETWEEN STEPS (OR EVEN WITHIN
+          THE SAME STEP). EXAMPLES ARE: PROBLEMS WITH SIGNIFICANT CONTACT CHANGES, PROBLEMS WITH MODEL
+          CHANGE, PROBLEMS WITH BOTH STATIC STEP AND STEADY STATE DYNAMIC PROCEDURES WHERE ACOUSTIC 
+          ELEMENTS WILL ONLY BE ACTIVATED IN THE STEADY STATE DYNAMIC STEPS.
+      (4) FOR MULTI-PROCESS EXECUTION, THE ESTIMATED VALUE OF FLOATING POINT OPERATIONS FOR EACH PROCESS
+          IS BASED ON AN INITIAL SCHEDULING OF OPERATIONS AND MIGHT NOT REFLECT THE ACTUAL FLOATING 
+          POINT OPERATIONS COMPLETED ON EACH PROCESS. OPERATIONS ARE DYNAMICALLY BALANCED DURING EXECUTION, 
+          SO THE ACTUAL BALANCE OF OPERATIONS BETWEEN PROCESSES IS EXPECTED TO BE BETTER THAN THE ESTIMATE
+          PRINTED HERE.
+      (5) THE UPPER LIMIT OF MEMORY THAT CAN BE ALLOCATED BY ABAQUS WILL IN GENERAL DEPEND ON THE VALUE OF
+          THE "MEMORY" PARAMETER AND THE AMOUNT OF PHYSICAL MEMORY AVAILABLE ON THE MACHINE. PLEASE SEE
+          THE "ABAQUS ANALYSIS USER'S MANUAL" FOR MORE DETAILS. THE ACTUAL USAGE OF MEMORY AND OF DISK
+          SPACE FOR SCRATCH DATA WILL DEPEND ON THIS UPPER LIMIT AS WELL AS THE MEMORY REQUIRED TO MINIMIZE
+          I/O. IF THE MEMORY UPPER LIMIT IS GREATER THAN THE MEMORY REQUIRED TO MINIMIZE I/O, THEN THE ACTUAL
+          MEMORY USAGE WILL BE CLOSE TO THE ESTIMATED "MEMORY TO MINIMIZE I/O" VALUE, AND THE SCRATCH DISK
+          USAGE WILL BE CLOSE-TO-ZERO; OTHERWISE, THE ACTUAL MEMORY USED WILL BE CLOSE TO THE PREVIOUSLY
+          MENTIONED MEMORY LIMIT, AND THE SCRATCH DISK USAGE WILL BE ROUGHLY PROPORTIONAL TO THE DIFFERENCE
+          BETWEEN THE ESTIMATED "MEMORY TO MINIMIZE I/O" AND THE MEMORY UPPER LIMIT. HOWEVER ACCURATE
+          ESTIMATE OF THE SCRATCH DISK SPACE IS NOT POSSIBLE.
+      (6) USING "*RESTART, WRITE" CAN GENERATE A LARGE AMOUNT OF DATA WRITTEN IN THE WORK DIRECTORY.
+
+
+          THE ANALYSIS HAS BEEN COMPLETED
+
+
+
+                              ANALYSIS COMPLETE
+                              WITH      2 WARNING MESSAGES ON THE DAT FILE
+
+
+
+     JOB TIME SUMMARY
+       USER TIME (SEC)      =      17.    
+       SYSTEM TIME (SEC)    =      11.    
+       TOTAL CPU TIME (SEC) =      28.    
+       WALLCLOCK TIME (SEC) =           29
